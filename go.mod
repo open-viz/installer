@@ -13,6 +13,7 @@ require (
 	github.com/google/gofuzz v1.0.0
 	github.com/prometheus/client_golang v1.1.0 // indirect
 	github.com/stretchr/testify v1.4.0 // indirect
+	github.com/yudai/gojsondiff v1.0.0
 	golang.org/x/sys v0.0.0-20190801041406-cbf593c0f2f3 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	k8s.io/api v0.0.0-20191114100352-16d7abae0d2a

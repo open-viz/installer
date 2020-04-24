@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ template "grafana-operator.fullname" . }}-cleaner
+  name: {{ include "grafana-operator.fullname" . }}-cleaner
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "grafana-operator.labels" . | nindent 4 }}
@@ -13,7 +13,7 @@ spec:
   activeDeadlineSeconds: 120
   template:
     spec:
-      serviceAccountName: {{ template "grafana-operator.serviceAccountName" . }}
+      serviceAccountName: {{ include "grafana-operator.serviceAccountName" . }}
       containers:
       - name: kubectl
         image: {{ .Values.cleaner.registry }}/{{ .Values.cleaner.repository }}:{{ .Values.cleaner.tag }}

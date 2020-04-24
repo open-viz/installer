@@ -29,8 +29,20 @@ import "k8s.io/apimachinery/pkg/runtime/schema/generated.proto";
 // Package-wide variables from generator "generated".
 option go_package = "v1alpha1";
 
+message ContianerRef {
+  optional ImageRef imageRef = 1;
+
+  // Compute Resources required by the sidecar container.
+  // +optional
+  optional k8s.io.api.core.v1.ResourceRequirements resources = 2;
+
+  // Security options the pod should run with.
+  // +optional
+  optional k8s.io.api.core.v1.SecurityContext securityContext = 3;
+}
+
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=grafanaoperators,singular=grafanaoperator,categories={kubevault,appscode}
+// +kubebuilder:resource:path=grafanaoperators,singular=grafanaoperator,categories={searchlight,appscode}
 message GrafanaOperator {
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
 
@@ -45,49 +57,65 @@ message GrafanaOperatorList {
   repeated GrafanaOperator items = 2;
 }
 
-// GrafanaOperatorSpec is the spec for redis version
+// GrafanaOperatorSpec is the schema for Grafana Operator values file
 message GrafanaOperatorSpec {
-  optional int32 replicaCount = 1;
+  // +optional
+  optional string nameOverride = 1;
 
-  optional ImageRef operator = 2;
+  // +optional
+  optional string fullnameOverride = 2;
 
-  optional ImageRef cleaner = 3;
+  optional int32 replicaCount = 3;
 
-  optional string imagePullPolicy = 4;
+  optional ContianerRef operator = 4;
 
-  repeated string imagePullSecrets = 5;
+  optional ImageRef cleaner = 5;
 
-  optional bool criticalAddon = 6;
+  optional string imagePullPolicy = 6;
 
-  optional int32 logLevel = 7;
+  // +optional
+  repeated string imagePullSecrets = 7;
 
-  map<string, string> annotations = 8;
+  // +optional
+  optional bool criticalAddon = 8;
 
-  map<string, string> nodeSelector = 9;
+  // +optional
+  optional int32 logLevel = 9;
+
+  // +optional
+  map<string, string> annotations = 10;
+
+  // +optional
+  map<string, string> podAnnotations = 11;
+
+  // +optional
+  map<string, string> nodeSelector = 12;
 
   // If specified, the pod's tolerations.
   // +optional
-  repeated k8s.io.api.core.v1.Toleration tolerations = 10;
+  repeated k8s.io.api.core.v1.Toleration tolerations = 13;
 
   // If specified, the pod's scheduling constraints
   // +optional
-  optional k8s.io.api.core.v1.Affinity affinity = 11;
+  optional k8s.io.api.core.v1.Affinity affinity = 14;
 
-  // Compute Resources required by the sidecar container.
-  optional k8s.io.api.core.v1.ResourceRequirements resources = 12;
+  // PodSecurityContext holds pod-level security attributes and common container settings.
+  // Optional: Defaults to empty.  See type description for default values of each field.
+  // +optional
+  optional k8s.io.api.core.v1.PodSecurityContext podSecurityContext = 15;
 
-  optional ServiceAccountSpec serviceAccount = 13;
+  optional ServiceAccountSpec serviceAccount = 16;
 
-  optional WebHookSpec apiserver = 14;
+  optional WebHookSpec apiserver = 17;
 
-  optional bool enableAnalytics = 15;
+  // +optional
+  optional bool enableAnalytics = 18;
 
-  optional Monitoring monitoring = 16;
-
-  optional string clusterName = 17;
+  optional Monitoring monitoring = 19;
 }
 
 message HealthcheckSpec {
+  // +optional
   optional bool enabled = 1;
 }
 
@@ -102,6 +130,7 @@ message ImageRef {
 message Monitoring {
   optional string agent = 1;
 
+  // +optional
   optional bool operator = 2;
 
   optional PrometheusSpec prometheus = 3;
@@ -110,26 +139,35 @@ message Monitoring {
 }
 
 message PrometheusSpec {
+  // +optional
   optional string namespace = 1;
 }
 
 message ServiceAccountSpec {
   optional bool create = 1;
 
+  // +optional
   optional string name = 2;
+
+  // +optional
+  map<string, string> annotations = 3;
 }
 
 message ServiceMonitorLabels {
+  // +optional
   map<string, string> labels = 1;
 }
 
 message ServingCerts {
   optional bool generate = 1;
 
+  // +optional
   optional string caCrt = 2;
 
+  // +optional
   optional string serverCrt = 3;
 
+  // +optional
   optional string serverKey = 4;
 }
 
@@ -144,6 +182,7 @@ message WebHookSpec {
 
   optional string ca = 5;
 
+  // +optional
   optional bool bypassValidatingWebhookXray = 6;
 
   optional bool useKubeapiserverFqdnForAks = 7;

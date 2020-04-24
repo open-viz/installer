@@ -1,3 +1,3 @@
 To verify that Grafana operator has started, run:
 
-  kubectl --namespace={{ .Release.Namespace }} get deployments -l "release={{ .Release.Name }}, app={{ template "grafana-operator.name" . }}"
+  kubectl get deployment --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "grafana-operator.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"

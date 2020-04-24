@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "grafana-operator.fullname" . }}
+  name: {{ include "grafana-operator.fullname" . }}
   labels:
     {{- include "grafana-operator.labels" . | nindent 4 }}
 rules:
