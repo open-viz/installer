@@ -28,7 +28,7 @@ spec:
   version: v1alpha1
   service:
     namespace: {{ .Release.Namespace }}
-    name: {{ template "grafana-operator.fullname" . }}
+    name: {{ include "grafana-operator.fullname" . }}
   caBundle: {{ $caCrt }}
   groupPriorityMinimum: {{ .Values.apiserver.groupPriorityMinimum }}
   versionPriority: {{ .Values.apiserver.versionPriority }}
@@ -37,7 +37,7 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ template "grafana-operator.fullname" . }}-apiserver-cert
+  name: {{ include "grafana-operator.fullname" . }}-apiserver-cert
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "grafana-operator.labels" . | nindent 4 }}
@@ -53,7 +53,7 @@ data:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ template "grafana-operator.fullname" . }}-apiserver-cert
+  name: {{ include "grafana-operator.fullname" . }}-apiserver-cert
   namespace: {{ $promNamespace }}
   labels:
     {{- include "grafana-operator.labels" . | nindent 4 }}
@@ -67,7 +67,7 @@ data:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{ template "grafana-operator.fullname" . }}-apiserver-extension-server-authentication-reader
+  name: {{ include "grafana-operator.fullname" . }}-apiserver-extension-server-authentication-reader
   namespace: kube-system
   labels:
     {{- include "grafana-operator.labels" . | nindent 4 }}
@@ -77,14 +77,14 @@ roleRef:
   name: extension-apiserver-authentication-reader
 subjects:
 - kind: ServiceAccount
-  name: {{ template "grafana-operator.serviceAccountName" . }}
+  name: {{ include "grafana-operator.serviceAccountName" . }}
   namespace: {{ .Release.Namespace }}
 ---
 # to delegate authentication and authorization
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ template "grafana-operator.fullname" . }}-apiserver-auth-delegator
+  name: {{ include "grafana-operator.fullname" . }}-apiserver-auth-delegator
   labels:
     {{- include "grafana-operator.labels" . | nindent 4 }}
 roleRef:
@@ -93,5 +93,5 @@ roleRef:
   name: system:auth-delegator
 subjects:
 - kind: ServiceAccount
-  name: {{ template "grafana-operator.serviceAccountName" . }}
+  name: {{ include "grafana-operator.serviceAccountName" . }}
   namespace: {{ .Release.Namespace }}

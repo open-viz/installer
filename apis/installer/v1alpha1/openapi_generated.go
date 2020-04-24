@@ -33,6 +33,7 @@ import (
 
 func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenAPIDefinition {
 	return map[string]common.OpenAPIDefinition{
+		"go.searchlight.dev/installer/apis/installer/v1alpha1.ContianerRef":         schema_installer_apis_installer_v1alpha1_ContianerRef(ref),
 		"go.searchlight.dev/installer/apis/installer/v1alpha1.GrafanaOperator":      schema_installer_apis_installer_v1alpha1_GrafanaOperator(ref),
 		"go.searchlight.dev/installer/apis/installer/v1alpha1.GrafanaOperatorList":  schema_installer_apis_installer_v1alpha1_GrafanaOperatorList(ref),
 		"go.searchlight.dev/installer/apis/installer/v1alpha1.GrafanaOperatorSpec":  schema_installer_apis_installer_v1alpha1_GrafanaOperatorSpec(ref),
@@ -344,6 +345,51 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 	}
 }
 
+func schema_installer_apis_installer_v1alpha1_ContianerRef(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"registry": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"repository": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"tag": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"resources": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Compute Resources required by the sidecar container.",
+							Ref:         ref("k8s.io/api/core/v1.ResourceRequirements"),
+						},
+					},
+					"securityContext": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Security options the pod should run with.",
+							Ref:         ref("k8s.io/api/core/v1.SecurityContext"),
+						},
+					},
+				},
+				Required: []string{"registry", "repository", "tag"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.ResourceRequirements", "k8s.io/api/core/v1.SecurityContext"},
+	}
+}
+
 func schema_installer_apis_installer_v1alpha1_GrafanaOperator(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -433,9 +479,21 @@ func schema_installer_apis_installer_v1alpha1_GrafanaOperatorSpec(ref common.Ref
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "GrafanaOperatorSpec is the spec for redis version",
+				Description: "GrafanaOperatorSpec is the schema for Grafana Operator values file",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
+					"nameOverride": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"fullnameOverride": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
 					"replicaCount": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"integer"},
@@ -444,7 +502,7 @@ func schema_installer_apis_installer_v1alpha1_GrafanaOperatorSpec(ref common.Ref
 					},
 					"operator": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("go.searchlight.dev/installer/apis/installer/v1alpha1.ImageRef"),
+							Ref: ref("go.searchlight.dev/installer/apis/installer/v1alpha1.ContianerRef"),
 						},
 					},
 					"cleaner": {
@@ -497,6 +555,20 @@ func schema_installer_apis_installer_v1alpha1_GrafanaOperatorSpec(ref common.Ref
 							},
 						},
 					},
+					"podAnnotations": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type:   []string{"string"},
+										Format: "",
+									},
+								},
+							},
+						},
+					},
 					"nodeSelector": {
 						SchemaProps: spec.SchemaProps{
 							Type: []string{"object"},
@@ -530,10 +602,10 @@ func schema_installer_apis_installer_v1alpha1_GrafanaOperatorSpec(ref common.Ref
 							Ref:         ref("k8s.io/api/core/v1.Affinity"),
 						},
 					},
-					"resources": {
+					"podSecurityContext": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Compute Resources required by the sidecar container.",
-							Ref:         ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Description: "PodSecurityContext holds pod-level security attributes and common container settings. Optional: Defaults to empty.  See type description for default values of each field.",
+							Ref:         ref("k8s.io/api/core/v1.PodSecurityContext"),
 						},
 					},
 					"serviceAccount": {
@@ -557,18 +629,12 @@ func schema_installer_apis_installer_v1alpha1_GrafanaOperatorSpec(ref common.Ref
 							Ref: ref("go.searchlight.dev/installer/apis/installer/v1alpha1.Monitoring"),
 						},
 					},
-					"clusterName": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
 				},
-				Required: []string{"replicaCount", "operator", "cleaner", "imagePullPolicy", "imagePullSecrets", "logLevel", "serviceAccount", "apiserver", "enableAnalytics", "monitoring"},
+				Required: []string{"replicaCount", "operator", "cleaner", "imagePullPolicy", "serviceAccount", "apiserver", "monitoring"},
 			},
 		},
 		Dependencies: []string{
-			"go.searchlight.dev/installer/apis/installer/v1alpha1.ImageRef", "go.searchlight.dev/installer/apis/installer/v1alpha1.Monitoring", "go.searchlight.dev/installer/apis/installer/v1alpha1.ServiceAccountSpec", "go.searchlight.dev/installer/apis/installer/v1alpha1.WebHookSpec", "k8s.io/api/core/v1.Affinity", "k8s.io/api/core/v1.ResourceRequirements", "k8s.io/api/core/v1.Toleration"},
+			"go.searchlight.dev/installer/apis/installer/v1alpha1.ContianerRef", "go.searchlight.dev/installer/apis/installer/v1alpha1.ImageRef", "go.searchlight.dev/installer/apis/installer/v1alpha1.Monitoring", "go.searchlight.dev/installer/apis/installer/v1alpha1.ServiceAccountSpec", "go.searchlight.dev/installer/apis/installer/v1alpha1.WebHookSpec", "k8s.io/api/core/v1.Affinity", "k8s.io/api/core/v1.PodSecurityContext", "k8s.io/api/core/v1.Toleration"},
 	}
 }
 
@@ -650,7 +716,7 @@ func schema_installer_apis_installer_v1alpha1_Monitoring(ref common.ReferenceCal
 						},
 					},
 				},
-				Required: []string{"agent", "operator", "prometheus", "serviceMonitor"},
+				Required: []string{"agent", "prometheus", "serviceMonitor"},
 			},
 		},
 		Dependencies: []string{
@@ -671,7 +737,6 @@ func schema_installer_apis_installer_v1alpha1_PrometheusSpec(ref common.Referenc
 						},
 					},
 				},
-				Required: []string{"namespace"},
 			},
 		},
 	}
@@ -695,8 +760,22 @@ func schema_installer_apis_installer_v1alpha1_ServiceAccountSpec(ref common.Refe
 							Format: "",
 						},
 					},
+					"annotations": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type:   []string{"string"},
+										Format: "",
+									},
+								},
+							},
+						},
+					},
 				},
-				Required: []string{"create", "name"},
+				Required: []string{"create"},
 			},
 		},
 	}
@@ -723,7 +802,6 @@ func schema_installer_apis_installer_v1alpha1_ServiceMonitorLabels(ref common.Re
 						},
 					},
 				},
-				Required: []string{"labels"},
 			},
 		},
 	}
