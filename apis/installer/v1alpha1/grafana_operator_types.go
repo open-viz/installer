@@ -27,7 +27,7 @@ const (
 	ResourceGrafanaOperators    = "grafanaoperators"
 )
 
-// GrafanaOperator defines the schama for KubeVault Operator Installer.
+// GrafanaOperator defines the schama for Grafana Operator Installer.
 
 // +genclient
 // +genclient:skipVerbs=updateStatus
