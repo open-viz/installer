@@ -45,7 +45,7 @@ func generateSwaggerJson() {
 		Scheme: Scheme,
 		Codecs: Codecs,
 		Info: spec.InfoProps{
-			Title:   "KubeVault Installer",
+			Title:   "Searchlight Installer",
 			Version: "v0.2.0",
 			Contact: &spec.ContactInfo{
 				Name:  "AppsCode Inc.",
