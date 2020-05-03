@@ -61,9 +61,9 @@ ARCH := $(if $(GOARCH),$(GOARCH),$(shell go env GOARCH))
 BASEIMAGE_PROD   ?= gcr.io/distroless/static
 BASEIMAGE_DBG    ?= debian:stretch
 
-GO_VERSION       ?= 1.13.5
+GO_VERSION       ?= 1.14.2
 BUILD_IMAGE      ?= appscode/golang-dev:$(GO_VERSION)
-CHART_TEST_IMAGE ?= quay.io/helmpack/chart-testing:v3.0.0-beta.1
+CHART_TEST_IMAGE ?= quay.io/helmpack/chart-testing:v3.0.0-rc.1
 
 OUTBIN = bin/$(OS)_$(ARCH)/$(BIN)
 ifeq ($(OS),windows)
@@ -228,8 +228,23 @@ gen-values-schema:
 	@yq r api/crds/installer.searchlight.dev_grafanaoperators.yaml spec.validation.openAPIV3Schema.properties.spec > /tmp/grafana-operator-values.openapiv3_schema.yaml
 	@yq d /tmp/grafana-operator-values.openapiv3_schema.yaml description > charts/grafana-operator/values.openapiv3_schema.yaml
 
+.PHONY: gen-chart-doc
+gen-chart-doc: gen-chart-doc-grafana-operator
+
+gen-chart-doc-%:
+	@echo "Generate $* chart docs"
+	@docker run --rm 	                                 \
+		-u $$(id -u):$$(id -g)                           \
+		-v /tmp:/.cache                                  \
+		-v $$(pwd):$(DOCKER_REPO_ROOT)                   \
+		-w $(DOCKER_REPO_ROOT)                           \
+		--env HTTP_PROXY=$(HTTP_PROXY)                   \
+		--env HTTPS_PROXY=$(HTTPS_PROXY)                 \
+		$(BUILD_IMAGE)                                   \
+		chart-doc-gen -d ./charts/$*/doc.yaml -v ./charts/$*/values.yaml > ./charts/$*/README.md
+
 .PHONY: manifests
-manifests: gen-crds patch-crds label-crds gen-bindata gen-values-schema
+manifests: gen-crds patch-crds label-crds gen-bindata gen-values-schema gen-chart-doc
 
 .PHONY: gen
 gen: clientset gen-crd-protos manifests openapi
