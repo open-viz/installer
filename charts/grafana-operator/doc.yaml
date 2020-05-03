@@ -1,0 +1,18 @@
+project:
+  name: Grafana Operator by AppsCode
+  shortName: Grafana Operator
+  url: https://github.com/searchlight/grafana-operator
+  description: Grafana Operator for Kubernetes
+  app: a Grafana operator
+repository:
+  url: https://charts.appscode.com/stable/
+  name: appscode
+chart:
+  name: grafana-operator
+  values: "-- generate from values file --"
+  valuesExample: "-- generate from values file --"
+prerequisites:
+- Kubernetes 1.11+
+release:
+  name: grafana-operator
+  namespace: kube-system
