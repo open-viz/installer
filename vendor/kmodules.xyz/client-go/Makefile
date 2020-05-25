@@ -15,15 +15,12 @@
 
 SHELL=/bin/bash -o pipefail
 
-GO_PKG   := go.searchlight.dev
+GO_PKG   := kmodules.xyz
 REPO     := $(notdir $(shell pwd))
-BIN      := installer
+BIN      := client-go
 
-# Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
-CRD_OPTIONS          ?= "crd:trivialVersions=true,preserveUnknownFields=false,crdVersions={v1beta1,v1}"
 # https://github.com/appscodelabs/gengo-builder
 CODE_GENERATOR_IMAGE ?= appscode/gengo:release-1.18
-API_GROUPS           ?= installer:v1alpha1
 
 # This version-strategy uses git tags to set the version string
 git_branch       := $(shell git rev-parse --abbrev-ref HEAD)
@@ -49,7 +46,7 @@ endif
 ### These variables should not need tweaking.
 ###
 
-SRC_DIRS := api apis hack/gencrd # directories which hold app source (not vendored)
+SRC_DIRS := *.go admissionregistration api apiextensions apiregistration apps batch bin certificates core discovery dynamic extensions logs meta openapi policy rbac storage tools 
 
 DOCKER_PLATFORMS := linux/amd64 linux/arm linux/arm64
 BIN_PLATFORMS    := $(DOCKER_PLATFORMS)
@@ -63,7 +60,6 @@ BASEIMAGE_DBG    ?= debian:stretch
 
 GO_VERSION       ?= 1.14
 BUILD_IMAGE      ?= appscode/golang-dev:$(GO_VERSION)
-CHART_TEST_IMAGE ?= quay.io/helmpack/chart-testing:v3.0.0-rc.1
 
 OUTBIN = bin/$(OS)_$(ARCH)/$(BIN)
 ifeq ($(OS),windows)
@@ -105,27 +101,9 @@ version:
 	@echo commit_hash=$(commit_hash)
 	@echo commit_timestamp=$(commit_timestamp)
 
+# Generate a typed clientset
 .PHONY: clientset
 clientset:
-	@docker run --rm 	                                          \
-		-u $$(id -u):$$(id -g)                                    \
-		-v /tmp:/.cache                                           \
-		-v $$(pwd):$(DOCKER_REPO_ROOT)                            \
-		-w $(DOCKER_REPO_ROOT)                                    \
-		--env HTTP_PROXY=$(HTTP_PROXY)                            \
-		--env HTTPS_PROXY=$(HTTPS_PROXY)                          \
-		$(CODE_GENERATOR_IMAGE)                                   \
-		/go/src/k8s.io/code-generator/generate-groups.sh          \
-			"deepcopy"                                            \
-			$(GO_PKG)/$(REPO)/client                              \
-			$(GO_PKG)/$(REPO)/apis                                \
-			"$(API_GROUPS)"                                       \
-			--go-header-file "./hack/license/go.txt"
-
-# Generate openapi schema
-.PHONY: openapi
-openapi: $(addprefix openapi-, $(subst :,_, $(API_GROUPS)))
-	@echo "Generating api/openapi-spec/swagger.json"
 	@docker run --rm	                                 \
 		-u $$(id -u):$$(id -g)                           \
 		-v /tmp:/.cache                                  \
@@ -133,13 +111,16 @@ openapi: $(addprefix openapi-, $(subst :,_, $(API_GROUPS)))
 		-w $(DOCKER_REPO_ROOT)                           \
 		--env HTTP_PROXY=$(HTTP_PROXY)                   \
 		--env HTTPS_PROXY=$(HTTPS_PROXY)                 \
-		--env GO111MODULE=on                             \
-		--env GOFLAGS="-mod=vendor"                      \
-		$(BUILD_IMAGE)                                   \
-		go run hack/gencrd/main.go
+		$(CODE_GENERATOR_IMAGE)                          \
+		deepcopy-gen                                     \
+			--go-header-file "./hack/license/go.txt"     \
+			--input-dirs "$(GO_PKG)/$(REPO)/api/v1"      \
+			--output-file-base zz_generated.deepcopy
 
-openapi-%:
-	@echo "Generating openapi schema for $(subst _,/,$*)"
+# Generate openapi schema
+.PHONY: openapi
+openapi:
+	@echo "Generating openapi schema"
 	@docker run --rm	                                 \
 		-u $$(id -u):$$(id -g)                           \
 		-v /tmp:/.cache                                  \
@@ -150,50 +131,13 @@ openapi-%:
 		$(CODE_GENERATOR_IMAGE)                          \
 		openapi-gen                                      \
 			--v 1 --logtostderr                          \
-			--go-header-file "./hack/license/go.txt" \
-			--input-dirs "$(GO_PKG)/$(REPO)/apis/$(subst _,/,$*),k8s.io/apimachinery/pkg/apis/meta/v1,k8s.io/apimachinery/pkg/api/resource,k8s.io/apimachinery/pkg/runtime,k8s.io/apimachinery/pkg/util/intstr,k8s.io/apimachinery/pkg/version,k8s.io/api/core/v1,k8s.io/api/apps/v1,k8s.io/api/rbac/v1" \
-			--output-package "$(GO_PKG)/$(REPO)/apis/$(subst _,/,$*)" \
+			--go-header-file "./hack/license/go.txt"     \
+			--input-dirs "$(GO_PKG)/$(REPO)/api/v1"      \
+			--output-package "$(GO_PKG)/$(REPO)/api/v1"  \
 			--report-filename /tmp/violation_exceptions.list
 
-# Generate CRD manifests
-.PHONY: gen-crds
-gen-crds:
-	@echo "Generating CRD manifests"
-	@docker run --rm	                    \
-		-u $$(id -u):$$(id -g)              \
-		-v /tmp:/.cache                     \
-		-v $$(pwd):$(DOCKER_REPO_ROOT)      \
-		-w $(DOCKER_REPO_ROOT)              \
-	    --env HTTP_PROXY=$(HTTP_PROXY)      \
-	    --env HTTPS_PROXY=$(HTTPS_PROXY)    \
-		$(CODE_GENERATOR_IMAGE)             \
-		controller-gen                      \
-			$(CRD_OPTIONS)                  \
-			paths="./apis/..."              \
-			output:crd:artifacts:config=api/crds
-
-crds_to_patch := installer.searchlight.dev_grafanaoperators.yaml
-
-.PHONY: patch-crds
-patch-crds: $(addprefix patch-crd-, $(crds_to_patch))
-patch-crd-%: $(BUILD_DIRS)
-	@echo "patching $*"
-	@kubectl patch -f api/crds/$* -p "$$(cat hack/crd-patch.json)" --type=json --local=true -o yaml > bin/$*
-	@mv bin/$* api/crds/$*
-
-.PHONY: label-crds
-label-crds: $(BUILD_DIRS)
-	@for f in api/crds/*.yaml; do \
-		echo "applying app.kubernetes.io/name=searchlight label to $$f"; \
-		kubectl label --overwrite -f $$f --local=true -o yaml app.kubernetes.io/name=searchlight > bin/crd.yaml; \
-		mv bin/crd.yaml $$f; \
-	done
-
 .PHONY: gen-crd-protos
-gen-crd-protos: $(addprefix gen-crd-protos-, $(subst :,_, $(API_GROUPS)))
-
-gen-crd-protos-%:
-	@echo "Generating protobuf for $(subst _,/,$*)"
+gen-crd-protos:
 	@docker run --rm                                     \
 		-u $$(id -u):$$(id -g)                           \
 		-v /tmp:/.cache                                  \
@@ -207,47 +151,10 @@ gen-crd-protos-%:
 			--proto-import=$(DOCKER_REPO_ROOT)/vendor    \
 			--proto-import=$(DOCKER_REPO_ROOT)/third_party/protobuf \
 			--apimachinery-packages=-k8s.io/apimachinery/pkg/api/resource,-k8s.io/apimachinery/pkg/apis/meta/v1,-k8s.io/apimachinery/pkg/apis/meta/v1beta1,-k8s.io/apimachinery/pkg/runtime,-k8s.io/apimachinery/pkg/runtime/schema,-k8s.io/apimachinery/pkg/util/intstr \
-			--packages=-k8s.io/api/core/v1,go.searchlight.dev/installer/apis/$(subst _,/,$*)
-
-.PHONY: gen-bindata
-gen-bindata:
-	@docker run                                                 \
-	    -i                                                      \
-	    --rm                                                    \
-	    -u $$(id -u):$$(id -g)                                  \
-	    -v $$(pwd):/src                                         \
-	    -w /src/api/crds                                        \
-		-v /tmp:/.cache                                         \
-	    --env HTTP_PROXY=$(HTTP_PROXY)                          \
-	    --env HTTPS_PROXY=$(HTTPS_PROXY)                        \
-	    $(BUILD_IMAGE)                                          \
-	    go-bindata -ignore=\\.go -ignore=\\.DS_Store -mode=0644 -modtime=1573722179 -o bindata.go -pkg crds ./...
-
-.PHONY: gen-values-schema
-gen-values-schema:
-	@yq r api/crds/installer.searchlight.dev_grafanaoperators.v1.yaml spec.versions[0].schema.openAPIV3Schema.properties.spec > /tmp/grafana-operator-values.openapiv3_schema.yaml
-	@yq d /tmp/grafana-operator-values.openapiv3_schema.yaml description > charts/grafana-operator/values.openapiv3_schema.yaml
-
-.PHONY: gen-chart-doc
-gen-chart-doc: gen-chart-doc-grafana-operator
-
-gen-chart-doc-%:
-	@echo "Generate $* chart docs"
-	@docker run --rm 	                                 \
-		-u $$(id -u):$$(id -g)                           \
-		-v /tmp:/.cache                                  \
-		-v $$(pwd):$(DOCKER_REPO_ROOT)                   \
-		-w $(DOCKER_REPO_ROOT)                           \
-		--env HTTP_PROXY=$(HTTP_PROXY)                   \
-		--env HTTPS_PROXY=$(HTTPS_PROXY)                 \
-		$(BUILD_IMAGE)                                   \
-		chart-doc-gen -d ./charts/$*/doc.yaml -v ./charts/$*/values.yaml > ./charts/$*/README.md
-
-.PHONY: manifests
-manifests: gen-crds patch-crds label-crds gen-bindata gen-values-schema gen-chart-doc
+			--packages=-k8s.io/api/core/v1,kmodules.xyz/client-go/api/v1
 
 .PHONY: gen
-gen: clientset gen-crd-protos manifests openapi
+gen: clientset openapi gen-crd-protos
 
 fmt: $(BUILD_DIRS)
 	@docker run                                                 \
@@ -263,7 +170,7 @@ fmt: $(BUILD_DIRS)
 	    --env HTTPS_PROXY=$(HTTPS_PROXY)                        \
 	    $(BUILD_IMAGE)                                          \
 	    /bin/bash -c "                                          \
-	        REPO_PKG=$(GO_PKG)                                  \
+	        REPO_PKG=$(GO_PKG)/$(REPO)                          \
 	        ./hack/fmt.sh $(SRC_DIRS)                           \
 	    "
 
@@ -297,10 +204,7 @@ $(OUTBIN): $(BUILD_DIRS)
 	    "
 	@echo
 
-.PHONY: test
-test: unit-tests
-
-unit-tests: $(BUILD_DIRS)
+test: $(BUILD_DIRS)
 	@docker run                                                 \
 	    -i                                                      \
 	    --rm                                                    \
@@ -319,34 +223,6 @@ unit-tests: $(BUILD_DIRS)
 	        VERSION=$(VERSION)                                  \
 	        ./hack/test.sh $(SRC_DIRS)                          \
 	    "
-
-TEST_CHARTS ?=
-
-ifeq ($(strip $(TEST_CHARTS)),)
-	CT_ARGS = --all
-else
-	CT_ARGS = --charts=$(TEST_CHARTS)
-endif
-
-.PHONY: ct
-ct: $(BUILD_DIRS)
-	@docker run                                                 \
-	    -i                                                      \
-	    --rm                                                    \
-	    -v $$(pwd):/src                                         \
-	    -w /src                                                 \
-	    --net=host                                              \
-	    -v $(HOME)/.kube:/.kube                                 \
-	    -v $(HOME)/.minikube:$(HOME)/.minikube                  \
-	    -v $(HOME)/.credentials:$(HOME)/.credentials            \
-	    -v $$(pwd)/.go/bin/$(OS)_$(ARCH):/go/bin                \
-	    -v $$(pwd)/.go/bin/$(OS)_$(ARCH):/go/bin/$(OS)_$(ARCH)  \
-	    -v $$(pwd)/.go/cache:/.cache                            \
-	    --env HTTP_PROXY=$(HTTP_PROXY)                          \
-	    --env HTTPS_PROXY=$(HTTPS_PROXY)                        \
-	    --env KUBECONFIG=$(subst $(HOME),,$(KUBECONFIG))        \
-	    $(CHART_TEST_IMAGE)                                     \
-	    ct lint-and-install --debug $(CT_ARGS)
 
 ADDTL_LINTERS   := goconst,gofmt,goimports,unparam
 
@@ -367,21 +243,21 @@ lint: $(BUILD_DIRS)
 	    --env GO111MODULE=on                                    \
 	    --env GOFLAGS="-mod=vendor"                             \
 	    $(BUILD_IMAGE)                                          \
-	    golangci-lint run --enable $(ADDTL_LINTERS) --timeout=10m --skip-files="generated.*\.go$\" --skip-dirs-use-default --skip-dirs=client,vendor
+	    golangci-lint run --enable $(ADDTL_LINTERS) --timeout=10m --skip-files="generated.*\.go$\" --skip-dirs-use-default
 
 $(BUILD_DIRS):
 	@mkdir -p $@
 
 .PHONY: dev
-dev: gen fmt
+dev: gen fmt push
 
 .PHONY: verify
 verify: verify-modules verify-gen
 
 .PHONY: verify-modules
 verify-modules:
-	GO111MODULE=on go mod tidy
-	GO111MODULE=on go mod vendor
+	go mod tidy
+	go mod vendor
 	@if !(git diff --exit-code HEAD); then \
 		echo "go module files are out of date"; exit 1; \
 	fi
@@ -389,7 +265,7 @@ verify-modules:
 .PHONY: verify-gen
 verify-gen: gen fmt
 	@if !(git diff --exit-code HEAD); then \
-		echo "generated files are out of date, run make gen"; exit 1; \
+		echo "file formatting is out of date, run make gen fmt"; exit 1; \
 	fi
 
 .PHONY: add-license
@@ -403,7 +279,7 @@ add-license:
 		--env HTTP_PROXY=$(HTTP_PROXY)                   \
 		--env HTTPS_PROXY=$(HTTPS_PROXY)                 \
 		$(BUILD_IMAGE)                                   \
-		ltag -t "./hack/license" --excludes "vendor contrib libbuild" -v
+		ltag -t "./hack/license" --excludes "vendor contrib" -v
 
 .PHONY: check-license
 check-license:
@@ -416,10 +292,10 @@ check-license:
 		--env HTTP_PROXY=$(HTTP_PROXY)                   \
 		--env HTTPS_PROXY=$(HTTPS_PROXY)                 \
 		$(BUILD_IMAGE)                                   \
-		ltag -t "./hack/license" --excludes "vendor contrib libbuild" --check -v
+		ltag -t "./hack/license" --excludes "vendor contrib" --check -v
 
 .PHONY: ci
-ci: verify check-license lint build unit-tests #cover
+ci: verify lint build test #cover
 
 .PHONY: clean
 clean:
