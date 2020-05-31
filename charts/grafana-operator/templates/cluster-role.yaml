@@ -35,11 +35,15 @@ rules:
 - apiGroups:
   - ""
   resources:
-  - configmaps
   - secrets
   - services
   - serviceaccounts
   verbs: ["create", "get", "patch"]
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs: ["create", "get", "list", "watch", "patch"]
 - apiGroups:
   - ""
   resources:
