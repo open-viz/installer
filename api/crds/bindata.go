@@ -215,8 +215,8 @@ type bintree struct {
 }
 
 var _bintree = &bintree{nil, map[string]*bintree{
-	"installer.searchlight.dev_grafanaoperators.v1.yaml": {installerSearchlightDev_grafanaoperatorsV1Yaml, map[string]*bintree{}},
-	"installer.searchlight.dev_grafanaoperators.yaml":    {installerSearchlightDev_grafanaoperatorsYaml, map[string]*bintree{}},
+	"installer.searchlight.dev_grafanaoperators.v1.yaml": &bintree{installerSearchlightDev_grafanaoperatorsV1Yaml, map[string]*bintree{}},
+	"installer.searchlight.dev_grafanaoperators.yaml":    &bintree{installerSearchlightDev_grafanaoperatorsYaml, map[string]*bintree{}},
 }}
 
 // RestoreAsset restores an asset under the given directory
