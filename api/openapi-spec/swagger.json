@@ -185,8 +185,15 @@
         {
           "uniqueItems": true,
           "type": "string",
-          "description": "When specified with a watch call, shows changes that occur after that particular version of a resource. Defaults to changes from the beginning of history. When specified for list: - if unset, then the result is returned from remote storage based on quorum-read flag; - if it's 0, then we simply return what we currently have in cache, no guarantee; - if set to non zero, then the result is at least as fresh as given rv.",
+          "description": "resourceVersion sets a constraint on what resource versions a request may be served from. See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
           "name": "resourceVersion",
+          "in": "query"
+        },
+        {
+          "uniqueItems": true,
+          "type": "string",
+          "description": "resourceVersionMatch determines how resourceVersion is applied to list calls. It is highly recommended that resourceVersionMatch be set for list calls where resourceVersion is set See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
+          "name": "resourceVersionMatch",
           "in": "query"
         },
         {
@@ -264,8 +271,15 @@
           {
             "uniqueItems": true,
             "type": "string",
-            "description": "When specified with a watch call, shows changes that occur after that particular version of a resource. Defaults to changes from the beginning of history. When specified for list: - if unset, then the result is returned from remote storage based on quorum-read flag; - if it's 0, then we simply return what we currently have in cache, no guarantee; - if set to non zero, then the result is at least as fresh as given rv.",
+            "description": "resourceVersion sets a constraint on what resource versions a request may be served from. See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
             "name": "resourceVersion",
+            "in": "query"
+          },
+          {
+            "uniqueItems": true,
+            "type": "string",
+            "description": "resourceVersionMatch determines how resourceVersion is applied to list calls. It is highly recommended that resourceVersionMatch be set for list calls where resourceVersion is set See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
+            "name": "resourceVersionMatch",
             "in": "query"
           },
           {
@@ -385,13 +399,6 @@
         "operationId": "deleteInstallerSearchlightDevV1alpha1CollectionNamespacedGrafanaOperator",
         "parameters": [
           {
-            "uniqueItems": true,
-            "type": "boolean",
-            "description": "allowWatchBookmarks requests watch events with type \"BOOKMARK\". Servers that do not implement bookmarks may ignore this flag and bookmarks are sent at the server's discretion. Clients should not assume bookmarks are returned at any specific interval, nor may they assume the server will send any BOOKMARK event during a session. If this is not a watch, this field is ignored. If the feature gate WatchBookmarks is not enabled in apiserver, this field is ignored.",
-            "name": "allowWatchBookmarks",
-            "in": "query"
-          },
-          {
             "name": "body",
             "in": "body",
             "schema": {
@@ -457,8 +464,15 @@
           {
             "uniqueItems": true,
             "type": "string",
-            "description": "When specified with a watch call, shows changes that occur after that particular version of a resource. Defaults to changes from the beginning of history. When specified for list: - if unset, then the result is returned from remote storage based on quorum-read flag; - if it's 0, then we simply return what we currently have in cache, no guarantee; - if set to non zero, then the result is at least as fresh as given rv.",
+            "description": "resourceVersion sets a constraint on what resource versions a request may be served from. See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
             "name": "resourceVersion",
+            "in": "query"
+          },
+          {
+            "uniqueItems": true,
+            "type": "string",
+            "description": "resourceVersionMatch determines how resourceVersion is applied to list calls. It is highly recommended that resourceVersionMatch be set for list calls where resourceVersion is set See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
+            "name": "resourceVersionMatch",
             "in": "query"
           },
           {
@@ -466,13 +480,6 @@
             "type": "integer",
             "description": "Timeout for the list/watch call. This limits the duration of the call, regardless of any activity or inactivity.",
             "name": "timeoutSeconds",
-            "in": "query"
-          },
-          {
-            "uniqueItems": true,
-            "type": "boolean",
-            "description": "Watch for changes to the described resources and return them as a stream of add, update, and remove notifications. Specify resourceVersion.",
-            "name": "watch",
             "in": "query"
           }
         ],
@@ -852,8 +859,15 @@
         {
           "uniqueItems": true,
           "type": "string",
-          "description": "When specified with a watch call, shows changes that occur after that particular version of a resource. Defaults to changes from the beginning of history. When specified for list: - if unset, then the result is returned from remote storage based on quorum-read flag; - if it's 0, then we simply return what we currently have in cache, no guarantee; - if set to non zero, then the result is at least as fresh as given rv.",
+          "description": "resourceVersion sets a constraint on what resource versions a request may be served from. See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
           "name": "resourceVersion",
+          "in": "query"
+        },
+        {
+          "uniqueItems": true,
+          "type": "string",
+          "description": "resourceVersionMatch determines how resourceVersion is applied to list calls. It is highly recommended that resourceVersionMatch be set for list calls where resourceVersion is set See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
+          "name": "resourceVersionMatch",
           "in": "query"
         },
         {
@@ -961,8 +975,15 @@
         {
           "uniqueItems": true,
           "type": "string",
-          "description": "When specified with a watch call, shows changes that occur after that particular version of a resource. Defaults to changes from the beginning of history. When specified for list: - if unset, then the result is returned from remote storage based on quorum-read flag; - if it's 0, then we simply return what we currently have in cache, no guarantee; - if set to non zero, then the result is at least as fresh as given rv.",
+          "description": "resourceVersion sets a constraint on what resource versions a request may be served from. See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
           "name": "resourceVersion",
+          "in": "query"
+        },
+        {
+          "uniqueItems": true,
+          "type": "string",
+          "description": "resourceVersionMatch determines how resourceVersion is applied to list calls. It is highly recommended that resourceVersionMatch be set for list calls where resourceVersion is set See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
+          "name": "resourceVersionMatch",
           "in": "query"
         },
         {
@@ -1078,8 +1099,15 @@
         {
           "uniqueItems": true,
           "type": "string",
-          "description": "When specified with a watch call, shows changes that occur after that particular version of a resource. Defaults to changes from the beginning of history. When specified for list: - if unset, then the result is returned from remote storage based on quorum-read flag; - if it's 0, then we simply return what we currently have in cache, no guarantee; - if set to non zero, then the result is at least as fresh as given rv.",
+          "description": "resourceVersion sets a constraint on what resource versions a request may be served from. See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
           "name": "resourceVersion",
+          "in": "query"
+        },
+        {
+          "uniqueItems": true,
+          "type": "string",
+          "description": "resourceVersionMatch determines how resourceVersion is applied to list calls. It is highly recommended that resourceVersionMatch be set for list calls where resourceVersion is set See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
+          "name": "resourceVersionMatch",
           "in": "query"
         },
         {
@@ -1109,13 +1137,16 @@
       ],
       "properties": {
         "registry": {
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "repository": {
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "resources": {
           "description": "Compute Resources required by the sidecar container.",
+          "default": {},
           "$ref": "#/definitions/io.k8s.api.core.v1.ResourceRequirements"
         },
         "securityContext": {
@@ -1123,7 +1154,8 @@
           "$ref": "#/definitions/io.k8s.api.core.v1.SecurityContext"
         },
         "tag": {
-          "type": "string"
+          "type": "string",
+          "default": ""
         }
       }
     },
@@ -1139,9 +1171,11 @@
           "type": "string"
         },
         "metadata": {
+          "default": {},
           "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta"
         },
         "spec": {
+          "default": {},
           "$ref": "#/definitions/dev.searchlight.go.installer.apis.installer.v1alpha1.GrafanaOperatorSpec"
         }
       },
@@ -1165,6 +1199,7 @@
           "description": "Items is a list of GrafanaOperator CRD objects",
           "type": "array",
           "items": {
+            "default": {},
             "$ref": "#/definitions/dev.searchlight.go.installer.apis.installer.v1alpha1.GrafanaOperator"
           }
         },
@@ -1173,6 +1208,7 @@
           "type": "string"
         },
         "metadata": {
+          "default": {},
           "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ListMeta"
         }
       },
@@ -1204,56 +1240,70 @@
         "annotations": {
           "type": "object",
           "additionalProperties": {
-            "type": "string"
+            "type": "string",
+            "default": ""
           }
         },
         "apiserver": {
+          "default": {},
           "$ref": "#/definitions/dev.searchlight.go.installer.apis.installer.v1alpha1.WebHookSpec"
         },
         "cleaner": {
+          "default": {},
           "$ref": "#/definitions/dev.searchlight.go.installer.apis.installer.v1alpha1.ImageRef"
         },
         "criticalAddon": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": false
         },
         "enableAnalytics": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": false
         },
         "fullnameOverride": {
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "imagePullPolicy": {
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "imagePullSecrets": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "default": ""
           }
         },
         "logLevel": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "default": 0
         },
         "monitoring": {
+          "default": {},
           "$ref": "#/definitions/dev.searchlight.go.installer.apis.installer.v1alpha1.Monitoring"
         },
         "nameOverride": {
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "nodeSelector": {
           "type": "object",
           "additionalProperties": {
-            "type": "string"
+            "type": "string",
+            "default": ""
           }
         },
         "operator": {
+          "default": {},
           "$ref": "#/definitions/dev.searchlight.go.installer.apis.installer.v1alpha1.ContianerRef"
         },
         "podAnnotations": {
           "type": "object",
           "additionalProperties": {
-            "type": "string"
+            "type": "string",
+            "default": ""
           }
         },
         "podSecurityContext": {
@@ -1262,15 +1312,18 @@
         },
         "replicaCount": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "default": 0
         },
         "serviceAccount": {
+          "default": {},
           "$ref": "#/definitions/dev.searchlight.go.installer.apis.installer.v1alpha1.ServiceAccountSpec"
         },
         "tolerations": {
           "description": "If specified, the pod's tolerations.",
           "type": "array",
           "items": {
+            "default": {},
             "$ref": "#/definitions/io.k8s.api.core.v1.Toleration"
           }
         }
@@ -1280,7 +1333,8 @@
       "type": "object",
       "properties": {
         "enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": false
         }
       }
     },
@@ -1293,13 +1347,16 @@
       ],
       "properties": {
         "registry": {
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "repository": {
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "tag": {
-          "type": "string"
+          "type": "string",
+          "default": ""
         }
       }
     },
@@ -1312,10 +1369,12 @@
       ],
       "properties": {
         "agent": {
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "operator": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": false
         },
         "prometheus": {
           "$ref": "#/definitions/dev.searchlight.go.installer.apis.installer.v1alpha1.PrometheusSpec"
@@ -1329,7 +1388,8 @@
       "type": "object",
       "properties": {
         "namespace": {
-          "type": "string"
+          "type": "string",
+          "default": ""
         }
       }
     },
@@ -1342,11 +1402,13 @@
         "annotations": {
           "type": "object",
           "additionalProperties": {
-            "type": "string"
+            "type": "string",
+            "default": ""
           }
         },
         "create": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": false
         },
         "name": {
           "type": "string"
@@ -1359,7 +1421,8 @@
         "labels": {
           "type": "object",
           "additionalProperties": {
-            "type": "string"
+            "type": "string",
+            "default": ""
           }
         }
       }
@@ -1371,16 +1434,20 @@
       ],
       "properties": {
         "caCrt": {
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "generate": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": false
         },
         "serverCrt": {
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "serverKey": {
-          "type": "string"
+          "type": "string",
+          "default": ""
         }
       }
     },
@@ -1398,33 +1465,42 @@
       ],
       "properties": {
         "bypassValidatingWebhookXray": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": false
         },
         "ca": {
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "enableMutatingWebhook": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": false
         },
         "enableValidatingWebhook": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": false
         },
         "groupPriorityMinimum": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "default": 0
         },
         "healthcheck": {
+          "default": {},
           "$ref": "#/definitions/dev.searchlight.go.installer.apis.installer.v1alpha1.HealthcheckSpec"
         },
         "servingCerts": {
+          "default": {},
           "$ref": "#/definitions/dev.searchlight.go.installer.apis.installer.v1alpha1.ServingCerts"
         },
         "useKubeapiserverFqdnForAks": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": false
         },
         "versionPriority": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "default": 0
         }
       }
     },
@@ -1454,14 +1530,16 @@
           "description": "Added capabilities",
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "default": ""
           }
         },
         "drop": {
           "description": "Removed capabilities",
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "default": ""
           }
         }
       }
@@ -1474,6 +1552,7 @@
           "description": "The scheduler will prefer to schedule pods to nodes that satisfy the affinity expressions specified by this field, but it may choose a node that violates one or more of the expressions. The node that is most preferred is the one with the greatest sum of weights, i.e. for each node that meets all of the scheduling requirements (resource request, requiredDuringScheduling affinity expressions, etc.), compute a sum by iterating through the elements of this field and adding \"weight\" to the sum if the node matches the corresponding matchExpressions; the node(s) with the highest sum are the most preferred.",
           "type": "array",
           "items": {
+            "default": {},
             "$ref": "#/definitions/io.k8s.api.core.v1.PreferredSchedulingTerm"
           }
         },
@@ -1494,6 +1573,7 @@
           "description": "Required. A list of node selector terms. The terms are ORed.",
           "type": "array",
           "items": {
+            "default": {},
             "$ref": "#/definitions/io.k8s.api.core.v1.NodeSelectorTerm"
           }
         }
@@ -1509,17 +1589,20 @@
       "properties": {
         "key": {
           "description": "The label key that the selector applies to.",
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "operator": {
           "description": "Represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists, DoesNotExist. Gt, and Lt.",
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "values": {
           "description": "An array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. If the operator is Gt or Lt, the values array must have a single element, which will be interpreted as an integer. This array is replaced during a strategic merge patch.",
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "default": ""
           }
         }
       }
@@ -1532,6 +1615,7 @@
           "description": "A list of node selector requirements by node's labels.",
           "type": "array",
           "items": {
+            "default": {},
             "$ref": "#/definitions/io.k8s.api.core.v1.NodeSelectorRequirement"
           }
         },
@@ -1539,6 +1623,7 @@
           "description": "A list of node selector requirements by node's fields.",
           "type": "array",
           "items": {
+            "default": {},
             "$ref": "#/definitions/io.k8s.api.core.v1.NodeSelectorRequirement"
           }
         }
@@ -1552,6 +1637,7 @@
           "description": "The scheduler will prefer to schedule pods to nodes that satisfy the affinity expressions specified by this field, but it may choose a node that violates one or more of the expressions. The node that is most preferred is the one with the greatest sum of weights, i.e. for each node that meets all of the scheduling requirements (resource request, requiredDuringScheduling affinity expressions, etc.), compute a sum by iterating through the elements of this field and adding \"weight\" to the sum if the node has pods which matches the corresponding podAffinityTerm; the node(s) with the highest sum are the most preferred.",
           "type": "array",
           "items": {
+            "default": {},
             "$ref": "#/definitions/io.k8s.api.core.v1.WeightedPodAffinityTerm"
           }
         },
@@ -1559,6 +1645,7 @@
           "description": "If the affinity requirements specified by this field are not met at scheduling time, the pod will not be scheduled onto the node. If the affinity requirements specified by this field cease to be met at some point during pod execution (e.g. due to a pod label update), the system may or may not try to eventually evict the pod from its node. When there are multiple elements, the lists of nodes corresponding to each podAffinityTerm are intersected, i.e. all terms must be satisfied.",
           "type": "array",
           "items": {
+            "default": {},
             "$ref": "#/definitions/io.k8s.api.core.v1.PodAffinityTerm"
           }
         }
@@ -1575,16 +1662,22 @@
           "description": "A label query over a set of resources, in this case pods.",
           "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.LabelSelector"
         },
+        "namespaceSelector": {
+          "description": "A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means \"this pod's namespace\". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.",
+          "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.LabelSelector"
+        },
         "namespaces": {
-          "description": "namespaces specifies which namespaces the labelSelector applies to (matches against); null or empty list means \"this pod's namespace\"",
+          "description": "namespaces specifies a static list of namespace names that the term applies to. The term is applied to the union of the namespaces listed in this field and the ones selected by namespaceSelector. null or empty namespaces list and null namespaceSelector means \"this pod's namespace\"",
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "default": ""
           }
         },
         "topologyKey": {
           "description": "This pod should be co-located (affinity) or not co-located (anti-affinity) with the pods matching the labelSelector in the specified namespaces, where co-located is defined as running on a node whose value of the label with key topologyKey matches that of any node on which any of the selected pods is running. Empty topologyKey is not allowed.",
-          "type": "string"
+          "type": "string",
+          "default": ""
         }
       }
     },
@@ -1596,6 +1689,7 @@
           "description": "The scheduler will prefer to schedule pods to nodes that satisfy the anti-affinity expressions specified by this field, but it may choose a node that violates one or more of the expressions. The node that is most preferred is the one with the greatest sum of weights, i.e. for each node that meets all of the scheduling requirements (resource request, requiredDuringScheduling anti-affinity expressions, etc.), compute a sum by iterating through the elements of this field and adding \"weight\" to the sum if the node has pods which matches the corresponding podAffinityTerm; the node(s) with the highest sum are the most preferred.",
           "type": "array",
           "items": {
+            "default": {},
             "$ref": "#/definitions/io.k8s.api.core.v1.WeightedPodAffinityTerm"
           }
         },
@@ -1603,6 +1697,7 @@
           "description": "If the anti-affinity requirements specified by this field are not met at scheduling time, the pod will not be scheduled onto the node. If the anti-affinity requirements specified by this field cease to be met at some point during pod execution (e.g. due to a pod label update), the system may or may not try to eventually evict the pod from its node. When there are multiple elements, the lists of nodes corresponding to each podAffinityTerm are intersected, i.e. all terms must be satisfied.",
           "type": "array",
           "items": {
+            "default": {},
             "$ref": "#/definitions/io.k8s.api.core.v1.PodAffinityTerm"
           }
         }
@@ -1618,7 +1713,7 @@
           "format": "int64"
         },
         "fsGroupChangePolicy": {
-          "description": "fsGroupChangePolicy defines behavior of changing ownership and permission of the volume before being exposed inside Pod. This field will only apply to volume types which support fsGroup based ownership(and permissions). It will have no effect on ephemeral volume types such as: secret, configmaps and emptydir. Valid values are \"OnRootMismatch\" and \"Always\". If not specified defaults to \"Always\".",
+          "description": "fsGroupChangePolicy defines behavior of changing ownership and permission of the volume before being exposed inside Pod. This field will only apply to volume types which support fsGroup based ownership(and permissions). It will have no effect on ephemeral volume types such as: secret, configmaps and emptydir. Valid values are \"OnRootMismatch\" and \"Always\". If not specified, \"Always\" is used.",
           "type": "string"
         },
         "runAsGroup": {
@@ -1639,18 +1734,24 @@
           "description": "The SELinux context to be applied to all containers. If unspecified, the container runtime will allocate a random SELinux context for each container.  May also be set in SecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence for that container.",
           "$ref": "#/definitions/io.k8s.api.core.v1.SELinuxOptions"
         },
+        "seccompProfile": {
+          "description": "The seccomp options to use by the containers in this pod.",
+          "$ref": "#/definitions/io.k8s.api.core.v1.SeccompProfile"
+        },
         "supplementalGroups": {
           "description": "A list of groups applied to the first process run in each container, in addition to the container's primary GID.  If unspecified, no groups will be added to any container.",
           "type": "array",
           "items": {
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": 0
           }
         },
         "sysctls": {
           "description": "Sysctls hold a list of namespaced sysctls used for the pod. Pods with unsupported sysctls (by the container runtime) might fail to launch.",
           "type": "array",
           "items": {
+            "default": {},
             "$ref": "#/definitions/io.k8s.api.core.v1.Sysctl"
           }
         },
@@ -1670,12 +1771,14 @@
       "properties": {
         "preference": {
           "description": "A node selector term, associated with the corresponding weight.",
+          "default": {},
           "$ref": "#/definitions/io.k8s.api.core.v1.NodeSelectorTerm"
         },
         "weight": {
           "description": "Weight associated with matching the corresponding nodeSelectorTerm, in the range 1-100.",
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "default": 0
         }
       }
     },
@@ -1684,16 +1787,18 @@
       "type": "object",
       "properties": {
         "limits": {
-          "description": "Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/",
+          "description": "Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
           "type": "object",
           "additionalProperties": {
+            "default": {},
             "$ref": "#/definitions/io.k8s.apimachinery.pkg.api.resource.Quantity"
           }
         },
         "requests": {
-          "description": "Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/",
+          "description": "Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
           "type": "object",
           "additionalProperties": {
+            "default": {},
             "$ref": "#/definitions/io.k8s.apimachinery.pkg.api.resource.Quantity"
           }
         }
@@ -1720,6 +1825,32 @@
           "type": "string"
         }
       }
+    },
+    "io.k8s.api.core.v1.SeccompProfile": {
+      "description": "SeccompProfile defines a pod/container's seccomp profile settings. Only one profile source may be set.",
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "localhostProfile": {
+          "description": "localhostProfile indicates a profile defined in a file on the node should be used. The profile must be preconfigured on the node to work. Must be a descending path, relative to the kubelet's configured seccomp profile location. Must only be set if type is \"Localhost\".",
+          "type": "string"
+        },
+        "type": {
+          "description": "type indicates which kind of seccomp profile will be applied. Valid options are:\n\nLocalhost - a profile defined in a file on the node should be used. RuntimeDefault - the container runtime default profile should be used. Unconfined - no profile should be applied.",
+          "type": "string",
+          "default": ""
+        }
+      },
+      "x-kubernetes-unions": [
+        {
+          "discriminator": "type",
+          "fields-to-discriminateBy": {
+            "localhostProfile": "LocalhostProfile"
+          }
+        }
+      ]
     },
     "io.k8s.api.core.v1.SecurityContext": {
       "description": "SecurityContext holds security configuration that will be applied to a container. Some fields are present in both SecurityContext and PodSecurityContext.  When both are set, the values in SecurityContext take precedence.",
@@ -1763,6 +1894,10 @@
           "description": "The SELinux context to be applied to the container. If unspecified, the container runtime will allocate a random SELinux context for each container.  May also be set in PodSecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.",
           "$ref": "#/definitions/io.k8s.api.core.v1.SELinuxOptions"
         },
+        "seccompProfile": {
+          "description": "The seccomp options to use by this container. If seccomp options are provided at both the pod \u0026 container level, the container options override the pod options.",
+          "$ref": "#/definitions/io.k8s.api.core.v1.SeccompProfile"
+        },
         "windowsOptions": {
           "description": "The Windows specific settings applied to all containers. If unspecified, the options from the PodSecurityContext will be used. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.",
           "$ref": "#/definitions/io.k8s.api.core.v1.WindowsSecurityContextOptions"
@@ -1779,11 +1914,13 @@
       "properties": {
         "name": {
           "description": "Name of a property to set",
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "value": {
           "description": "Value of a property to set",
-          "type": "string"
+          "type": "string",
+          "default": ""
         }
       }
     },
@@ -1824,12 +1961,14 @@
       "properties": {
         "podAffinityTerm": {
           "description": "Required. A pod affinity term, associated with the corresponding weight.",
+          "default": {},
           "$ref": "#/definitions/io.k8s.api.core.v1.PodAffinityTerm"
         },
         "weight": {
           "description": "weight associated with matching the corresponding podAffinityTerm, in the range 1-100.",
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "default": 0
         }
       }
     },
@@ -1873,16 +2012,19 @@
         },
         "name": {
           "description": "name is the name of the group.",
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "preferredVersion": {
           "description": "preferredVersion is the version preferred by the API server, which probably is the storage version.",
+          "default": {},
           "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.GroupVersionForDiscovery"
         },
         "serverAddressByClientCIDRs": {
           "description": "a map of client CIDR to server address that is serving this group. This is to help clients reach servers in the most network-efficient way possible. Clients can use the appropriate server address as per the CIDR that they match. In case of multiple matches, clients should use the longest matching CIDR. The server returns only those CIDRs that it thinks that the client can match. For example: the master will return an internal IP CIDR only, if the client reaches the server using an internal IP. Server looks at X-Forwarded-For header or X-Real-Ip header or request.RemoteAddr (in that order) to get the client IP.",
           "type": "array",
           "items": {
+            "default": {},
             "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ServerAddressByClientCIDR"
           }
         },
@@ -1890,6 +2032,7 @@
           "description": "versions are the versions supported in this group.",
           "type": "array",
           "items": {
+            "default": {},
             "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.GroupVersionForDiscovery"
           }
         }
@@ -1917,6 +2060,7 @@
           "description": "groups is a list of APIGroup.",
           "type": "array",
           "items": {
+            "default": {},
             "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.APIGroup"
           }
         },
@@ -1948,7 +2092,8 @@
           "description": "categories is a list of the grouped resources this resource belongs to (e.g. 'all')",
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "default": ""
           }
         },
         "group": {
@@ -1957,26 +2102,31 @@
         },
         "kind": {
           "description": "kind is the kind for the resource (e.g. 'Foo' is the kind for a resource 'foo')",
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "name": {
           "description": "name is the plural name of the resource.",
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "namespaced": {
           "description": "namespaced indicates if a resource is namespaced or not.",
-          "type": "boolean"
+          "type": "boolean",
+          "default": false
         },
         "shortNames": {
           "description": "shortNames is a list of suggested short names of the resource.",
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "default": ""
           }
         },
         "singularName": {
           "description": "singularName is the singular name of the resource.  This allows clients to handle plural and singular opaquely. The singularName is more correct for reporting status on a single item and both singular and plural are allowed from the kubectl CLI interface.",
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "storageVersionHash": {
           "description": "The hash value of the storage version, the version this resource is converted to when written to the data store. Value must be treated as opaque by clients. Only equality comparison on the value is valid. This is an alpha feature and may change or be removed in the future. The field is populated by the apiserver only if the StorageVersionHash feature gate is enabled. This field will remain optional even if it graduates.",
@@ -1986,7 +2136,8 @@
           "description": "verbs is a list of supported kube verbs (this includes get, list, watch, create, update, patch, delete, deletecollection, and proxy)",
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "default": ""
           }
         },
         "version": {
@@ -2009,7 +2160,8 @@
         },
         "groupVersion": {
           "description": "groupVersion is the group and version this APIResourceList is for.",
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "kind": {
           "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
@@ -2019,6 +2171,7 @@
           "description": "resources contains the name of the resources and if they are namespaced.",
           "type": "array",
           "items": {
+            "default": {},
             "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.APIResource"
           }
         }
@@ -2043,7 +2196,8 @@
           "description": "When present, indicates that modifications should not be persisted. An invalid or unrecognized dryRun directive will result in an error response and no further processing of the request. Valid values are: - All: all dry run stages will be processed",
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "default": ""
           }
         },
         "gracePeriodSeconds": {
@@ -2095,11 +2249,13 @@
       "properties": {
         "groupVersion": {
           "description": "groupVersion specifies the API group and version in the form \"group/version\"",
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "version": {
           "description": "version specifies the version in the form of \"version\". This is to save the clients the trouble of splitting the GroupVersion.",
-          "type": "string"
+          "type": "string",
+          "default": ""
         }
       }
     },
@@ -2111,6 +2267,7 @@
           "description": "matchExpressions is a list of label selector requirements. The requirements are ANDed.",
           "type": "array",
           "items": {
+            "default": {},
             "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.LabelSelectorRequirement"
           }
         },
@@ -2118,10 +2275,12 @@
           "description": "matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is \"key\", the operator is \"In\", and the values array contains only \"value\". The requirements are ANDed.",
           "type": "object",
           "additionalProperties": {
-            "type": "string"
+            "type": "string",
+            "default": ""
           }
         }
-      }
+      },
+      "x-kubernetes-map-type": "atomic"
     },
     "io.k8s.apimachinery.pkg.apis.meta.v1.LabelSelectorRequirement": {
       "description": "A label selector requirement is a selector that contains values, a key, and an operator that relates the key and values.",
@@ -2134,18 +2293,21 @@
         "key": {
           "description": "key is the label key that the selector applies to.",
           "type": "string",
+          "default": "",
           "x-kubernetes-patch-merge-key": "key",
           "x-kubernetes-patch-strategy": "merge"
         },
         "operator": {
           "description": "operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.",
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "values": {
           "description": "values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.",
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "default": ""
           }
         }
       }
@@ -2211,7 +2373,8 @@
           "description": "Annotations is an unstructured key value map stored with a resource that may be set by external tools to store and retrieve arbitrary metadata. They are not queryable and should be preserved when modifying objects. More info: http://kubernetes.io/docs/user-guide/annotations",
           "type": "object",
           "additionalProperties": {
-            "type": "string"
+            "type": "string",
+            "default": ""
           }
         },
         "clusterName": {
@@ -2220,6 +2383,7 @@
         },
         "creationTimestamp": {
           "description": "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC.\n\nPopulated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata",
+          "default": {},
           "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
         },
         "deletionGracePeriodSeconds": {
@@ -2235,7 +2399,8 @@
           "description": "Must be empty before the object is deleted from the registry. Each entry is an identifier for the responsible component that will remove the entry from the list. If the deletionTimestamp of the object is non-nil, entries in this list can only be removed. Finalizers may be processed and removed in any order.  Order is NOT enforced because it introduces significant risk of stuck finalizers. finalizers is a shared field, any actor with permission can reorder it. If the finalizer list is processed in order, then this can lead to a situation in which the component responsible for the first finalizer in the list is waiting for a signal (field value, external system, or other) produced by a component responsible for a finalizer later in the list, resulting in a deadlock. Without enforced ordering finalizers are free to order amongst themselves and are not vulnerable to ordering changes in the list.",
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "default": ""
           },
           "x-kubernetes-patch-strategy": "merge"
         },
@@ -2252,13 +2417,15 @@
           "description": "Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels",
           "type": "object",
           "additionalProperties": {
-            "type": "string"
+            "type": "string",
+            "default": ""
           }
         },
         "managedFields": {
           "description": "ManagedFields maps workflow-id and version to the set of fields that are managed by that workflow. This is mostly for internal housekeeping, and users typically shouldn't need to set or understand this field. A workflow can be the user's name, a controller's name, or the name of a specific apply path like \"ci-cd\". The set of fields is always in the version that the workflow used when modifying the object.",
           "type": "array",
           "items": {
+            "default": {},
             "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ManagedFieldsEntry"
           }
         },
@@ -2267,13 +2434,14 @@
           "type": "string"
         },
         "namespace": {
-          "description": "Namespace defines the space within each name must be unique. An empty namespace is equivalent to the \"default\" namespace, but \"default\" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.\n\nMust be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces",
+          "description": "Namespace defines the space within which each name must be unique. An empty namespace is equivalent to the \"default\" namespace, but \"default\" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.\n\nMust be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces",
           "type": "string"
         },
         "ownerReferences": {
           "description": "List of objects depended by this object. If ALL objects in the list have been deleted, this object will be garbage collected. If this object is managed by a controller, then an entry in this list will point to this controller, with the controller field set to true. There cannot be more than one managing controller.",
           "type": "array",
           "items": {
+            "default": {},
             "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.OwnerReference"
           },
           "x-kubernetes-patch-merge-key": "uid",
@@ -2305,7 +2473,8 @@
       "properties": {
         "apiVersion": {
           "description": "API version of the referent.",
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "blockOwnerDeletion": {
           "description": "If true, AND if the owner has the \"foregroundDeletion\" finalizer, then the owner cannot be deleted from the key-value store until this reference is removed. Defaults to false. To set this field, a user needs \"delete\" permission of the owner, otherwise 422 (Unprocessable Entity) will be returned.",
@@ -2317,15 +2486,18 @@
         },
         "kind": {
           "description": "Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "name": {
           "description": "Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names",
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "uid": {
           "description": "UID of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#uids",
-          "type": "string"
+          "type": "string",
+          "default": ""
         }
       }
     },
@@ -2357,11 +2529,13 @@
       "properties": {
         "clientCIDR": {
           "description": "The CIDR with which clients can match their IP to figure out the server address that they should use.",
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "serverAddress": {
           "description": "Address of this server, suitable for a client that matches the above CIDR. This can be a hostname, hostname:port, IP or IP:port.",
-          "type": "string"
+          "type": "string",
+          "default": ""
         }
       }
     },
@@ -2392,6 +2566,7 @@
         },
         "metadata": {
           "description": "Standard list metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+          "default": {},
           "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ListMeta"
         },
         "reason": {
@@ -2442,6 +2617,7 @@
           "description": "The Causes array includes more details associated with the StatusReason failure. Not all StatusReasons may provide detailed causes.",
           "type": "array",
           "items": {
+            "default": {},
             "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.StatusCause"
           }
         },
@@ -2483,10 +2659,12 @@
       "properties": {
         "object": {
           "description": "Object is:\n * If Type is Added or Modified: the new state of the object.\n * If Type is Deleted: the state of the object immediately before deletion.\n * If Type is Error: *Status is recommended; other types may make sense\n   depending on context.",
+          "default": {},
           "$ref": "#/definitions/io.k8s.apimachinery.pkg.runtime.RawExtension"
         },
         "type": {
-          "type": "string"
+          "type": "string",
+          "default": ""
         }
       },
       "x-kubernetes-group-version-kind": [
