@@ -7,17 +7,14 @@ require (
 	github.com/gogo/protobuf v1.3.2
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/google/gofuzz v1.1.0
-	github.com/imdario/mergo v0.3.6 // indirect
-	github.com/onsi/gomega v1.8.1 // indirect
 	github.com/yudai/gojsondiff v1.0.0
 	gomodules.xyz/runtime v0.0.0-20201104200926-d838b09dda8b
-	google.golang.org/appengine v1.6.5 // indirect
 	k8s.io/api v0.21.0
 	k8s.io/apimachinery v0.21.0
 	k8s.io/client-go v0.21.0
 	k8s.io/kube-openapi v0.0.0-20210305001622-591a79e4bda7
-	kmodules.xyz/client-go v0.0.0-20210429233600-944c5ec810d6
-	kmodules.xyz/crd-schema-fuzz v0.0.0-20210427142518-307383b79acb
+	kmodules.xyz/client-go v0.0.0-20210502215034-b73197efff3f
+	kmodules.xyz/crd-schema-fuzz v0.0.0-20210503010137-7a9466ed654d
 	sigs.k8s.io/yaml v1.2.0
 )
 
@@ -60,6 +57,10 @@ replace github.com/Azure/go-autorest/autorest/validation => github.com/Azure/go-
 replace github.com/Azure/go-autorest/logger => github.com/Azure/go-autorest/logger v0.2.0
 
 replace github.com/Azure/go-autorest/tracing => github.com/Azure/go-autorest/tracing v0.6.0
+
+replace github.com/docker/distribution => github.com/docker/distribution v0.0.0-20191216044856-a8371794149d
+
+replace github.com/docker/docker => github.com/moby/moby v17.12.0-ce-rc1.0.20200618181300-9dc6525e6118+incompatible
 
 replace github.com/go-openapi/analysis => github.com/go-openapi/analysis v0.19.5
 
@@ -119,7 +120,7 @@ replace k8s.io/client-go => k8s.io/client-go v0.21.0
 
 replace k8s.io/component-base => k8s.io/component-base v0.21.0
 
-replace k8s.io/kube-openapi => k8s.io/kube-openapi v0.0.0-20201113171705-d219536bb9fd
+replace k8s.io/kube-openapi => k8s.io/kube-openapi v0.0.0-20210305001622-591a79e4bda7
 
 replace k8s.io/kubernetes => github.com/kmodules/kubernetes v1.22.0-alpha.0.0.20210427080452-22d2e66bae50
 
