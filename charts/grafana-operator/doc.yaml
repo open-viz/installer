@@ -15,4 +15,4 @@ prerequisites:
 - Kubernetes 1.16+
 release:
   name: grafana-operator
-  namespace: kube-system
+  namespace: openviz

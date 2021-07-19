@@ -8,7 +8,7 @@ provider "helm" {
 
 locals {
   searchlight_release_name = "grafana-operator"
-  searchlight_namespace    = "kube-system"
+  searchlight_namespace    = "openviz"
 }
 
 locals {
