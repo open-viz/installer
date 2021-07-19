@@ -1,5 +1,5 @@
 /*
-Copyright The Searchlight Authors.
+Copyright AppsCode Inc. and Contributors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ limitations under the License.
 // Package v1alpha1 is the v1alpha1 version of the API.
 
 // +k8s:deepcopy-gen=package,register
-// +k8s:conversion-gen=go.searchlight.dev/installer/apis/installer
+// +k8s:conversion-gen=go.openviz.dev/installer/apis/installer
 // +k8s:openapi-gen=true
 // +k8s:defaulter-gen=TypeMeta
 

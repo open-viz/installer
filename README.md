@@ -1,1 +1,1 @@
-# Searchlight installers
+# OpenViz installers

@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: searchlight:grafana:admin
+  name: openviz:core:admin
   labels:
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
   annotations:
@@ -10,7 +10,7 @@ metadata:
 rules:
 - apiGroups:
   - appcatalog.appscode.com
-  - grafana.searchlight.dev
+  - openviz.dev
   resources:
   - "*"
   verbs: ["*"]
@@ -18,7 +18,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: searchlight:grafana:edit
+  name: openviz:core:edit
   labels:
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
   annotations:
@@ -26,7 +26,7 @@ metadata:
     "helm.sh/hook-delete-policy": before-hook-creation
 rules:
 - apiGroups:
-  - grafana.searchlight.dev
+  - openviz.dev
   resources:
   - dashboards
   verbs: ["*"]
@@ -39,7 +39,7 @@ rules:
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: searchlight:grafana:view
+  name: openviz:core:view
   labels:
     rbac.authorization.k8s.io/aggregate-to-view: "true"
   annotations:
@@ -47,7 +47,7 @@ metadata:
     "helm.sh/hook-delete-policy": before-hook-creation
 rules:
 - apiGroups:
-  - grafana.searchlight.dev
+  - openviz.dev
   resources:
   - dashboards
   verbs: ["get", "list", "watch"]

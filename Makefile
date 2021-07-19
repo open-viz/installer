@@ -15,12 +15,12 @@
 
 SHELL=/bin/bash -o pipefail
 
-GO_PKG   := go.searchlight.dev
+GO_PKG   := go.openviz.dev
 REPO     := $(notdir $(shell pwd))
 BIN      := installer
 
 # Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
-CRD_OPTIONS          ?= "crd:trivialVersions=true,preserveUnknownFields=false,crdVersions={v1beta1,v1}"
+CRD_OPTIONS          ?= "crd:trivialVersions=true,preserveUnknownFields=false,crdVersions={v1}"
 # https://github.com/appscodelabs/gengo-builder
 CODE_GENERATOR_IMAGE ?= appscode/gengo:release-1.21
 API_GROUPS           ?= installer:v1alpha1
@@ -49,8 +49,8 @@ endif
 ### These variables should not need tweaking.
 ###
 
-SRC_PKGS := api apis # directories which hold app source (not vendored)
-SRC_DIRS := $(SRC_PKGS) hack/gencrd
+SRC_PKGS := apis # directories which hold app source (not vendored)
+SRC_DIRS := $(SRC_PKGS)
 
 DOCKER_PLATFORMS := linux/amd64 linux/arm linux/arm64
 BIN_PLATFORMS    := $(DOCKER_PLATFORMS)
@@ -64,7 +64,7 @@ BASEIMAGE_DBG    ?= debian:buster
 
 GO_VERSION       ?= 1.16
 BUILD_IMAGE      ?= appscode/golang-dev:$(GO_VERSION)
-CHART_TEST_IMAGE ?= quay.io/helmpack/chart-testing:v3.0.0
+CHART_TEST_IMAGE ?= quay.io/helmpack/chart-testing:v3.4.0
 
 OUTBIN = bin/$(OS)_$(ARCH)/$(BIN)
 ifeq ($(OS),windows)
@@ -171,22 +171,22 @@ gen-crds:
 		controller-gen                      \
 			$(CRD_OPTIONS)                  \
 			paths="./apis/..."              \
-			output:crd:artifacts:config=api/crds
+			output:crd:artifacts:config=.crds
 
-crds_to_patch := installer.searchlight.dev_grafanaoperators.yaml
+crds_to_patch := installer.kubevault.com_kubevaultoperators.yaml
 
 .PHONY: patch-crds
 patch-crds: $(addprefix patch-crd-, $(crds_to_patch))
 patch-crd-%: $(BUILD_DIRS)
 	@echo "patching $*"
-	@kubectl patch -f api/crds/$* -p "$$(cat hack/crd-patch.json)" --type=json --local=true -o yaml > bin/$*
-	@mv bin/$* api/crds/$*
+	@kubectl patch -f .crds/$* -p "$$(cat hack/crd-patch.json)" --type=json --local=true -o yaml > bin/$*
+	@mv bin/$* .crds/$*
 
 .PHONY: label-crds
 label-crds: $(BUILD_DIRS)
-	@for f in api/crds/*.yaml; do \
-		echo "applying app.kubernetes.io/name=searchlight label to $$f"; \
-		kubectl label --overwrite -f $$f --local=true -o yaml app.kubernetes.io/name=searchlight > bin/crd.yaml; \
+	@for f in .crds/*.yaml; do \
+		echo "applying app.kubernetes.io/name=kubevault label to $$f"; \
+		kubectl label --overwrite -f $$f --local=true -o yaml app.kubernetes.io/name=kubevault > bin/crd.yaml; \
 		mv bin/crd.yaml $$f; \
 	done
 
@@ -208,29 +208,22 @@ gen-crd-protos-%:
 			--proto-import=$(DOCKER_REPO_ROOT)/vendor    \
 			--proto-import=$(DOCKER_REPO_ROOT)/third_party/protobuf \
 			--apimachinery-packages=-k8s.io/apimachinery/pkg/api/resource,-k8s.io/apimachinery/pkg/apis/meta/v1,-k8s.io/apimachinery/pkg/apis/meta/v1beta1,-k8s.io/apimachinery/pkg/runtime,-k8s.io/apimachinery/pkg/runtime/schema,-k8s.io/apimachinery/pkg/util/intstr \
-			--packages=-k8s.io/api/core/v1,go.searchlight.dev/installer/apis/$(subst _,/,$*)
-
-.PHONY: gen-bindata
-gen-bindata:
-	@docker run                                                 \
-	    -i                                                      \
-	    --rm                                                    \
-	    -u $$(id -u):$$(id -g)                                  \
-	    -v $$(pwd):/src                                         \
-	    -w /src/api/crds                                        \
-		-v /tmp:/.cache                                         \
-	    --env HTTP_PROXY=$(HTTP_PROXY)                          \
-	    --env HTTPS_PROXY=$(HTTPS_PROXY)                        \
-	    $(BUILD_IMAGE)                                          \
-	    go-bindata -ignore=\\.go -ignore=\\.DS_Store -mode=0644 -modtime=1573722179 -o bindata.go -pkg crds ./...
+			--packages=-k8s.io/api/core/v1,kubevault.dev/installer/apis/$(subst _,/,$*)
 
 .PHONY: gen-values-schema
-gen-values-schema:
-	@yq r api/crds/installer.searchlight.dev_grafanaoperators.v1.yaml spec.versions[0].schema.openAPIV3Schema.properties.spec > /tmp/grafana-operator-values.openapiv3_schema.yaml
-	@yq d /tmp/grafana-operator-values.openapiv3_schema.yaml description > charts/grafana-operator/values.openapiv3_schema.yaml
+gen-values-schema: $(BUILD_DIRS)
+	@for dir in charts/*/; do \
+		dir=$${dir%*/}; \
+		dir=$${dir##*/}; \
+		crd_file=.crds/installer.kubevault.com_$$(echo $$dir | tr -d '-')s.yaml; \
+		if [ ! -f $${crd_file} ]; then \
+			continue; \
+		fi; \
+		yq -y --indentless '.spec.versions[0].schema.openAPIV3Schema.properties.spec | del(.description)' $${crd_file} > charts/$${dir}/values.openapiv3_schema.yaml; \
+	done
 
 .PHONY: gen-chart-doc
-gen-chart-doc: gen-chart-doc-grafana-operator
+gen-chart-doc: $(shell find $$(pwd)/charts -maxdepth 1 -mindepth 1 -type d -printf 'gen-chart-doc-%f ')
 
 gen-chart-doc-%:
 	@echo "Generate $* chart docs"
@@ -245,10 +238,10 @@ gen-chart-doc-%:
 		chart-doc-gen -d ./charts/$*/doc.yaml -v ./charts/$*/values.yaml > ./charts/$*/README.md
 
 .PHONY: manifests
-manifests: gen-crds patch-crds label-crds gen-bindata gen-values-schema gen-chart-doc
+manifests: gen-crds gen-values-schema gen-chart-doc
 
 .PHONY: gen
-gen: clientset gen-crd-protos manifests openapi
+gen: clientset manifests
 
 CHART_REGISTRY     ?= appscode
 CHART_REGISTRY_URL ?= https://charts.appscode.com/stable/
@@ -262,14 +255,13 @@ chart-%:
 	@$(MAKE) chart-contents-$* gen-chart-doc-$* --no-print-directory
 
 chart-contents-%:
-	@yq w -i ./charts/$*/doc.yaml repository.name --tag '!!str' $(CHART_REGISTRY)
-	@yq w -i ./charts/$*/doc.yaml repository.url --tag '!!str' $(CHART_REGISTRY_URL)
-	@if [ ! -z "$(CHART_VERSION)" ]; then                                            \
-		yq w -i ./charts/$*/Chart.yaml version --tag '!!str' $(CHART_VERSION);       \
+	@yq -y --indentless -i '.repository.name="$(CHART_REGISTRY)"' ./charts/$*/doc.yaml
+	@yq -y --indentless -i '.repository.url="$(CHART_REGISTRY_URL)"' ./charts/$*/doc.yaml
+	@if [ -n "$(CHART_VERSION)" ]; then \
+	  yq -y --indentless -i '.version="$(CHART_VERSION)"' ./charts/$*/Chart.yaml; \
 	fi
-	@if [ ! -z "$(APP_VERSION)" ]; then                                              \
-		yq w -i ./charts/$*/Chart.yaml appVersion --tag '!!str' $(APP_VERSION);      \
-		yq w -i ./charts/$*/values.yaml operator.tag --tag '!!str' $(APP_VERSION);   \
+	@if [ -n "$(APP_VERSION)" ]; then \
+		yq -y --indentless -i '.appVersion="$(APP_VERSION)"' ./charts/$*/Chart.yaml; \
 	fi
 
 fmt: $(BUILD_DIRS)
@@ -286,6 +278,7 @@ fmt: $(BUILD_DIRS)
 	    --env HTTPS_PROXY=$(HTTPS_PROXY)                        \
 	    $(BUILD_IMAGE)                                          \
 	    /bin/bash -c "                                          \
+	        set -eou pipefail;                                  \
 	        REPO_PKG=$(GO_PKG)                                  \
 	        ./hack/fmt.sh $(SRC_DIRS)                           \
 	    "
@@ -343,12 +336,18 @@ unit-tests: $(BUILD_DIRS)
 	        ./hack/test.sh $(SRC_PKGS)                          \
 	    "
 
-TEST_CHARTS ?=
+CT_COMMAND     ?= lint-and-install
+TEST_CHARTS    ?=
+KUBE_NAMESPACE ?=
+
+ifeq ($(CT_COMMAND),lint-and-install)
+	ct_namespace = --namespace=$(KUBE_NAMESPACE)
+endif
 
 ifeq ($(strip $(TEST_CHARTS)),)
-	CT_ARGS = --all
+	CT_ARGS = --all $(ct_namespace)
 else
-	CT_ARGS = --charts=$(TEST_CHARTS)
+	CT_ARGS = --charts=$(TEST_CHARTS) $(ct_namespace)
 endif
 
 .PHONY: ct
@@ -356,6 +355,7 @@ ct: $(BUILD_DIRS)
 	@docker run                                                 \
 	    -i                                                      \
 	    --rm                                                    \
+	    -u $$(id -u):$$(id -g)                                  \
 	    -v $$(pwd):/src                                         \
 	    -w /src                                                 \
 	    --net=host                                              \
@@ -369,7 +369,10 @@ ct: $(BUILD_DIRS)
 	    --env HTTPS_PROXY=$(HTTPS_PROXY)                        \
 	    --env KUBECONFIG=$(subst $(HOME),,$(KUBECONFIG))        \
 	    $(CHART_TEST_IMAGE)                                     \
-	    ct lint-and-install --debug $(CT_ARGS)
+	    /bin/sh -c "                                            \
+	        kubectl delete crds --selector=app.kubernetes.io/name=openviz; \
+	        ct $(CT_COMMAND) --debug --validate-maintainers=false $(CT_ARGS) \
+	    "
 
 ADDTL_LINTERS   := goconst,gofmt,goimports,unparam
 
@@ -399,10 +402,10 @@ $(BUILD_DIRS):
 dev: gen fmt
 
 .PHONY: verify
-verify: verify-gen verify-modules
+verify: verify-modules
 
 .PHONY: verify-modules
-verify-modules:
+verify-modules: gen fmt
 	GO111MODULE=on go mod tidy
 	GO111MODULE=on go mod vendor
 	@if !(git diff --exit-code HEAD); then \
