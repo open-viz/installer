@@ -16,14 +16,14 @@
 {{- $serverKey = required "Required when apiserver.servingCerts.generate is false" .Values.apiserver.servingCerts.serverKey }}
 {{- end }}
 {{- if .Values.apiserver.enableValidatingWebhook }}
-apiVersion: apiregistration.k8s.io/v1beta1
+apiVersion: apiregistration.k8s.io/v1
 kind: APIService
 metadata:
-  name: v1alpha1.validators.grafana.searchlight.dev
+  name: v1alpha1.validators.openviz.dev
   labels:
     {{- include "grafana-operator.labels" . | nindent 4 }}
 spec:
-  group: validators.grafana.searchlight.dev
+  group: validators.openviz.dev
   version: v1alpha1
   service:
     namespace: {{ .Release.Namespace }}
@@ -34,14 +34,14 @@ spec:
 {{- end }}
 {{- if .Values.apiserver.enableMutatingWebhook }}
 ---
-apiVersion: apiregistration.k8s.io/v1beta1
+apiVersion: apiregistration.k8s.io/v1
 kind: APIService
 metadata:
-  name: v1alpha1.mutators.grafana.searchlight.dev
+  name: v1alpha1.mutators.openviz.dev
   labels:
     {{- include "grafana-operator.labels" . | nindent 4 }}
 spec:
-  group: mutators.grafana.searchlight.dev
+  group: mutators.openviz.dev
   version: v1alpha1
   service:
     namespace: {{ .Release.Namespace }}
@@ -63,23 +63,6 @@ data:
   tls.crt: {{ $serverCrt }}
   tls.key: {{ $serverKey }}
 ---
-{{ $promNamespace:= default .Release.Namespace .Values.monitoring.prometheus.namespace }}
-{{- if (and (ne $promNamespace .Release.Namespace) .Values.monitoring.operator) }}
-# if operator monitoring is enabled and prometheus namespace is different than operator
-# create the above secret in prometheus namespace too.
-apiVersion: v1
-kind: Secret
-metadata:
-  name: {{ include "grafana-operator.fullname" . }}-apiserver-cert
-  namespace: {{ $promNamespace }}
-  labels:
-    {{- include "grafana-operator.labels" . | nindent 4 }}
-type: kubernetes.io/tls
-data:
-  tls.crt: {{ $serverCrt }}
-  tls.key: {{ $serverKey }}
----
-{{- end }}
 # to read the config for terminating authentication
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding

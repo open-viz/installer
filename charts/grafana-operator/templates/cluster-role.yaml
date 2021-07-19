@@ -22,7 +22,7 @@ rules:
   - validatingwebhookconfigurations
   verbs: ["delete", "list", "watch", "patch"]
 - apiGroups:
-  - grafana.searchlight.dev
+  - openviz.dev
   - appcatalog.appscode.com
   resources:
   - "*"

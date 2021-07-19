@@ -1,5 +1,5 @@
 /*
-Copyright The Searchlight Authors.
+Copyright AppsCode Inc. and Contributors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ limitations under the License.
 package install
 
 import (
-	"go.searchlight.dev/installer/apis/installer/v1alpha1"
+	"go.openviz.dev/installer/apis/installer/v1alpha1"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
