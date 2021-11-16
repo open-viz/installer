@@ -1,7 +1,7 @@
 project:
   name: Grafana Operator by AppsCode
   shortName: Grafana Operator
-  url: https://github.com/searchlight/grafana-operator
+  url: https://github.com/open-viz/grafana-operator
   description: Grafana Operator for Kubernetes
   app: a Grafana operator
 repository:
@@ -15,4 +15,4 @@ prerequisites:
 - Kubernetes 1.16+
 release:
   name: grafana-operator
-  namespace: openviz
+  namespace: kubeops

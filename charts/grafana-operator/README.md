@@ -1,13 +1,13 @@
 # Grafana Operator
 
-[Grafana Operator by AppsCode](https://github.com/searchlight/grafana-operator) - Grafana Operator for Kubernetes
+[Grafana Operator by AppsCode](https://github.com/open-viz/grafana-operator) - Grafana Operator for Kubernetes
 
 ## TL;DR;
 
 ```console
 $ helm repo add appscode https://charts.appscode.com/stable/
 $ helm repo update
-$ helm install grafana-operator appscode/grafana-operator -n openviz
+$ helm install grafana-operator appscode/grafana-operator -n kubeops
 ```
 
 ## Introduction
@@ -23,7 +23,7 @@ This chart deploys a Grafana operator on a [Kubernetes](http://kubernetes.io) cl
 To install the chart with the release name `grafana-operator`:
 
 ```console
-$ helm install grafana-operator appscode/grafana-operator -n openviz
+$ helm install grafana-operator appscode/grafana-operator -n kubeops
 ```
 
 The command deploys a Grafana operator on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -35,7 +35,7 @@ The command deploys a Grafana operator on the Kubernetes cluster in the default 
 To uninstall/delete the `grafana-operator`:
 
 ```console
-$ helm delete grafana-operator -n openviz
+$ helm delete grafana-operator -n kubeops
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -91,12 +91,12 @@ The following table lists the configurable parameters of the `grafana-operator` 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example:
 
 ```console
-$ helm install grafana-operator appscode/grafana-operator -n openviz --set replicaCount=1
+$ helm install grafana-operator appscode/grafana-operator -n kubeops --set replicaCount=1
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while
 installing the chart. For example:
 
 ```console
-$ helm install grafana-operator appscode/grafana-operator -n openviz --values values.yaml
+$ helm install grafana-operator appscode/grafana-operator -n kubeops --values values.yaml
 ```
