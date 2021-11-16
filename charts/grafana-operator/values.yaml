@@ -10,11 +10,11 @@ fullnameOverride: ""
 replicaCount: 1
 operator:
   # Docker registry used to pull operator image
-  registry: searchlight
+  registry: appscode
   # Name of operator container image
   repository: grafana-operator
   # Operator container image tag
-  tag: v0.1.0-beta.0
+  tag: v0.0.1
   # Compute Resources required by the operator container
   resources: {}
   # Security options the operator container should run with
@@ -31,7 +31,7 @@ cleaner:
   # Webhook cleaner container image
   repository: kubectl
   # Webhook cleaner container image tag
-  tag: v1.16
+  tag: v1.22
   # Skip generating cleaner YAML
   skip: false
 # Specify an array of imagePullSecrets.
