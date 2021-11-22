@@ -4,7 +4,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "grafana-operator.fullname" . }}
+  name: {{ include "grafana-operator.fullname" . }}-operator
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "grafana-operator.labels" . | nindent 4 }}
@@ -16,10 +16,12 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
+      app.openviz.dev/component: operator
       {{- include "grafana-operator.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
+        app.openviz.dev/component: operator
         {{- include "grafana-operator.selectorLabels" . | nindent 8 }}
       annotations:
         checksum/apiregistration.yaml: {{ include (print $.Template.BasePath "/apiregistration.yaml") . | sha256sum }}
@@ -39,14 +41,8 @@ spec:
         image: {{ include "operator.registry" . }}/{{ .Values.operator.repository }}:{{ .Values.operator.tag }}
         imagePullPolicy: {{ .Values.imagePullPolicy  }}
         args:
-        - run
+        - operator
         - --v={{ .Values.logLevel }}
-        - --secure-port=8443
-        - --audit-log-path=-
-        - --tls-cert-file=/var/serving-cert/tls.crt
-        - --tls-private-key-file=/var/serving-cert/tls.key
-        - --enable-mutating-webhook={{ .Values.apiserver.enableMutatingWebhook }}
-        - --enable-validating-webhook={{ .Values.apiserver.enableValidatingWebhook }}
         - --bypass-validating-webhook-xray={{ .Values.apiserver.bypassValidatingWebhookXray }}
         - --use-kubeapiserver-fqdn-for-aks={{ .Values.apiserver.useKubeapiserverFqdnForAks }}
         ports:
@@ -60,20 +56,6 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-      {{- if .Values.apiserver.healthcheck.enabled }}
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 8443
-            scheme: HTTPS
-          initialDelaySeconds: 5
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 8443
-            scheme: HTTPS
-          initialDelaySeconds: 5
-      {{- end }}
         resources:
           {{- toYaml .Values.operator.resources | nindent 10 }}
         volumeMounts:

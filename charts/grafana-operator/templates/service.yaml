@@ -1,9 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "grafana-operator.fullname" . }}
+  name: {{ include "grafana-operator.fullname" . }}-webhook-server
   namespace: {{ .Release.Namespace }}
   labels:
+    app.openviz.dev/component: webhook-server
     {{- include "grafana-operator.labels" . | nindent 4 }}
   {{- if eq .Values.monitoring.agent "prometheus.io/builtin" }}
   annotations:
@@ -19,4 +20,5 @@ spec:
     port: 443
     targetPort: 8443
   selector:
+    app.openviz.dev/component: webhook-server
     {{- include "grafana-operator.selectorLabels" . | nindent 4 }}

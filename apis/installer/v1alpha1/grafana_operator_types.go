@@ -97,9 +97,7 @@ type GrafanaOperatorSpec struct {
 	PodSecurityContext *core.PodSecurityContext `json:"podSecurityContext"`
 	ServiceAccount     ServiceAccountSpec       `json:"serviceAccount"`
 	Apiserver          WebHookSpec              `json:"apiserver"`
-	//+optional
-	EnableAnalytics bool       `json:"enableAnalytics"`
-	Monitoring      Monitoring `json:"monitoring"`
+	Monitoring         Monitoring               `json:"monitoring"`
 }
 
 type ServiceAccountSpec struct {
@@ -111,11 +109,9 @@ type ServiceAccountSpec struct {
 }
 
 type WebHookSpec struct {
-	GroupPriorityMinimum    int32  `json:"groupPriorityMinimum"`
-	VersionPriority         int32  `json:"versionPriority"`
-	EnableMutatingWebhook   bool   `json:"enableMutatingWebhook"`
-	EnableValidatingWebhook bool   `json:"enableValidatingWebhook"`
-	CA                      string `json:"ca"`
+	GroupPriorityMinimum int32  `json:"groupPriorityMinimum"`
+	VersionPriority      int32  `json:"versionPriority"`
+	CA                   string `json:"ca"`
 	//+optional
 	BypassValidatingWebhookXray bool            `json:"bypassValidatingWebhookXray"`
 	UseKubeapiserverFqdnForAks  bool            `json:"useKubeapiserverFqdnForAks"`
