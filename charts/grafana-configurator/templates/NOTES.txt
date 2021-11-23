@@ -1,0 +1,3 @@
+To verify that Grafana Configurator is setup, run:
+
+  kubectl get appbinding --namespace {{ .Release.Namespace }} {{ include "grafana-configurator.fullname" . }}

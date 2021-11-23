@@ -1,9 +1,9 @@
 project:
-  name: Kubernetes UI Server by AppsCode
-  shortName: Kubernetes UI Server
+  name: Grafana UI Server by AppsCode
+  shortName: Grafana UI Server
   url: https://github.com/kubeops/ui-server
-  description: Kubernetes UI Server for ByteBuilders
-  app: a Kubernetes UI Server
+  description: Grafana UI Server for ByteBuilders
+  app: a Grafana UI Server
 repository:
   url: https://charts.appscode.com/stable/
   name: appscode

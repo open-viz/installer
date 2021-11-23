@@ -1,6 +1,6 @@
-# Kubernetes UI Server
+# Grafana UI Server
 
-[Kubernetes UI Server by AppsCode](https://github.com/kubeops/ui-server) - Kubernetes UI Server for ByteBuilders
+[Grafana UI Server by AppsCode](https://github.com/kubeops/ui-server) - Grafana UI Server for ByteBuilders
 
 ## TL;DR;
 
@@ -12,7 +12,7 @@ $ helm install grafana-ui-server appscode/grafana-ui-server -n kubeops
 
 ## Introduction
 
-This chart deploys a Kubernetes UI Server on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart deploys a Grafana UI Server on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
@@ -26,7 +26,7 @@ To install the chart with the release name `grafana-ui-server`:
 $ helm install grafana-ui-server appscode/grafana-ui-server -n kubeops
 ```
 
-The command deploys a Kubernetes UI Server on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+The command deploys a Grafana UI Server on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 

@@ -1,0 +1,33 @@
+apiVersion: appcatalog.appscode.com/v1alpha1
+kind: AppBinding
+metadata:
+  name: {{ include "grafana-configurator.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "grafana-configurator.labels" . | nindent 4 }}
+spec:
+  type: Grafana
+  clientConfig:
+  {{- if .Values.grafana.url }}
+    url: {{ .Values.grafana.url }}
+  {{- else }}
+    service:
+      scheme: {{ .Values.grafana.service.scheme }}
+      name: {{ .Values.grafana.service.name }}
+      port: {{ .Values.grafana.service.port }}
+      path: {{ .Values.grafana.service.path }}
+      query: {{ .Values.grafana.service.query }}
+  {{- end }}
+  secret:
+    name: {{ include "grafana-configurator.fullname" . }}-auth
+  insecureSkipTLSVerify: {{ .Values.grafana.tls.insecureSkipTLSVerify }}
+  caBundle: {{ .Values.grafana.tls.caBundle | b64enc }}
+  parameters:
+    apiVersion: openviz.dev/v1alpha1
+    kind: Datasource
+    metadata:
+      name: {{ .Values.datasource.name }}
+  {{- if .Values.grafana.tls.clientCert }}
+    clientCertSecret:
+      name: {{ include "grafana-configurator.fullname" . }}-tls
+  {{- end }}
