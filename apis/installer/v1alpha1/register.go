@@ -56,6 +56,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(SchemeGroupVersion,
 		&GrafanaOperator{},
 		&GrafanaOperatorList{},
+		&GrafanaUiServer{},
+		&GrafanaUiServerList{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,
