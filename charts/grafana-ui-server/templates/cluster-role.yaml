@@ -1,0 +1,50 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "grafana-ui-server.fullname" . }}
+  labels:
+    {{- include "grafana-ui-server.labels" . | nindent 4 }}
+rules:
+- apiGroups:
+  - ui.openviz.dev
+  resources:
+  - "*"
+  verbs: ["*"]
+- apiGroups:
+  - openviz.dev
+  resources:
+  - "*"
+  verbs: ["get", "list"]
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  verbs: ["get", "list", "watch"]
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs: ["get", "list"]
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
+  verbs: ["get", "list"]
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs: ["create"]
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs: ["get", "list", "watch"]
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - clusterroles
+  - clusterrolebindings
+  - roles
+  - rolebindings
+  verbs: ["get", "list", "watch"]

@@ -27,6 +27,7 @@ import (
 func TestDefaultValues(t *testing.T) {
 	checker := schemachecker.New("../../..", []interface{}{
 		v1alpha1.GrafanaOperatorSpec{},
+		v1alpha1.GrafanaUiServerSpec{},
 	})
 	checker.TestAll(t)
 }

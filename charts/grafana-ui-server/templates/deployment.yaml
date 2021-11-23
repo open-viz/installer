@@ -4,10 +4,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "grafana-operator.fullname" . }}
+  name: {{ include "grafana-ui-server.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "grafana-operator.labels" . | nindent 4 }}
+    {{- include "grafana-ui-server.labels" . | nindent 4 }}
   {{- with .Values.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -16,11 +16,11 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "grafana-operator.selectorLabels" . | nindent 6 }}
+      {{- include "grafana-ui-server.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "grafana-operator.selectorLabels" . | nindent 8 }}
+        {{- include "grafana-ui-server.selectorLabels" . | nindent 8 }}
       annotations:
         checksum/apiregistration.yaml: {{ include (print $.Template.BasePath "/apiregistration.yaml") . | sha256sum }}
       {{- if $criticalAddon }}
@@ -30,33 +30,33 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
-      {{- include "appscode.imagePullSecrets" . | nindent 6 }}
-      serviceAccountName: {{ include "grafana-operator.serviceAccountName" . }}
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      serviceAccountName: {{ include "grafana-ui-server.serviceAccountName" . }}
       containers:
-      - name: operator
+      - name: ui-server
         securityContext:
-          {{- toYaml .Values.operator.securityContext | nindent 10 }}
-        image: {{ include "operator.registry" . }}/{{ .Values.operator.repository }}:{{ .Values.operator.tag }}
+          {{- toYaml .Values.image.securityContext | nindent 10 }}
+        image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.imagePullPolicy  }}
         args:
-        - operator
+        - ui-server
         - --v={{ .Values.logLevel }}
         - --secure-port=8443
         - --audit-log-path=-
         - --tls-cert-file=/var/serving-cert/tls.crt
         - --tls-private-key-file=/var/serving-cert/tls.key
-        - --enable-mutating-webhook={{ .Values.apiserver.enableMutatingWebhook }}
-        - --enable-validating-webhook={{ .Values.apiserver.enableValidatingWebhook }}
-        - --bypass-validating-webhook-xray={{ .Values.apiserver.bypassValidatingWebhookXray }}
         - --use-kubeapiserver-fqdn-for-aks={{ .Values.apiserver.useKubeapiserverFqdnForAks }}
         ports:
         - containerPort: 8443
         env:
-        - name: POD_NAME
+        - name: MY_POD_NAME
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        - name: POD_NAMESPACE
+        - name: MY_POD_NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
@@ -75,7 +75,7 @@ spec:
           initialDelaySeconds: 5
       {{- end }}
         resources:
-          {{- toYaml .Values.operator.resources | nindent 10 }}
+          {{- toYaml .Values.image.resources | nindent 10 }}
         volumeMounts:
         - mountPath: /var/serving-cert
           name: serving-cert
@@ -83,7 +83,7 @@ spec:
       - name: serving-cert
         secret:
           defaultMode: 420
-          secretName: {{ include "grafana-operator.fullname" . }}-apiserver-cert
+          secretName: {{ include "grafana-ui-server.fullname" . }}-apiserver-cert
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
     {{- if or .Values.tolerations $criticalAddon }}
