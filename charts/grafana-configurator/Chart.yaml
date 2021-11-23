@@ -2,7 +2,7 @@ apiVersion: v2
 name: grafana-configurator
 description: A Helm chart for grafana-configurator by AppsCode
 type: application
-version: v2021.11.18
+version: v2021.11.16
 appVersion: v0.0.1
 home: https://github.com/open-viz
 icon: https://cdn.appscode.com/images/products/kubeops/icons/android-icon-192x192.png
