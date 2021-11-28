@@ -14,7 +14,7 @@ rules:
   - openviz.dev
   resources:
   - "*"
-  verbs: ["get", "list"]
+  verbs: ["get", "list", "watch"]
 - apiGroups:
   - ""
   resources:
