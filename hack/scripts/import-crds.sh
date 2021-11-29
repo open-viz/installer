@@ -53,7 +53,7 @@ crd-importer \
 crd-importer \
     --input=${crd_dir} \
     --out=./charts/grafana-ui-server/crds \
-    --gk=Dashboard.openviz.dev
+    --gk=GrafanaDashboard.openviz.dev
 
 crd-importer \
     --input=https://github.com/kmodules/custom-resources/raw/kubernetes-1.21.1/crds/appcatalog.appscode.com_appbindings.yaml \
