@@ -1,0 +1,4 @@
+grafana:
+  url: "<set-real-rul>"
+  auth:
+    apiKey: "<set-real-token>"
