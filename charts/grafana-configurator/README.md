@@ -54,19 +54,17 @@ The following table lists the configurable parameters of the `grafana-configurat
 | grafana.service.port              |             | `""`    |
 | grafana.service.path              |             | `""`    |
 | grafana.service.query             |             | `""`    |
-| grafana.auth.username             |             | `""`    |
-| grafana.auth.password             |             | `""`    |
+| grafana.auth.apiKey               |             | `""`    |
 | grafana.tls.insecureSkipTLSVerify |             | `false` |
 | grafana.tls.caBundle              |             | `""`    |
-| grafana.tls.clientCert            |             | `""`    |
-| grafana.tls.clientKey             |             | `""`    |
-| datasource.name                   |             | `""`    |
+| dashboard.datasource              |             | `""`    |
+| dashboard.folderID                |             | `0`     |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example:
 
 ```console
-$ helm install grafana-configurator appscode/grafana-configurator -n kubeops --set -- generate from values file --
+$ helm install grafana-configurator appscode/grafana-configurator -n kubeops --set dashboard.folderID=0
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while

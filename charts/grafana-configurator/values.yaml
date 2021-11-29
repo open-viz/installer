@@ -16,14 +16,12 @@ grafana:
     query: ""
 
   auth:
-    username: ""
-    password: ""
+    apiKey: ""
 
   tls:
     insecureSkipTLSVerify: false
     caBundle: ""
-    clientCert: ""
-    clientKey: ""
 
-datasource:
-  name: ""
+dashboard:
+  datasource: ""
+  folderID: 0
