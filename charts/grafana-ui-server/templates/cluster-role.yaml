@@ -16,6 +16,11 @@ rules:
   - "*"
   verbs: ["get", "list", "watch"]
 - apiGroups:
+  - appcatalog.appscode.com
+  resources:
+  - "*"
+  verbs: ["get", "list", "watch"]
+- apiGroups:
   - ""
   resources:
   - nodes
