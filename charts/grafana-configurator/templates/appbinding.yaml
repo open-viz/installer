@@ -3,6 +3,10 @@ kind: AppBinding
 metadata:
   name: {{ include "grafana-configurator.fullname" . }}
   namespace: {{ .Release.Namespace }}
+{{- if .Values.grafana.default }}
+  annotations:
+    openviz.dev/is-default-grafana: "true"
+{{- end }}
   labels:
     {{- include "grafana-configurator.labels" . | nindent 4 }}
 spec:

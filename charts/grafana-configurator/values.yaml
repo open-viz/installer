@@ -6,6 +6,8 @@ nameOverride: ""
 fullnameOverride: ""
 
 grafana:
+  default: false
+
   url: ""
 
   service:

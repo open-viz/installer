@@ -48,6 +48,7 @@ The following table lists the configurable parameters of the `grafana-configurat
 |-----------------------------------|-------------|---------|
 | nameOverride                      |             | `""`    |
 | fullnameOverride                  |             | `""`    |
+| grafana.default                   |             | `false` |
 | grafana.url                       |             | `""`    |
 | grafana.service.scheme            |             | `""`    |
 | grafana.service.name              |             | `""`    |
