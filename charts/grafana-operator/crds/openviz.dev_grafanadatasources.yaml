@@ -4,7 +4,7 @@ metadata:
   creationTimestamp: null
   labels:
     app.kubernetes.io/name: openviz
-  name: grafanadashboards.openviz.dev
+  name: grafanadatasources.openviz.dev
 spec:
   group: openviz.dev
   names:
@@ -12,10 +12,10 @@ spec:
     - grafana
     - openviz
     - appscode
-    kind: GrafanaDashboard
-    listKind: GrafanaDashboardList
-    plural: grafanadashboards
-    singular: grafanadashboard
+    kind: GrafanaDatasource
+    listKind: GrafanaDatasourceList
+    plural: grafanadatasources
+    singular: grafanadatasource
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -40,21 +40,24 @@ spec:
               submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
             type: string
           metadata:
-            properties:
-              name:
-                maxLength: 63
-                pattern: ^[a-z]([-a-z0-9]*[a-z0-9])?$
-                type: string
             type: object
           spec:
             properties:
-              folderID:
-                description: FolderID defines the Grafana folderID
-                format: int64
-                type: integer
+              access:
+                type: string
+              basicAuth:
+                type: boolean
+              basicAuthPassword:
+                type: string
+              basicAuthUser:
+                type: string
+              database:
+                type: string
+              editable:
+                type: boolean
               grafanaRef:
-                description: GrafanaRef defines the grafana app binding name for the
-                  GrafanaDashboard
+                description: ObjectReference contains enough information to let you
+                  inspect or modify the referred object.
                 properties:
                   name:
                     description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
@@ -65,28 +68,35 @@ spec:
                 required:
                 - name
                 type: object
-              model:
-                type: object
-                x-kubernetes-preserve-unknown-fields: true
-              overwrite:
-                description: Overwrite defines the existing grafanadashboard with
-                  the same name(if any) should be overwritten or not
+              id:
+                format: int64
+                type: integer
+              isDefault:
                 type: boolean
-              templatize:
-                description: Templatize defines the fields which supports templating
-                  in GrafanaDashboard Model json
-                properties:
-                  datasource:
-                    type: boolean
-                  title:
-                    type: boolean
-                type: object
+              name:
+                type: string
+              orgId:
+                format: int64
+                type: integer
+              password:
+                type: string
+              type:
+                type: string
+              url:
+                type: string
+              user:
+                type: string
+            required:
+            - access
+            - grafanaRef
+            - name
+            - orgId
+            - type
+            - url
             type: object
           status:
             properties:
               conditions:
-                description: Represents the latest available observations of a GrafanaDashboard
-                  current state.
                 items:
                   properties:
                     lastTransitionTime:
@@ -132,25 +142,9 @@ spec:
                   - type
                   type: object
                 type: array
-              dashboard:
-                description: Dashboard indicates the updated grafanadashboard database
-                properties:
-                  id:
-                    format: int64
-                    type: integer
-                  orgID:
-                    format: int64
-                    type: integer
-                  slug:
-                    type: string
-                  uid:
-                    type: string
-                  url:
-                    type: string
-                  version:
-                    format: int64
-                    type: integer
-                type: object
+              grafanadatasourceId:
+                format: int64
+                type: integer
               observedGeneration:
                 description: ObservedGeneration is the most recent generation observed
                   for this resource. It corresponds to the resource's generation,
@@ -158,10 +152,8 @@ spec:
                 format: int64
                 type: integer
               phase:
-                description: Phase indicates the state this Vault cluster jumps in.
                 type: string
               reason:
-                description: The reason for the current phase
                 type: string
             type: object
         type: object
