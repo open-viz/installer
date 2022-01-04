@@ -48,7 +48,18 @@ fi
 crd-importer \
     --input=${crd_dir} \
     --out=. --output-yaml=crds/openviz-crds.yaml \
-    --group=openviz.dev
+    --gk=GrafanaDashboard.openviz.dev \
+    --gk=GrafanaDatasource.openviz.dev
+
+crd-importer \
+    --input=${crd_dir} \
+    --out=./charts/grafana-operator/crds \
+    --gk=GrafanaDashboard.openviz.dev \
+    --gk=GrafanaDatasource.openviz.dev
+
+crd-importer \
+    --input=https://github.com/kmodules/custom-resources/raw/kubernetes-1.21.1/crds/appcatalog.appscode.com_appbindings.yaml \
+    --out=./charts/grafana-operator/crds
 
 crd-importer \
     --input=${crd_dir} \
