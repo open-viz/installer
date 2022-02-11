@@ -44,22 +44,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the `grafana-configurator` chart and their default values.
 
-|             Parameter             | Description | Default |
-|-----------------------------------|-------------|---------|
-| nameOverride                      |             | `""`    |
-| fullnameOverride                  |             | `""`    |
-| grafana.default                   |             | `false` |
-| grafana.url                       |             | `""`    |
-| grafana.service.scheme            |             | `""`    |
-| grafana.service.name              |             | `""`    |
-| grafana.service.port              |             | `""`    |
-| grafana.service.path              |             | `""`    |
-| grafana.service.query             |             | `""`    |
-| grafana.auth.apiKey               |             | `""`    |
-| grafana.tls.insecureSkipTLSVerify |             | `false` |
-| grafana.tls.caBundle              |             | `""`    |
-| dashboard.datasource              |             | `""`    |
-| dashboard.folderID                |             | `0`     |
+|             Parameter             | Description |      Default       |
+|-----------------------------------|-------------|--------------------|
+| nameOverride                      |             | <code>""</code>    |
+| fullnameOverride                  |             | <code>""</code>    |
+| grafana.default                   |             | <code>false</code> |
+| grafana.url                       |             | <code>""</code>    |
+| grafana.service.scheme            |             | <code>""</code>    |
+| grafana.service.name              |             | <code>""</code>    |
+| grafana.service.port              |             | <code>""</code>    |
+| grafana.service.path              |             | <code>""</code>    |
+| grafana.service.query             |             | <code>""</code>    |
+| grafana.auth.apiKey               |             | <code>""</code>    |
+| grafana.tls.insecureSkipTLSVerify |             | <code>false</code> |
+| grafana.tls.caBundle              |             | <code>""</code>    |
+| dashboard.datasource              |             | <code>""</code>    |
+| dashboard.folderID                |             | <code>0</code>     |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example:
