@@ -4,10 +4,11 @@
 
 ## TL;DR;
 
-```console
+```bash
 $ helm repo add appscode https://charts.appscode.com/stable/
 $ helm repo update
-$ helm install grafana-operator appscode/grafana-operator -n kubeops
+$ helm search repo appscode/grafana-operator --version=v2021.11.16
+$ helm upgrade -i grafana-operator appscode/grafana-operator -n kubeops --create-namespace --version=v2021.11.16
 ```
 
 ## Introduction
@@ -20,10 +21,10 @@ This chart deploys a Grafana operator on a [Kubernetes](http://kubernetes.io) cl
 
 ## Installing the Chart
 
-To install the chart with the release name `grafana-operator`:
+To install/upgrade the chart with the release name `grafana-operator`:
 
-```console
-$ helm install grafana-operator appscode/grafana-operator -n kubeops
+```bash
+$ helm upgrade -i grafana-operator appscode/grafana-operator -n kubeops --create-namespace --version=v2021.11.16
 ```
 
 The command deploys a Grafana operator on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -32,10 +33,10 @@ The command deploys a Grafana operator on the Kubernetes cluster in the default 
 
 ## Uninstalling the Chart
 
-To uninstall/delete the `grafana-operator`:
+To uninstall the `grafana-operator`:
 
-```console
-$ helm delete grafana-operator -n kubeops
+```bash
+$ helm uninstall grafana-operator -n kubeops
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -87,15 +88,15 @@ The following table lists the configurable parameters of the `grafana-operator` 
 | monitoring.serviceMonitor.labels      | Specify the labels for ServiceMonitor. Prometheus crd will select ServiceMonitor using these labels. Only usable when monitoring agent is `prometheus.io/operator`.                                                                                                                                                                                                | <code>{}</code>                                |
 
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example:
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm upgrade -i`. For example:
 
-```console
-$ helm install grafana-operator appscode/grafana-operator -n kubeops --set replicaCount=1
+```bash
+$ helm upgrade -i grafana-operator appscode/grafana-operator -n kubeops --create-namespace --version=v2021.11.16 --set replicaCount=1
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while
 installing the chart. For example:
 
-```console
-$ helm install grafana-operator appscode/grafana-operator -n kubeops --values values.yaml
+```bash
+$ helm upgrade -i grafana-operator appscode/grafana-operator -n kubeops --create-namespace --version=v2021.11.16 --values values.yaml
 ```
