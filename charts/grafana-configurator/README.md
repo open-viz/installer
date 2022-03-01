@@ -4,10 +4,11 @@
 
 ## TL;DR;
 
-```console
+```bash
 $ helm repo add appscode https://charts.appscode.com/stable/
 $ helm repo update
-$ helm install grafana-configurator appscode/grafana-configurator -n kubeops
+$ helm search repo appscode/grafana-configurator --version=v2021.11.16
+$ helm upgrade -i grafana-configurator appscode/grafana-configurator -n kubeops --create-namespace --version=v2021.11.16
 ```
 
 ## Introduction
@@ -20,10 +21,10 @@ This chart deploys a Grafana Configurator on a [Kubernetes](http://kubernetes.io
 
 ## Installing the Chart
 
-To install the chart with the release name `grafana-configurator`:
+To install/upgrade the chart with the release name `grafana-configurator`:
 
-```console
-$ helm install grafana-configurator appscode/grafana-configurator -n kubeops
+```bash
+$ helm upgrade -i grafana-configurator appscode/grafana-configurator -n kubeops --create-namespace --version=v2021.11.16
 ```
 
 The command deploys a Grafana Configurator on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -32,10 +33,10 @@ The command deploys a Grafana Configurator on the Kubernetes cluster in the defa
 
 ## Uninstalling the Chart
 
-To uninstall/delete the `grafana-configurator`:
+To uninstall the `grafana-configurator`:
 
-```console
-$ helm delete grafana-configurator -n kubeops
+```bash
+$ helm uninstall grafana-configurator -n kubeops
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -62,15 +63,15 @@ The following table lists the configurable parameters of the `grafana-configurat
 | dashboard.folderID                |             | <code>0</code>     |
 
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example:
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm upgrade -i`. For example:
 
-```console
-$ helm install grafana-configurator appscode/grafana-configurator -n kubeops --set dashboard.folderID=0
+```bash
+$ helm upgrade -i grafana-configurator appscode/grafana-configurator -n kubeops --create-namespace --version=v2021.11.16 --set dashboard.folderID=0
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while
 installing the chart. For example:
 
-```console
-$ helm install grafana-configurator appscode/grafana-configurator -n kubeops --values values.yaml
+```bash
+$ helm upgrade -i grafana-configurator appscode/grafana-configurator -n kubeops --create-namespace --version=v2021.11.16 --values values.yaml
 ```
