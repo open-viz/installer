@@ -17,6 +17,7 @@ limitations under the License.
 package v1alpha1_test
 
 import (
+	"os"
 	"testing"
 
 	"go.openviz.dev/installer/apis/installer/v1alpha1"
@@ -25,9 +26,9 @@ import (
 )
 
 func TestDefaultValues(t *testing.T) {
-	checker := schemachecker.New("../../..", []interface{}{
+	checker := schemachecker.New(os.DirFS("../../.."),
 		v1alpha1.GrafanaOperatorSpec{},
 		v1alpha1.GrafanaUiServerSpec{},
-	})
+	)
 	checker.TestAll(t)
 }
