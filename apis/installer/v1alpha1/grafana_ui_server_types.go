@@ -74,10 +74,16 @@ type GrafanaUiServerSpec struct {
 	// +optional
 	PodSecurityContext *core.PodSecurityContext `json:"podSecurityContext"`
 	ServiceAccount     ServiceAccountSpec       `json:"serviceAccount"`
-	Apiserver          WebHookSpec              `json:"apiserver"`
-	//+optional
-	EnableAnalytics bool       `json:"enableAnalytics"`
-	Monitoring      Monitoring `json:"monitoring"`
+	Apiserver          ApiserverSpec            `json:"apiserver"`
+	Monitoring         Monitoring               `json:"monitoring"`
+}
+
+type ApiserverSpec struct {
+	GroupPriorityMinimum       int32           `json:"groupPriorityMinimum"`
+	VersionPriority            int32           `json:"versionPriority"`
+	UseKubeapiserverFqdnForAks bool            `json:"useKubeapiserverFqdnForAks"`
+	Healthcheck                HealthcheckSpec `json:"healthcheck"`
+	ServingCerts               ServingCerts    `json:"servingCerts"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

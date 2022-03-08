@@ -86,8 +86,6 @@ apiserver:
     # Private key for the serving certificate used by webhook server.
     serverKey: ""
 monitoring:
-  # If true, enables monitoring KubeDB operator
-  enabled: false
   # Name of monitoring agent (either "prometheus.io/operator" or "prometheus.io/builtin")
   agent: "none"
   serviceMonitor:

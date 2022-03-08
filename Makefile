@@ -169,7 +169,7 @@ gen-crds:
 			paths="./apis/..."              \
 			output:crd:artifacts:config=.crds
 
-crds_to_patch := installer.kubevault.com_kubevaultoperators.yaml
+crds_to_patch := installer.openviz.dev_kubevaultoperators.yaml
 
 .PHONY: patch-crds
 patch-crds: $(addprefix patch-crd-, $(crds_to_patch))
@@ -211,7 +211,7 @@ gen-values-schema: $(BUILD_DIRS)
 	@for dir in charts/*/; do \
 		dir=$${dir%*/}; \
 		dir=$${dir##*/}; \
-		crd_file=.crds/installer.kubevault.com_$$(echo $$dir | tr -d '-')s.yaml; \
+		crd_file=.crds/installer.openviz.dev_$$(echo $$dir | tr -d '-')s.yaml; \
 		if [ ! -f $${crd_file} ]; then \
 			continue; \
 		fi; \

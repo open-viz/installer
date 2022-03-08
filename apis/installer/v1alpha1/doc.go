@@ -20,5 +20,5 @@ limitations under the License.
 // +k8s:openapi-gen=true
 // +k8s:defaulter-gen=TypeMeta
 
-// +groupName=installer.searchlight.dev
+// +groupName=installer.openviz.dev
 package v1alpha1

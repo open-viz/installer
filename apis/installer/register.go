@@ -17,4 +17,4 @@ limitations under the License.
 package installer
 
 // GroupName is the group name use in this package
-const GroupName = "installer.searchlight.dev"
+const GroupName = "installer.openviz.dev"

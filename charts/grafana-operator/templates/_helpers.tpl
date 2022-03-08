@@ -98,15 +98,6 @@ imagePullSecrets:
 {{- end }}
 
 {{/*
-Returns the enabled monitoring agent name
-*/}}
-{{- define "monitoring.agent" -}}
-{{- if .Values.monitoring.enabled -}}
-{{- .Values.monitoring.agent }}
-{{- end }}
-{{- end }}
-
-{{/*
 Returns whether the ServiceMonitor will be labeled with custom label
 */}}
 {{- define "monitoring.apply-servicemonitor-label" -}}

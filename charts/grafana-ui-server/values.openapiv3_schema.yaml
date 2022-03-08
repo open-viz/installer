@@ -786,8 +786,6 @@ properties:
     type: object
   criticalAddon:
     type: boolean
-  enableAnalytics:
-    type: boolean
   fullnameOverride:
     type: string
   image:
@@ -972,8 +970,6 @@ properties:
     properties:
       agent:
         type: string
-      enabled:
-        type: boolean
       serviceMonitor:
         properties:
           labels:
