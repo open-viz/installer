@@ -1,0 +1,18 @@
+project:
+  name: Kubernetes Grafana Dashboards by AppsCode
+  shortName: Kubernetes Grafana Dashboards
+  url: https://github.com/open-viz/installer
+  description: Grafana dashboards for end-to-end Kubernetes cluster monitoring
+  app: Grafana dashboards
+repository:
+  url: https://charts.appscode.com/stable/
+  name: appscode
+chart:
+  name: kube-grafana-dashboards
+  values: "-- generate from values file --"
+  valuesExample: "-- generate from values file --"
+prerequisites:
+- Kubernetes 1.16+
+release:
+  name: kube-grafana-dashboards
+  namespace: kubeops
