@@ -29,6 +29,7 @@ func TestDefaultValues(t *testing.T) {
 	checker := schemachecker.New(os.DirFS("../../.."),
 		v1alpha1.GrafanaOperatorSpec{},
 		v1alpha1.GrafanaUiServerSpec{},
+		v1alpha1.KubeGrafanaDashboardsSpec{},
 	)
 	checker.TestAll(t)
 }

@@ -1,0 +1,138 @@
+properties:
+  coreDns:
+    properties:
+      enabled:
+        type: boolean
+    required:
+    - enabled
+    type: object
+  dashboard:
+    properties:
+      folderID:
+        type: integer
+      multicluster:
+        properties:
+          etcd:
+            properties:
+              enabled:
+                type: boolean
+            required:
+            - enabled
+            type: object
+          global:
+            properties:
+              enabled:
+                type: boolean
+            required:
+            - enabled
+            type: object
+        required:
+        - etcd
+        - global
+        type: object
+      overwrite:
+        type: boolean
+      templatize:
+        properties:
+          datasource:
+            type: boolean
+          title:
+            type: boolean
+        required:
+        - datasource
+        - title
+        type: object
+    required:
+    - folderID
+    - multicluster
+    - overwrite
+    - templatize
+    type: object
+  fullnameOverride:
+    type: string
+  grafana:
+    properties:
+      defaultDashboardsTimezone:
+        type: string
+      name:
+        type: string
+      namespace:
+        type: string
+    required:
+    - defaultDashboardsTimezone
+    - name
+    - namespace
+    type: object
+  kubeApiServer:
+    properties:
+      enabled:
+        type: boolean
+    required:
+    - enabled
+    type: object
+  kubeControllerManager:
+    properties:
+      enabled:
+        type: boolean
+    required:
+    - enabled
+    type: object
+  kubeEtcd:
+    properties:
+      enabled:
+        type: boolean
+    required:
+    - enabled
+    type: object
+  kubeProxy:
+    properties:
+      enabled:
+        type: boolean
+    required:
+    - enabled
+    type: object
+  kubeScheduler:
+    properties:
+      enabled:
+        type: boolean
+    required:
+    - enabled
+    type: object
+  kubelet:
+    properties:
+      enabled:
+        type: boolean
+    required:
+    - enabled
+    type: object
+  nameOverride:
+    type: string
+  nodeExporter:
+    properties:
+      enabled:
+        type: boolean
+    required:
+    - enabled
+    type: object
+  prometheus:
+    properties:
+      remoteWriteDashboards:
+        type: boolean
+    required:
+    - remoteWriteDashboards
+    type: object
+required:
+- coreDns
+- dashboard
+- fullnameOverride
+- grafana
+- kubeApiServer
+- kubeControllerManager
+- kubeEtcd
+- kubeProxy
+- kubeScheduler
+- kubelet
+- nameOverride
+- nodeExporter
+- prometheus
+type: object
