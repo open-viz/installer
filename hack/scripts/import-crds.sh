@@ -65,3 +65,8 @@ crd-importer \
     --input=${crd_dir} \
     --out=./charts/grafana-ui-server/crds \
     --gk=GrafanaDashboard.openviz.dev
+
+crd-importer \
+    --input=${crd_dir} \
+    --out=./charts/kube-grafana-dashboards/crds \
+    --gk=GrafanaDashboard.openviz.dev
