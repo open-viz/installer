@@ -1,6 +1,6 @@
 apiVersion: v2
 name: kube-grafana-dashboards
-description: kube-grafana-dashboards provides Grafana dashboards for end-to-end Kubernetes cluster monitoring
+description: Grafana dashboards for end-to-end Kubernetes cluster monitoring
 icon: https://cdn.appscode.com/images/products/kubeops/icons/android-icon-192x192.png
 type: application
 maintainers:
@@ -8,9 +8,9 @@ maintainers:
   email: support@appscode.com
 sources:
 - https://github.com/open-viz/installer
-version: v2021.11.16
-appVersion: v0.0.1
-kubeVersion: ">=1.16.0-0"
+version: v2022.03.20
+appVersion: v2022.03.20
+kubeVersion: '>=1.16.0-0'
 home: https://github.com/open-viz
 keywords:
 - openviz
