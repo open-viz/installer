@@ -53,7 +53,7 @@ rules:
   - ""
   resources:
   - events
-  verbs: ["create"]
+  verbs: ["create", "patch"]
 - apiGroups:
   - monitoring.coreos.com
   resources:
