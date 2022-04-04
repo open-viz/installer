@@ -28,6 +28,12 @@ rules:
   - "*"
   verbs: ["*"]
 - apiGroups:
+  - openviz.dev
+  resources:
+  - grafanadashboards/finalizers
+  - grafanadatasources/finalizers
+  verbs: ["update"]
+- apiGroups:
   - apps
   resources:
   - deployments
