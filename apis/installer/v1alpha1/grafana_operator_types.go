@@ -42,27 +42,6 @@ type GrafanaOperator struct {
 	Spec              GrafanaOperatorSpec `json:"spec,omitempty"`
 }
 
-type ImageRef struct {
-	Registry   string `json:"registry"`
-	Repository string `json:"repository"`
-	Tag        string `json:"tag"`
-}
-
-type ContianerRef struct {
-	ImageRef `json:",inline"`
-	// Compute Resources required by the sidecar container.
-	// +optional
-	Resources core.ResourceRequirements `json:"resources"`
-	// Security options the pod should run with.
-	// +optional
-	SecurityContext *core.SecurityContext `json:"securityContext"`
-}
-
-type CleanerRef struct {
-	ImageRef `json:",inline"`
-	Skip     bool `json:"skip"`
-}
-
 // GrafanaOperatorSpec is the schema for Grafana Operator values file
 type GrafanaOperatorSpec struct {
 	//+optional
@@ -70,8 +49,8 @@ type GrafanaOperatorSpec struct {
 	//+optional
 	FullnameOverride string       `json:"fullnameOverride"`
 	ReplicaCount     int32        `json:"replicaCount"`
+	RegistryFQDN     string       `json:"registryFQDN"`
 	Operator         ContianerRef `json:"operator"`
-	Cleaner          CleanerRef   `json:"cleaner"`
 	ImagePullPolicy  string       `json:"imagePullPolicy"`
 	//+optional
 	ImagePullSecrets []string `json:"imagePullSecrets"`
@@ -98,52 +77,6 @@ type GrafanaOperatorSpec struct {
 	ServiceAccount     ServiceAccountSpec       `json:"serviceAccount"`
 	Apiserver          WebHookSpec              `json:"apiserver"`
 	Monitoring         Monitoring               `json:"monitoring"`
-}
-
-type ServiceAccountSpec struct {
-	Create bool `json:"create"`
-	//+optional
-	Name *string `json:"name"`
-	//+optional
-	Annotations map[string]string `json:"annotations"`
-}
-
-type WebHookSpec struct {
-	GroupPriorityMinimum    int32  `json:"groupPriorityMinimum"`
-	VersionPriority         int32  `json:"versionPriority"`
-	EnableMutatingWebhook   bool   `json:"enableMutatingWebhook"`
-	EnableValidatingWebhook bool   `json:"enableValidatingWebhook"`
-	CA                      string `json:"ca"`
-	//+optional
-	BypassValidatingWebhookXray bool            `json:"bypassValidatingWebhookXray"`
-	UseKubeapiserverFqdnForAks  bool            `json:"useKubeapiserverFqdnForAks"`
-	Healthcheck                 HealthcheckSpec `json:"healthcheck"`
-	ServingCerts                ServingCerts    `json:"servingCerts"`
-}
-
-type HealthcheckSpec struct {
-	//+optional
-	Enabled bool `json:"enabled"`
-}
-
-type ServingCerts struct {
-	Generate bool `json:"generate"`
-	//+optional
-	CaCrt string `json:"caCrt"`
-	//+optional
-	ServerCrt string `json:"serverCrt"`
-	//+optional
-	ServerKey string `json:"serverKey"`
-}
-
-type Monitoring struct {
-	Agent          string                `json:"agent"`
-	ServiceMonitor *ServiceMonitorLabels `json:"serviceMonitor"`
-}
-
-type ServiceMonitorLabels struct {
-	//+optional
-	Labels map[string]string `json:"labels"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

@@ -49,6 +49,7 @@ type GrafanaUiServerSpec struct {
 	//+optional
 	FullnameOverride string       `json:"fullnameOverride"`
 	ReplicaCount     int32        `json:"replicaCount"`
+	RegistryFQDN     string       `json:"registryFQDN"`
 	Image            ContianerRef `json:"image"`
 	ImagePullPolicy  string       `json:"imagePullPolicy"`
 	//+optional
@@ -74,16 +75,8 @@ type GrafanaUiServerSpec struct {
 	// +optional
 	PodSecurityContext *core.PodSecurityContext `json:"podSecurityContext"`
 	ServiceAccount     ServiceAccountSpec       `json:"serviceAccount"`
-	Apiserver          ApiserverSpec            `json:"apiserver"`
-	Monitoring         Monitoring               `json:"monitoring"`
-}
-
-type ApiserverSpec struct {
-	GroupPriorityMinimum       int32           `json:"groupPriorityMinimum"`
-	VersionPriority            int32           `json:"versionPriority"`
-	UseKubeapiserverFqdnForAks bool            `json:"useKubeapiserverFqdnForAks"`
-	Healthcheck                HealthcheckSpec `json:"healthcheck"`
-	ServingCerts               ServingCerts    `json:"servingCerts"`
+	Apiserver          EASSpec                  `json:"apiserver"`
+	Monitoring         EASMonitoring            `json:"monitoring"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
