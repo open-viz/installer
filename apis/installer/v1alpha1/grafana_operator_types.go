@@ -50,7 +50,7 @@ type GrafanaOperatorSpec struct {
 	FullnameOverride string       `json:"fullnameOverride"`
 	ReplicaCount     int32        `json:"replicaCount"`
 	RegistryFQDN     string       `json:"registryFQDN"`
-	Operator         ContianerRef `json:"operator"`
+	Image            ContianerRef `json:"image"`
 	ImagePullPolicy  string       `json:"imagePullPolicy"`
 	//+optional
 	ImagePullSecrets []string `json:"imagePullSecrets"`

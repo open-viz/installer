@@ -770,44 +770,7 @@ properties:
     type: boolean
   fullnameOverride:
     type: string
-  imagePullPolicy:
-    type: string
-  imagePullSecrets:
-    items:
-      type: string
-    type: array
-  logLevel:
-    format: int32
-    type: integer
-  monitoring:
-    properties:
-      agent:
-        enum:
-        - prometheus.io
-        - prometheus.io/operator
-        - prometheus.io/builtin
-        type: string
-      bindPort:
-        type: integer
-      serviceMonitor:
-        properties:
-          labels:
-            additionalProperties:
-              type: string
-            type: object
-        type: object
-    required:
-    - agent
-    - bindPort
-    - serviceMonitor
-    type: object
-  nameOverride:
-    type: string
-  nodeSelector:
-    additionalProperties:
-      type: string
-    type: object
-  operator:
+  image:
     properties:
       registry:
         type: string
@@ -975,6 +938,43 @@ properties:
     - registry
     - repository
     - tag
+    type: object
+  imagePullPolicy:
+    type: string
+  imagePullSecrets:
+    items:
+      type: string
+    type: array
+  logLevel:
+    format: int32
+    type: integer
+  monitoring:
+    properties:
+      agent:
+        enum:
+        - prometheus.io
+        - prometheus.io/operator
+        - prometheus.io/builtin
+        type: string
+      bindPort:
+        type: integer
+      serviceMonitor:
+        properties:
+          labels:
+            additionalProperties:
+              type: string
+            type: object
+        type: object
+    required:
+    - agent
+    - bindPort
+    - serviceMonitor
+    type: object
+  nameOverride:
+    type: string
+  nodeSelector:
+    additionalProperties:
+      type: string
     type: object
   podAnnotations:
     additionalProperties:
@@ -1168,9 +1168,9 @@ properties:
     type: array
 required:
 - apiserver
+- image
 - imagePullPolicy
 - monitoring
-- operator
 - registryFQDN
 - replicaCount
 - serviceAccount
