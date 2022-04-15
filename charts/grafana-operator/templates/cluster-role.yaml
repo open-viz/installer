@@ -44,7 +44,7 @@ rules:
   - secrets
   - services
   - serviceaccounts
-  verbs: ["create", "get", "patch"]
+  verbs: ["create", "get", "patch", "list", "watch"]
 - apiGroups:
   - ""
   resources:
