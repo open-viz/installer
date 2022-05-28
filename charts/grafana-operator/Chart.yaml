@@ -3,7 +3,7 @@ name: grafana-operator
 description: A Helm chart for Grafana Operator by AppsCode
 type: application
 version: v2022.04.04
-appVersion: v2022.04.04
+appVersion: v0.0.1
 home: https://github.com/open-viz/grafana-operator
 icon: https://cdn.appscode.com/images/products/searchlight/icons/android-icon-192x192.png
 sources:
