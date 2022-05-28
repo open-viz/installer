@@ -3,7 +3,7 @@ name: grafana-ui-server
 description: A Helm chart for grafana-ui-server by AppsCode
 type: application
 version: v2022.04.04
-appVersion: v2022.04.04
+appVersion: v0.0.1
 home: https://github.com/kubeops/grafana-ui-server
 icon: https://cdn.appscode.com/images/products/kubeops/icons/android-icon-192x192.png
 sources:
