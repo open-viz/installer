@@ -8,8 +8,8 @@ maintainers:
   email: support@appscode.com
 sources:
 - https://github.com/open-viz/installer
-version: v2022.04.04
-appVersion: v2022.04.04
+version: v2022.06.14
+appVersion: v2022.06.14
 kubeVersion: '>=1.16.0-0'
 home: https://github.com/open-viz
 keywords:
