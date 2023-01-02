@@ -60,6 +60,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&GrafanaUiServerList{},
 		&KubeGrafanaDashboards{},
 		&KubeGrafanaDashboardsList{},
+		&Trickster{},
+		&TricksterList{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,
