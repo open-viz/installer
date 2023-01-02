@@ -1,0 +1,397 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.10.0
+  creationTimestamp: null
+  name: tricksters.trickstercache.org
+spec:
+  group: trickstercache.org
+  names:
+    kind: Trickster
+    listKind: TricksterList
+    plural: tricksters
+    singular: trickster
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Trickster is the Schema for the tricksters API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: TricksterSpec defines the desired state of Trickster
+            properties:
+              backend_selector:
+                description: Backends is a map of BackendOptionss Backends map[string]*bo.Options
+                  `json:"backends,omitempty"`
+                properties:
+                  matchExpressions:
+                    description: matchExpressions is a list of label selector requirements.
+                      The requirements are ANDed.
+                    items:
+                      description: A label selector requirement is a selector that
+                        contains values, a key, and an operator that relates the key
+                        and values.
+                      properties:
+                        key:
+                          description: key is the label key that the selector applies
+                            to.
+                          type: string
+                        operator:
+                          description: operator represents a key's relationship to
+                            a set of values. Valid operators are In, NotIn, Exists
+                            and DoesNotExist.
+                          type: string
+                        values:
+                          description: values is an array of string values. If the
+                            operator is In or NotIn, the values array must be non-empty.
+                            If the operator is Exists or DoesNotExist, the values
+                            array must be empty. This array is replaced during a strategic
+                            merge patch.
+                          items:
+                            type: string
+                          type: array
+                      required:
+                      - key
+                      - operator
+                      type: object
+                    type: array
+                  matchLabels:
+                    additionalProperties:
+                      type: string
+                    description: matchLabels is a map of {key,value} pairs. A single
+                      {key,value} in the matchLabels map is equivalent to an element
+                      of matchExpressions, whose key field is "key", the operator
+                      is "In", and the values array contains only "value". The requirements
+                      are ANDed.
+                    type: object
+                type: object
+                x-kubernetes-map-type: atomic
+              cache_selector:
+                description: Caches is a map of CacheConfigs Caches map[string]*cache.Options
+                  `json:"caches,omitempty"`
+                properties:
+                  matchExpressions:
+                    description: matchExpressions is a list of label selector requirements.
+                      The requirements are ANDed.
+                    items:
+                      description: A label selector requirement is a selector that
+                        contains values, a key, and an operator that relates the key
+                        and values.
+                      properties:
+                        key:
+                          description: key is the label key that the selector applies
+                            to.
+                          type: string
+                        operator:
+                          description: operator represents a key's relationship to
+                            a set of values. Valid operators are In, NotIn, Exists
+                            and DoesNotExist.
+                          type: string
+                        values:
+                          description: values is an array of string values. If the
+                            operator is In or NotIn, the values array must be non-empty.
+                            If the operator is Exists or DoesNotExist, the values
+                            array must be empty. This array is replaced during a strategic
+                            merge patch.
+                          items:
+                            type: string
+                          type: array
+                      required:
+                      - key
+                      - operator
+                      type: object
+                    type: array
+                  matchLabels:
+                    additionalProperties:
+                      type: string
+                    description: matchLabels is a map of {key,value} pairs. A single
+                      {key,value} in the matchLabels map is equivalent to an element
+                      of matchExpressions, whose key field is "key", the operator
+                      is "In", and the values array contains only "value". The requirements
+                      are ANDed.
+                    type: object
+                type: object
+                x-kubernetes-map-type: atomic
+              frontend:
+                description: ProxyServer is provides configurations about the Proxy
+                  Front End
+                properties:
+                  connections_limit:
+                    description: ConnectionsLimit indicates how many concurrent front
+                      end connections trickster will handle at any time
+                    type: integer
+                  listen_address:
+                    description: ListenAddress is IP address for the main http listener
+                      for the application
+                    type: string
+                  listen_port:
+                    description: ListenPort is TCP Port for the main http listener
+                      for the application
+                    type: integer
+                  tls_listen_address:
+                    description: TLSListenAddress is IP address for the tls  http
+                      listener for the application
+                    type: string
+                  tls_listen_port:
+                    description: TLSListenPort is the TCP Port for the tls http listener
+                      for the application
+                    type: integer
+                type: object
+              logging:
+                description: Logging provides configurations that affect logging behavior
+                properties:
+                  log_file:
+                    description: LogFile provides the filepath to the instances's
+                      logfile. Set as empty string to Log to Console
+                    type: string
+                  log_level:
+                    description: LogLevel provides the most granular level (e.g.,
+                      DEBUG, INFO, ERROR) to log
+                    type: string
+                type: object
+              main:
+                description: Main is the primary MainConfig section
+                properties:
+                  config_handler_path:
+                    description: ConfigHandlerPath provides the path to register the
+                      Config Handler for outputting the running configuration
+                    type: string
+                  health_handler_path:
+                    description: HeatlHandlerPath provides the base Health Check Handler
+                      path
+                    type: string
+                  instance_id:
+                    description: InstanceID represents a unique ID for the current
+                      instance, when multiple instances on the same host
+                    type: integer
+                  ping_handler_path:
+                    description: PingHandlerPath provides the path to register the
+                      Ping Handler for checking that Trickster is running
+                    type: string
+                  pprof_server:
+                    description: 'PprofServer provides the name of the http listener
+                      that will host the pprof debugging routes Options are: "metrics",
+                      "reload", "both", or "off"; default is both'
+                    type: string
+                  reload_handler_path:
+                    description: ReloadHandlerPath provides the path to register the
+                      Config Reload Handler
+                    type: string
+                  server_name:
+                    description: ServerName represents the server name that is conveyed
+                      in Via headers to upstream origins defaults to os.Hostname
+                    type: string
+                type: object
+              metrics:
+                description: Metrics provides configurations for collecting Metrics
+                  about the application
+                properties:
+                  listen_address:
+                    description: ListenAddress is IP address from which the Application
+                      Metrics are available for pulling at /metrics
+                    type: string
+                  listen_port:
+                    description: ListenPort is TCP Port from which the Application
+                      Metrics are available for pulling at /metrics
+                    type: integer
+                type: object
+              negative_caches:
+                additionalProperties:
+                  additionalProperties:
+                    type: integer
+                  description: Config is a collection of response codes and their
+                    TTLs in milliseconds
+                  type: object
+                description: NegativeCacheConfigs is a map of NegativeCacheConfigs
+                type: object
+              reloading:
+                description: ReloadConfig provides configurations for in-process config
+                  reloading
+                properties:
+                  drain_timeout_ms:
+                    description: DrainTimeoutMS provides the duration to wait for
+                      all sessions to drain before closing old resources following
+                      a reload
+                    type: integer
+                  handler_path:
+                    description: ReloadHandlerPath provides the path to register the
+                      Config Reload Handler
+                    type: string
+                  listen_address:
+                    description: ListenAddress is IP address from which the Reload
+                      API is available at ReloadHandlerPath
+                    type: string
+                  listen_port:
+                    description: ListenPort is TCP Port from which the Reload API
+                      is available at ReloadHandlerPath
+                    type: integer
+                  rate_limit_ms:
+                    description: 'RateLimitMS limits the # of handled config reload
+                      HTTP requests to 1 per CheckRateMS if multiple HTTP requests
+                      are received in the rate limit window, only the first is handled
+                      This prevents a bad actor from stating the config file with
+                      millions of concurrent requests The rate limit does not apply
+                      to SIGHUP-based reload requests'
+                    type: integer
+                type: object
+              request_rewriter_selector:
+                description: RequestRewriters is a map of the Rewriters RequestRewriters
+                  map[string]*rwopts.Options `json:"request_rewriters,omitempty"`
+                properties:
+                  matchExpressions:
+                    description: matchExpressions is a list of label selector requirements.
+                      The requirements are ANDed.
+                    items:
+                      description: A label selector requirement is a selector that
+                        contains values, a key, and an operator that relates the key
+                        and values.
+                      properties:
+                        key:
+                          description: key is the label key that the selector applies
+                            to.
+                          type: string
+                        operator:
+                          description: operator represents a key's relationship to
+                            a set of values. Valid operators are In, NotIn, Exists
+                            and DoesNotExist.
+                          type: string
+                        values:
+                          description: values is an array of string values. If the
+                            operator is In or NotIn, the values array must be non-empty.
+                            If the operator is Exists or DoesNotExist, the values
+                            array must be empty. This array is replaced during a strategic
+                            merge patch.
+                          items:
+                            type: string
+                          type: array
+                      required:
+                      - key
+                      - operator
+                      type: object
+                    type: array
+                  matchLabels:
+                    additionalProperties:
+                      type: string
+                    description: matchLabels is a map of {key,value} pairs. A single
+                      {key,value} in the matchLabels map is equivalent to an element
+                      of matchExpressions, whose key field is "key", the operator
+                      is "In", and the values array contains only "value". The requirements
+                      are ANDed.
+                    type: object
+                type: object
+                x-kubernetes-map-type: atomic
+              rule_selector:
+                description: Rules is a map of the Rules Rules map[string]*rule.Options
+                  `json:"rules,omitempty"`
+                properties:
+                  matchExpressions:
+                    description: matchExpressions is a list of label selector requirements.
+                      The requirements are ANDed.
+                    items:
+                      description: A label selector requirement is a selector that
+                        contains values, a key, and an operator that relates the key
+                        and values.
+                      properties:
+                        key:
+                          description: key is the label key that the selector applies
+                            to.
+                          type: string
+                        operator:
+                          description: operator represents a key's relationship to
+                            a set of values. Valid operators are In, NotIn, Exists
+                            and DoesNotExist.
+                          type: string
+                        values:
+                          description: values is an array of string values. If the
+                            operator is In or NotIn, the values array must be non-empty.
+                            If the operator is Exists or DoesNotExist, the values
+                            array must be empty. This array is replaced during a strategic
+                            merge patch.
+                          items:
+                            type: string
+                          type: array
+                      required:
+                      - key
+                      - operator
+                      type: object
+                    type: array
+                  matchLabels:
+                    additionalProperties:
+                      type: string
+                    description: matchLabels is a map of {key,value} pairs. A single
+                      {key,value} in the matchLabels map is equivalent to an element
+                      of matchExpressions, whose key field is "key", the operator
+                      is "In", and the values array contains only "value". The requirements
+                      are ANDed.
+                    type: object
+                type: object
+                x-kubernetes-map-type: atomic
+              tracing_config_selector:
+                description: TracingConfigs provides the distributed tracing configuration
+                  TracingConfigs map[string]*tracing.Options `json:"tracing,omitempty"`
+                properties:
+                  matchExpressions:
+                    description: matchExpressions is a list of label selector requirements.
+                      The requirements are ANDed.
+                    items:
+                      description: A label selector requirement is a selector that
+                        contains values, a key, and an operator that relates the key
+                        and values.
+                      properties:
+                        key:
+                          description: key is the label key that the selector applies
+                            to.
+                          type: string
+                        operator:
+                          description: operator represents a key's relationship to
+                            a set of values. Valid operators are In, NotIn, Exists
+                            and DoesNotExist.
+                          type: string
+                        values:
+                          description: values is an array of string values. If the
+                            operator is In or NotIn, the values array must be non-empty.
+                            If the operator is Exists or DoesNotExist, the values
+                            array must be empty. This array is replaced during a strategic
+                            merge patch.
+                          items:
+                            type: string
+                          type: array
+                      required:
+                      - key
+                      - operator
+                      type: object
+                    type: array
+                  matchLabels:
+                    additionalProperties:
+                      type: string
+                    description: matchLabels is a map of {key,value} pairs. A single
+                      {key,value} in the matchLabels map is equivalent to an element
+                      of matchExpressions, whose key field is "key", the operator
+                      is "In", and the values array contains only "value". The requirements
+                      are ANDed.
+                    type: object
+                type: object
+                x-kubernetes-map-type: atomic
+            type: object
+          status:
+            description: TricksterStatus defines the observed state of Trickster
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

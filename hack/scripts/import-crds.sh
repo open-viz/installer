@@ -70,3 +70,12 @@ crd-importer \
     --input=${crd_dir} \
     --out=./charts/kube-grafana-dashboards/crds \
     --gk=GrafanaDashboard.openviz.dev
+
+crd-importer \
+    --input=https://github.com/open-viz/trickster-config/raw/api/config/crd/bases/trickstercache.org_backends.yaml \
+    --input=https://github.com/open-viz/trickster-config/raw/api/config/crd/bases/trickstercache.org_caches.yaml \
+    --input=https://github.com/open-viz/trickster-config/raw/api/config/crd/bases/trickstercache.org_requestrewriters.yaml \
+    --input=https://github.com/open-viz/trickster-config/raw/api/config/crd/bases/trickstercache.org_rules.yaml \
+    --input=https://github.com/open-viz/trickster-config/raw/api/config/crd/bases/trickstercache.org_tracingconfigs.yaml \
+    --input=https://github.com/open-viz/trickster-config/raw/api/config/crd/bases/trickstercache.org_tricksters.yaml \
+    --out=./charts/trickster/crds

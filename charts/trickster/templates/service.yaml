@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "trickster.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "trickster.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - name: prom
+      port: 9090
+      targetPort: prom
+      protocol: TCP
+    - name: http
+      port: 8480
+      targetPort: http
+      protocol: TCP
+    - name: metrics
+      port: 8481
+      targetPort: metrics
+      protocol: TCP
+    - name: reload
+      port: 8484
+      targetPort: reload
+      protocol: TCP
+  selector:
+    {{- include "trickster.selectorLabels" . | nindent 4 }}
