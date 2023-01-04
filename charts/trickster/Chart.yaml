@@ -2,7 +2,7 @@ apiVersion: v2
 name: trickster
 description: A Helm chart for Trickster by AppsCode
 type: application
-version: v2023.01.03
+version: v2022.06.14
 appVersion: v0.0.1
 home: https://github.com/open-viz/trickster
 icon: https://cdn.appscode.com/images/products/kubeops/icons/android-icon-192x192.png
