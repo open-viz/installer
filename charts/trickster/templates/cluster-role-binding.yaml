@@ -10,5 +10,5 @@ roleRef:
   name: {{ include "trickster.fullname" . }}
 subjects:
 - kind: ServiceAccount
-  name: {{ include "appscode.serviceAccountName" . }}
+  name: {{ include "trickster.serviceAccountName" . }}
   namespace: {{ .Release.Namespace }}
