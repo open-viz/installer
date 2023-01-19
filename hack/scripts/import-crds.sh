@@ -58,7 +58,7 @@ crd-importer \
     --gk=GrafanaDatasource.openviz.dev
 
 crd-importer \
-    --input=https://github.com/kmodules/custom-resources/raw/kubernetes-1.21.1/crds/appcatalog.appscode.com_appbindings.yaml \
+    --input=https://github.com/kmodules/custom-resources/raw/v0.25.1/crds/appcatalog.appscode.com_appbindings.yaml \
     --out=./charts/grafana-operator/crds
 
 crd-importer \
@@ -72,10 +72,10 @@ crd-importer \
     --gk=GrafanaDashboard.openviz.dev
 
 crd-importer \
-    --input=https://github.com/open-viz/trickster-config/raw/api/config/crd/bases/trickstercache.org_backends.yaml \
-    --input=https://github.com/open-viz/trickster-config/raw/api/config/crd/bases/trickstercache.org_caches.yaml \
-    --input=https://github.com/open-viz/trickster-config/raw/api/config/crd/bases/trickstercache.org_requestrewriters.yaml \
-    --input=https://github.com/open-viz/trickster-config/raw/api/config/crd/bases/trickstercache.org_rules.yaml \
-    --input=https://github.com/open-viz/trickster-config/raw/api/config/crd/bases/trickstercache.org_tracingconfigs.yaml \
-    --input=https://github.com/open-viz/trickster-config/raw/api/config/crd/bases/trickstercache.org_tricksters.yaml \
+    --input=https://github.com/open-viz/trickster-config/raw/master/config/crd/bases/trickstercache.org_backends.yaml \
+    --input=https://github.com/open-viz/trickster-config/raw/master/config/crd/bases/trickstercache.org_caches.yaml \
+    --input=https://github.com/open-viz/trickster-config/raw/master/config/crd/bases/trickstercache.org_requestrewriters.yaml \
+    --input=https://github.com/open-viz/trickster-config/raw/master/config/crd/bases/trickstercache.org_rules.yaml \
+    --input=https://github.com/open-viz/trickster-config/raw/master/config/crd/bases/trickstercache.org_tracingconfigs.yaml \
+    --input=https://github.com/open-viz/trickster-config/raw/master/config/crd/bases/trickstercache.org_tricksters.yaml \
     --out=./charts/trickster/crds

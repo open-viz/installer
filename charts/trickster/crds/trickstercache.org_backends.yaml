@@ -490,6 +490,22 @@ spec:
                 description: TracingConfigName provides the name of the Tracing Config
                   to be used by this Backend
                 type: string
+              transport:
+                description: Transport is the transport configuration for the Backend
+                properties:
+                  crossAccount:
+                    type: boolean
+                  linkID:
+                    type: string
+                  type:
+                    default: Direct
+                    enum:
+                    - Direct
+                    - NATS
+                    type: string
+                required:
+                - type
+                type: object
             type: object
           status:
             description: BackendStatus defines the observed state of Backend
