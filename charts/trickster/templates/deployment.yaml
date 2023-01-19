@@ -57,6 +57,12 @@ spec:
               port: metrics
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /etc/trickster/conf.d
+              name: config
+      volumes:
+        - name: config
+          emptyDir: {}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

@@ -15,7 +15,7 @@ image:
   # App container image
   repository: trickster
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v2.0.0-beta3
+  tag: ""
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []

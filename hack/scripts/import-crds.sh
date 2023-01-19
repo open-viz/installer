@@ -72,10 +72,10 @@ crd-importer \
     --gk=GrafanaDashboard.openviz.dev
 
 crd-importer \
-    --input=https://github.com/open-viz/trickster-config/raw/master/config/crd/bases/trickstercache.org_backends.yaml \
-    --input=https://github.com/open-viz/trickster-config/raw/master/config/crd/bases/trickstercache.org_caches.yaml \
-    --input=https://github.com/open-viz/trickster-config/raw/master/config/crd/bases/trickstercache.org_requestrewriters.yaml \
-    --input=https://github.com/open-viz/trickster-config/raw/master/config/crd/bases/trickstercache.org_rules.yaml \
-    --input=https://github.com/open-viz/trickster-config/raw/master/config/crd/bases/trickstercache.org_tracingconfigs.yaml \
+    --input=https://github.com/open-viz/trickster-config/raw/master/config/crd/bases/trickstercache.org_tricksterbackends.yaml \
+    --input=https://github.com/open-viz/trickster-config/raw/master/config/crd/bases/trickstercache.org_trickstercaches.yaml \
+    --input=https://github.com/open-viz/trickster-config/raw/master/config/crd/bases/trickstercache.org_tricksterrequestrewriters.yaml \
+    --input=https://github.com/open-viz/trickster-config/raw/master/config/crd/bases/trickstercache.org_tricksterrules.yaml \
     --input=https://github.com/open-viz/trickster-config/raw/master/config/crd/bases/trickstercache.org_tricksters.yaml \
+    --input=https://github.com/open-viz/trickster-config/raw/master/config/crd/bases/trickstercache.org_trickstertracingconfigs.yaml \
     --out=./charts/trickster/crds
