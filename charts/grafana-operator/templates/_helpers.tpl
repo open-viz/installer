@@ -63,13 +63,6 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
-Returns the appscode license
-*/}}
-{{- define "appscode.license" -}}
-{{- .Values.license }}
-{{- end }}
-
-{{/*
 Returns the registry used for operator docker image
 */}}
 {{- define "image.registry" -}}

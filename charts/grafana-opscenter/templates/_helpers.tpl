@@ -62,31 +62,10 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
-Returns the appscode license
+Returns the registry used for docker image
 */}}
-{{- define "appscode.license" -}}
-{{- default .Values.global.license .Values.license }}
-{{- end }}
-
-{{/*
-Returns the registry used for operator docker image
-*/}}
-{{- define "operator.registry" -}}
-{{- list (default .Values.registryFQDN .Values.global.registryFQDN) (default .Values.operator.registry .Values.global.registry) | compact | join "/" }}
-{{- end }}
-
-{{/*
-Returns the registry used for catalog docker images
-*/}}
-{{- define "catalog.registry" -}}
-{{- list (default .registryFQDN .global.registryFQDN | default ._reg) (default .image.registry .global.registry | default ._repo) | compact | join "/" }}
-{{- end }}
-
-{{/*
-Returns the registry used for webhook server docker image
-*/}}
-{{- define "server.registry" -}}
-{{- list (default .Values.registryFQDN .Values.global.registryFQDN) (default .Values.server.registry .Values.global.registry) | compact | join "/" }}
+{{- define "image.registry" -}}
+{{- list (default .Values.registryFQDN .Values.global.registryFQDN) (default .Values.image.registry .Values.global.registry) | compact | join "/" }}
 {{- end }}
 
 {{/*
@@ -99,27 +78,6 @@ imagePullSecrets:
 {{- else -}}
 imagePullSecrets:
 {{- toYaml $.Values.imagePullSecrets | nindent 2 }}
-{{- end }}
-{{- end }}
-
-{{- define "docker.imagePullSecretFlags" -}}
-{{- range .Values.global.imagePullSecrets -}}
-- --image-pull-secrets={{- .name -}}
-{{- else -}}
-{{- range $.Values.imagePullSecrets -}}
-- --image-pull-secrets={{- .name -}}
-{{- end }}
-{{- end }}
-{{- end }}
-
-{{/*
-Returns the registry used for official docker images
-*/}}
-{{- define "official.registry" -}}
-{{- if .image.overrideOfficialRegistry -}}
-{{- list (default .registryFQDN .global.registryFQDN) (default .image.registry .global.registry) ._bin | compact | join "/" }}
-{{- else -}}
-{{- list (default .registryFQDN .global.registryFQDN) ._bin | compact | join "/" }}
 {{- end }}
 {{- end }}
 
