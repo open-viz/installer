@@ -1,0 +1,39 @@
+# Default values for grafana-opscenter.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+global:
+  # Docker registry used to pull KubeDB related images
+  registry: ""
+
+  # Docker registry fqdn used to pull KubeDB related images.
+  # Set this to use docker registry hosted at ${registryFQDN}/${registry}/${image}
+  registryFQDN: ""
+
+  # Specify an array of imagePullSecrets.
+  # Secrets must be manually created in the namespace.
+  #
+  # Example:
+  # helm template charts/grafana-opscenter \
+  #   --set global.imagePullSecrets[0].name=sec0 \
+  #   --set global.imagePullSecrets[1].name=sec1
+  imagePullSecrets: []
+
+  monitoring:
+    # Name of monitoring agent (one of "prometheus.io", "prometheus.io/operator", "prometheus.io/builtin")
+    agent: ""
+    serviceMonitor:
+      # Specify the labels for ServiceMonitor.
+      # Prometheus crd will select ServiceMonitor using these labels.
+      # Only usable when monitoring agent is `prometheus.io/operator`.
+      labels: {}
+
+grafana-operator:
+  # If enabled, installs the grafana-operator chart
+  enabled: true
+grafana-ui-server:
+  # If enabled, installs the grafana-ui-server chart
+  enabled: true
+kube-grafana-dashboards:
+  # If enabled, installs the kube-grafana-dashboards chart
+  enabled: true

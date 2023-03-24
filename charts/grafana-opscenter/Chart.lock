@@ -1,0 +1,12 @@
+dependencies:
+- name: grafana-operator
+  repository: file://../grafana-operator
+  version: v0.0.2
+- name: grafana-ui-server
+  repository: file://../grafana-ui-server
+  version: v0.0.2
+- name: kube-grafana-dashboards
+  repository: file://../kube-grafana-dashboards
+  version: v2023.03.23
+digest: sha256:c8f120937c22e6eab2c93b084929e3e4226a9b8d792d45cca579dd4f126080a3
+generated: "2023-03-23T22:54:55.963625-07:00"
