@@ -456,7 +456,7 @@ spec:
         stack: false
         steppedLine: false
         targets:
-        - expr: cluster_quantile:apiserver_request_duration_seconds:histogram_quantile{verb="read", cluster="$cluster"}
+        - expr: cluster_quantile:apiserver_request_slo_duration_seconds:histogram_quantile{verb="read", cluster="$cluster"}
           format: time_series
           intervalFactor: 2
           legendFormat: '{{`{{`}} resource {{`}}`}}'
@@ -749,7 +749,7 @@ spec:
         stack: false
         steppedLine: false
         targets:
-        - expr: cluster_quantile:apiserver_request_duration_seconds:histogram_quantile{verb="write", cluster="$cluster"}
+        - expr: cluster_quantile:apiserver_request_slo_duration_seconds:histogram_quantile{verb="write", cluster="$cluster"}
           format: time_series
           intervalFactor: 2
           legendFormat: '{{`{{`}} resource {{`}}`}}'

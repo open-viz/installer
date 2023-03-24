@@ -1,14 +1,14 @@
 {{- /*
-Generated from 'node-cluster-rsrc-use' from https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/main/manifests/grafana-dashboardDefinitions.yaml
+Generated from 'nodes-darwin' from https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/main/manifests/grafana-dashboardDefinitions.yaml
 Do not change in-place! In order to change this file first read following link:
 https://github.com/open-viz/installer/tree/master/charts/kube-grafana-dashboards/hack
 */ -}}
 {{- $kubeTargetVersion := default .Capabilities.KubeVersion.GitVersion .Values.kubeTargetVersionOverride }}
-{{- if and (semverCompare ">=1.14.0-0" $kubeTargetVersion) (semverCompare "<9.9.9-9" $kubeTargetVersion)  .Values.nodeExporter.enabled }}
+{{- if and (semverCompare ">=1.14.0-0" $kubeTargetVersion) (semverCompare "<9.9.9-9" $kubeTargetVersion)  }}
 apiVersion: openviz.dev/v1alpha1
 kind: GrafanaDashboard
 metadata:
-  name: {{ printf "%s-%s" (include "kube-grafana-dashboards.fullname" $) "node-cluster-rsrc-use" | trunc 63 | trimSuffix "-" }}
+  name: {{ printf "%s-%s" (include "kube-grafana-dashboards.fullname" $) "nodes-darwin" | trunc 63 | trimSuffix "-" }}
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "kube-grafana-dashboards.labels" $ | nindent 4 }}
@@ -49,7 +49,7 @@ spec:
         dashLength: 10
         dashes: false
         datasource: $datasource
-        fill: 10
+        fill: 1
         fillGradient: 0
         gridPos: {}
         id: 2
@@ -60,7 +60,7 @@ spec:
           max: false
           min: false
           rightSide: false
-          show: false
+          show: true
           sideWidth: null
           total: false
           values: false
@@ -79,18 +79,18 @@ spec:
         stack: true
         steppedLine: false
         targets:
-        - expr: "((\n  instance:node_cpu_utilisation:rate5m{job=\"node-exporter\", cluster=\"$cluster\"}\n  *\n  instance:node_num_cpu:sum{job=\"node-exporter\", cluster=\"$cluster\"}\n) != 0 )\n/ scalar(sum(instance:node_num_cpu:sum{job=\"node-exporter\", cluster=\"$cluster\"}))\n"
+        - expr: "(\n  (1 - sum without (mode) (rate(node_cpu_seconds_total{job=\"node-exporter\", mode=~\"idle|iowait|steal\", instance=\"$instance\"}[$__rate_interval])))\n/ ignoring(cpu) group_left\n  count without (cpu, mode) (node_cpu_seconds_total{job=\"node-exporter\", mode=\"idle\", instance=\"$instance\"})\n)\n"
           format: time_series
-          intervalFactor: 2
-          legendFormat: '{{`{{`}} instance {{`}}`}}'
+          intervalFactor: 5
+          legendFormat: '{{`{{`}}cpu{{`}}`}}'
           refId: A
         thresholds: []
         timeFrom: null
         timeShift: null
-        title: CPU Utilisation
+        title: CPU Usage
         tooltip:
           shared: true
-          sort: 2
+          sort: 0
           value_type: individual
         type: graph
         xaxis:
@@ -103,21 +103,21 @@ spec:
         - format: percentunit
           label: null
           logBase: 1
-          max: null
-          min: null
+          max: 1
+          min: 0
           show: true
         - format: percentunit
           label: null
           logBase: 1
-          max: null
-          min: null
+          max: 1
+          min: 0
           show: true
       - aliasColors: {}
         bars: false
         dashLength: 10
         dashes: false
         datasource: $datasource
-        fill: 10
+        fill: 0
         fillGradient: 0
         gridPos: {}
         id: 3
@@ -128,7 +128,7 @@ spec:
           max: false
           min: false
           rightSide: false
-          show: false
+          show: true
           sideWidth: null
           total: false
           values: false
@@ -144,21 +144,36 @@ spec:
         seriesOverrides: []
         spaceLength: 10
         span: 6
-        stack: true
+        stack: false
         steppedLine: false
         targets:
-        - expr: "(\n  instance:node_load1_per_cpu:ratio{job=\"node-exporter\", cluster=\"$cluster\"}\n  / scalar(count(instance:node_load1_per_cpu:ratio{job=\"node-exporter\", cluster=\"$cluster\"}))\n)  != 0\n"
+        - expr: node_load1{job="node-exporter", instance="$instance"}
           format: time_series
           intervalFactor: 2
-          legendFormat: '{{`{{`}}instance{{`}}`}}'
+          legendFormat: 1m load average
           refId: A
+        - expr: node_load5{job="node-exporter", instance="$instance"}
+          format: time_series
+          intervalFactor: 2
+          legendFormat: 5m load average
+          refId: B
+        - expr: node_load15{job="node-exporter", instance="$instance"}
+          format: time_series
+          intervalFactor: 2
+          legendFormat: 15m load average
+          refId: C
+        - expr: count(node_cpu_seconds_total{job="node-exporter", instance="$instance", mode="idle"})
+          format: time_series
+          intervalFactor: 2
+          legendFormat: logical cores
+          refId: D
         thresholds: []
         timeFrom: null
         timeShift: null
-        title: CPU Saturation (Load1 per CPU)
+        title: Load Average
         tooltip:
           shared: true
-          sort: 2
+          sort: 0
           value_type: individual
         type: graph
         xaxis:
@@ -168,17 +183,17 @@ spec:
           show: true
           values: []
         yaxes:
-        - format: percentunit
+        - format: short
           label: null
           logBase: 1
           max: null
-          min: null
+          min: 0
           show: true
-        - format: percentunit
+        - format: short
           label: null
           logBase: 1
           max: null
-          min: null
+          min: 0
           show: true
       repeat: null
       repeatIteration: null
@@ -195,7 +210,7 @@ spec:
         dashLength: 10
         dashes: false
         datasource: $datasource
-        fill: 10
+        fill: 1
         fillGradient: 0
         gridPos: {}
         id: 4
@@ -206,7 +221,7 @@ spec:
           max: false
           min: false
           rightSide: false
-          show: false
+          show: true
           sideWidth: null
           total: false
           values: false
@@ -221,22 +236,42 @@ spec:
         repeat: null
         seriesOverrides: []
         spaceLength: 10
-        span: 6
-        stack: true
+        span: 9
+        stack: false
         steppedLine: false
         targets:
-        - expr: "(\n  instance:node_memory_utilisation:ratio{job=\"node-exporter\", cluster=\"$cluster\"}\n  / scalar(count(instance:node_memory_utilisation:ratio{job=\"node-exporter\", cluster=\"$cluster\"}))\n) != 0\n"
+        - expr: node_memory_total_bytes{job="node-exporter", instance="$instance"}
           format: time_series
           intervalFactor: 2
-          legendFormat: '{{`{{`}}instance{{`}}`}}'
+          legendFormat: Physical Memory
           refId: A
+        - expr: "(\n    node_memory_internal_bytes{job=\"node-exporter\", instance=\"$instance\"} -\n    node_memory_purgeable_bytes{job=\"node-exporter\", instance=\"$instance\"} +\n    node_memory_wired_bytes{job=\"node-exporter\", instance=\"$instance\"} +\n    node_memory_compressed_bytes{job=\"node-exporter\", instance=\"$instance\"}\n)\n"
+          format: time_series
+          intervalFactor: 2
+          legendFormat: Memory Used
+          refId: B
+        - expr: "(\n    node_memory_internal_bytes{job=\"node-exporter\", instance=\"$instance\"} -\n    node_memory_purgeable_bytes{job=\"node-exporter\", instance=\"$instance\"}\n)\n"
+          format: time_series
+          intervalFactor: 2
+          legendFormat: App Memory
+          refId: C
+        - expr: node_memory_wired_bytes{job="node-exporter", instance="$instance"}
+          format: time_series
+          intervalFactor: 2
+          legendFormat: Wired Memory
+          refId: D
+        - expr: node_memory_compressed_bytes{job="node-exporter", instance="$instance"}
+          format: time_series
+          intervalFactor: 2
+          legendFormat: Compressed
+          refId: E
         thresholds: []
         timeFrom: null
         timeShift: null
-        title: Memory Utilisation
+        title: Memory Usage
         tooltip:
           shared: true
-          sort: 2
+          sort: 0
           value_type: individual
         type: graph
         xaxis:
@@ -246,86 +281,43 @@ spec:
           show: true
           values: []
         yaxes:
-        - format: percentunit
+        - format: bytes
           label: null
           logBase: 1
           max: null
-          min: null
+          min: 0
           show: true
-        - format: percentunit
+        - format: bytes
           label: null
           logBase: 1
           max: null
-          min: null
+          min: 0
           show: true
-      - aliasColors: {}
-        bars: false
-        dashLength: 10
-        dashes: false
-        datasource: $datasource
-        fill: 10
-        fillGradient: 0
+      - datasource: $datasource
+        fieldConfig:
+          defaults:
+            max: 100
+            min: 0
+            thresholds:
+              mode: absolute
+              steps:
+              - color: rgba(50, 172, 45, 0.97)
+              - color: rgba(237, 129, 40, 0.89)
+                value: 80
+              - color: rgba(245, 54, 54, 0.9)
+                value: 90
+            unit: percent
         gridPos: {}
         id: 5
-        legend:
-          alignAsTable: false
-          avg: false
-          current: false
-          max: false
-          min: false
-          rightSide: false
-          show: false
-          sideWidth: null
-          total: false
-          values: false
-        lines: true
-        linewidth: 1
-        links: []
-        nullPointMode: 'null'
-        percentage: false
-        pointradius: 5
-        points: false
-        renderer: flot
-        repeat: null
-        seriesOverrides: []
-        spaceLength: 10
-        span: 6
-        stack: true
-        steppedLine: false
+        span: 3
         targets:
-        - expr: instance:node_vmstat_pgmajfault:rate5m{job="node-exporter", cluster="$cluster"}
+        - expr: "(\n    (\n      avg(node_memory_internal_bytes{job=\"node-exporter\", instance=\"$instance\"}) -\n      avg(node_memory_purgeable_bytes{job=\"node-exporter\", instance=\"$instance\"}) +\n      avg(node_memory_wired_bytes{job=\"node-exporter\", instance=\"$instance\"}) +\n      avg(node_memory_compressed_bytes{job=\"node-exporter\", instance=\"$instance\"})\n    ) /\n    avg(node_memory_total_bytes{job=\"node-exporter\", instance=\"$instance\"})\n)\n*\n100\n"
           format: time_series
           intervalFactor: 2
-          legendFormat: '{{`{{`}}instance{{`}}`}}'
-          refId: A
-        thresholds: []
-        timeFrom: null
-        timeShift: null
-        title: Memory Saturation (Major Page Faults)
-        tooltip:
-          shared: true
-          sort: 2
-          value_type: individual
-        type: graph
-        xaxis:
-          buckets: null
-          mode: time
-          name: null
-          show: true
-          values: []
-        yaxes:
-        - format: rds
-          label: null
-          logBase: 1
-          max: null
-          min: null
-          show: true
-        - format: rds
-          label: null
-          logBase: 1
-          max: null
-          min: null
-          show: true
+          legendFormat: ''
+        title: Memory Usage
+        transparent: false
+        type: gauge
       repeat: null
       repeatIteration: null
       repeatRowId: null
@@ -341,7 +333,7 @@ spec:
         dashLength: 10
         dashes: false
         datasource: $datasource
-        fill: 10
+        fill: 0
         fillGradient: 0
         gridPos: {}
         id: 6
@@ -352,7 +344,7 @@ spec:
           max: false
           min: false
           rightSide: false
-          show: false
+          show: true
           sideWidth: null
           total: false
           values: false
@@ -366,33 +358,37 @@ spec:
         renderer: flot
         repeat: null
         seriesOverrides:
-        - alias: /Receive/
-          stack: A
-        - alias: /Transmit/
-          stack: B
-          transform: negative-Y
+        - alias: / read| written/
+          yaxis: 1
+        - alias: / io time/
+          yaxis: 2
         spaceLength: 10
         span: 6
-        stack: true
+        stack: false
         steppedLine: false
         targets:
-        - expr: instance:node_network_receive_bytes_excluding_lo:rate5m{job="node-exporter", cluster="$cluster"} != 0
+        - expr: rate(node_disk_read_bytes_total{job="node-exporter", instance="$instance", device=~"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|md.+|dasd.+)"}[$__rate_interval])
           format: time_series
-          intervalFactor: 2
-          legendFormat: '{{`{{`}}instance{{`}}`}} Receive'
+          intervalFactor: 1
+          legendFormat: '{{`{{`}}device{{`}}`}} read'
           refId: A
-        - expr: instance:node_network_transmit_bytes_excluding_lo:rate5m{job="node-exporter", cluster="$cluster"} != 0
+        - expr: rate(node_disk_written_bytes_total{job="node-exporter", instance="$instance", device=~"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|md.+|dasd.+)"}[$__rate_interval])
           format: time_series
-          intervalFactor: 2
-          legendFormat: '{{`{{`}}instance{{`}}`}} Transmit'
+          intervalFactor: 1
+          legendFormat: '{{`{{`}}device{{`}}`}} written'
           refId: B
+        - expr: rate(node_disk_io_time_seconds_total{job="node-exporter", instance="$instance", device=~"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|md.+|dasd.+)"}[$__rate_interval])
+          format: time_series
+          intervalFactor: 1
+          legendFormat: '{{`{{`}}device{{`}}`}} io time'
+          refId: C
         thresholds: []
         timeFrom: null
         timeShift: null
-        title: Network Utilisation (Bytes Receive/Transmit)
+        title: Disk I/O
         tooltip:
           shared: true
-          sort: 2
+          sort: 0
           value_type: individual
         type: graph
         xaxis:
@@ -408,95 +404,140 @@ spec:
           max: null
           min: null
           show: true
-        - format: Bps
+        - format: percentunit
           label: null
           logBase: 1
           max: null
           min: null
           show: true
-      - aliasColors: {}
-        bars: false
-        dashLength: 10
-        dashes: false
-        datasource: $datasource
-        fill: 10
-        fillGradient: 0
+      - datasource: $datasource
+        fieldConfig:
+          defaults:
+            custom: {}
+            thresholds:
+              mode: absolute
+              steps:
+              - color: green
+              - color: yellow
+                value: 0.8
+              - color: red
+                value: 0.9
+            unit: decbytes
+          overrides:
+          - matcher:
+              id: byName
+              options: Mounted on
+            properties:
+            - id: custom.width
+              value: 260
+          - matcher:
+              id: byName
+              options: Size
+            properties:
+            - id: custom.width
+              value: 93
+          - matcher:
+              id: byName
+              options: Used
+            properties:
+            - id: custom.width
+              value: 72
+          - matcher:
+              id: byName
+              options: Available
+            properties:
+            - id: custom.width
+              value: 88
+          - matcher:
+              id: byName
+              options: Used, %
+            properties:
+            - id: unit
+              value: percentunit
+            - id: custom.displayMode
+              value: gradient-gauge
+            - id: max
+              value: 1
+            - id: min
+              value: 0
         gridPos: {}
         id: 7
-        legend:
-          alignAsTable: false
-          avg: false
-          current: false
-          max: false
-          min: false
-          rightSide: false
-          show: false
-          sideWidth: null
-          total: false
-          values: false
-        lines: true
-        linewidth: 1
-        links: []
-        nullPointMode: 'null'
-        percentage: false
-        pointradius: 5
-        points: false
-        renderer: flot
-        repeat: null
-        seriesOverrides:
-        - alias: / Receive/
-          stack: A
-        - alias: / Transmit/
-          stack: B
-          transform: negative-Y
-        spaceLength: 10
         span: 6
-        stack: true
-        steppedLine: false
         targets:
-        - expr: instance:node_network_receive_drop_excluding_lo:rate5m{job="node-exporter", cluster="$cluster"} != 0
-          format: time_series
+        - expr: 'max by (mountpoint) (node_filesystem_size_bytes{job="node-exporter", instance="$instance", fstype!="", mountpoint!=""})
+
+            '
+          format: table
+          instant: true
           intervalFactor: 2
-          legendFormat: '{{`{{`}}instance{{`}}`}} Receive'
-          refId: A
-        - expr: instance:node_network_transmit_drop_excluding_lo:rate5m{job="node-exporter", cluster="$cluster"} != 0
-          format: time_series
+          legendFormat: ''
+        - expr: 'max by (mountpoint) (node_filesystem_avail_bytes{job="node-exporter", instance="$instance", fstype!="", mountpoint!=""})
+
+            '
+          format: table
+          instant: true
           intervalFactor: 2
-          legendFormat: '{{`{{`}}instance{{`}}`}} Transmit'
-          refId: B
-        thresholds: []
-        timeFrom: null
-        timeShift: null
-        title: Network Saturation (Drops Receive/Transmit)
-        tooltip:
-          shared: true
-          sort: 2
-          value_type: individual
-        type: graph
-        xaxis:
-          buckets: null
-          mode: time
-          name: null
-          show: true
-          values: []
-        yaxes:
-        - format: Bps
-          label: null
-          logBase: 1
-          max: null
-          min: null
-          show: true
-        - format: Bps
-          label: null
-          logBase: 1
-          max: null
-          min: null
-          show: true
+          legendFormat: ''
+        title: Disk Space Usage
+        transformations:
+        - id: groupBy
+          options:
+            fields:
+              'Value #A':
+                aggregations:
+                - lastNotNull
+                operation: aggregate
+              'Value #B':
+                aggregations:
+                - lastNotNull
+                operation: aggregate
+              mountpoint:
+                aggregations: []
+                operation: groupby
+        - id: merge
+          options: {}
+        - id: calculateField
+          options:
+            alias: Used
+            binary:
+              left: 'Value #A (lastNotNull)'
+              operator: '-'
+              reducer: sum
+              right: 'Value #B (lastNotNull)'
+            mode: binary
+            reduce:
+              reducer: sum
+        - id: calculateField
+          options:
+            alias: Used, %
+            binary:
+              left: Used
+              operator: /
+              reducer: sum
+              right: 'Value #A (lastNotNull)'
+            mode: binary
+            reduce:
+              reducer: sum
+        - id: organize
+          options:
+            excludeByName: {}
+            indexByName: {}
+            renameByName:
+              'Value #A (lastNotNull)': Size
+              'Value #B (lastNotNull)': Available
+              mountpoint: Mounted on
+        - id: sortBy
+          options:
+            fields: {}
+            sort:
+            - field: Mounted on
+        transparent: false
+        type: table
       repeat: null
       repeatIteration: null
       repeatRowId: null
       showTitle: true
-      title: Network
+      title: Disk
       titleSize: h6
       type: row
     - collapse: false
@@ -507,7 +548,8 @@ spec:
         dashLength: 10
         dashes: false
         datasource: $datasource
-        fill: 10
+        description: Network received (bits/s)
+        fill: 0
         fillGradient: 0
         gridPos: {}
         id: 8
@@ -518,7 +560,7 @@ spec:
           max: false
           min: false
           rightSide: false
-          show: false
+          show: true
           sideWidth: null
           total: false
           values: false
@@ -534,21 +576,21 @@ spec:
         seriesOverrides: []
         spaceLength: 10
         span: 6
-        stack: true
+        stack: false
         steppedLine: false
         targets:
-        - expr: "(\n  instance_device:node_disk_io_time_seconds:rate5m{job=\"node-exporter\", cluster=\"$cluster\"}\n  / scalar(count(instance_device:node_disk_io_time_seconds:rate5m{job=\"node-exporter\", cluster=\"$cluster\"}))\n) != 0\n"
+        - expr: rate(node_network_receive_bytes_total{job="node-exporter", instance="$instance", device!="lo"}[$__rate_interval]) * 8
           format: time_series
-          intervalFactor: 2
-          legendFormat: '{{`{{`}}instance{{`}}`}} {{`{{`}}device{{`}}`}}'
+          intervalFactor: 1
+          legendFormat: '{{`{{`}}device{{`}}`}}'
           refId: A
         thresholds: []
         timeFrom: null
         timeShift: null
-        title: Disk IO Utilisation
+        title: Network Received
         tooltip:
           shared: true
-          sort: 2
+          sort: 0
           value_type: individual
         type: graph
         xaxis:
@@ -558,24 +600,25 @@ spec:
           show: true
           values: []
         yaxes:
-        - format: percentunit
+        - format: bps
           label: null
           logBase: 1
           max: null
-          min: null
+          min: 0
           show: true
-        - format: percentunit
+        - format: bps
           label: null
           logBase: 1
           max: null
-          min: null
+          min: 0
           show: true
       - aliasColors: {}
         bars: false
         dashLength: 10
         dashes: false
         datasource: $datasource
-        fill: 10
+        description: Network transmitted (bits/s)
+        fill: 0
         fillGradient: 0
         gridPos: {}
         id: 9
@@ -586,7 +629,7 @@ spec:
           max: false
           min: false
           rightSide: false
-          show: false
+          show: true
           sideWidth: null
           total: false
           values: false
@@ -602,21 +645,21 @@ spec:
         seriesOverrides: []
         spaceLength: 10
         span: 6
-        stack: true
+        stack: false
         steppedLine: false
         targets:
-        - expr: "(\n  instance_device:node_disk_io_time_weighted_seconds:rate5m{job=\"node-exporter\", cluster=\"$cluster\"}\n  / scalar(count(instance_device:node_disk_io_time_weighted_seconds:rate5m{job=\"node-exporter\", cluster=\"$cluster\"}))\n) != 0\n"
+        - expr: rate(node_network_transmit_bytes_total{job="node-exporter", instance="$instance", device!="lo"}[$__rate_interval]) * 8
           format: time_series
-          intervalFactor: 2
-          legendFormat: '{{`{{`}}instance{{`}}`}} {{`{{`}}device{{`}}`}}'
+          intervalFactor: 1
+          legendFormat: '{{`{{`}}device{{`}}`}}'
           refId: A
         thresholds: []
         timeFrom: null
         timeShift: null
-        title: Disk IO Saturation
+        title: Network Transmitted
         tooltip:
           shared: true
-          sort: 2
+          sort: 0
           value_type: individual
         type: graph
         xaxis:
@@ -626,101 +669,23 @@ spec:
           show: true
           values: []
         yaxes:
-        - format: percentunit
+        - format: bps
           label: null
           logBase: 1
           max: null
-          min: null
+          min: 0
           show: true
-        - format: percentunit
+        - format: bps
           label: null
           logBase: 1
           max: null
-          min: null
+          min: 0
           show: true
       repeat: null
       repeatIteration: null
       repeatRowId: null
       showTitle: true
-      title: Disk IO
-      titleSize: h6
-      type: row
-    - collapse: false
-      collapsed: false
-      panels:
-      - aliasColors: {}
-        bars: false
-        dashLength: 10
-        dashes: false
-        datasource: $datasource
-        fill: 10
-        fillGradient: 0
-        gridPos: {}
-        id: 10
-        legend:
-          alignAsTable: false
-          avg: false
-          current: false
-          max: false
-          min: false
-          rightSide: false
-          show: false
-          sideWidth: null
-          total: false
-          values: false
-        lines: true
-        linewidth: 1
-        links: []
-        nullPointMode: 'null'
-        percentage: false
-        pointradius: 5
-        points: false
-        renderer: flot
-        repeat: null
-        seriesOverrides: []
-        spaceLength: 10
-        span: 12
-        stack: true
-        steppedLine: false
-        targets:
-        - expr: "sum without (device) (\n  max without (fstype, mountpoint) ((\n    node_filesystem_size_bytes{job=\"node-exporter\", fstype!=\"\", mountpoint!=\"\", cluster=\"$cluster\"}\n    -\n    node_filesystem_avail_bytes{job=\"node-exporter\", fstype!=\"\", mountpoint!=\"\", cluster=\"$cluster\"}\n  ) != 0)\n)\n/ scalar(sum(max without (fstype, mountpoint) (node_filesystem_size_bytes{job=\"node-exporter\", fstype!=\"\", mountpoint!=\"\", cluster=\"$cluster\"})))\n"
-          format: time_series
-          intervalFactor: 2
-          legendFormat: '{{`{{`}}instance{{`}}`}}'
-          refId: A
-        thresholds: []
-        timeFrom: null
-        timeShift: null
-        title: Disk Space Utilisation
-        tooltip:
-          shared: true
-          sort: 2
-          value_type: individual
-        type: graph
-        xaxis:
-          buckets: null
-          mode: time
-          name: null
-          show: true
-          values: []
-        yaxes:
-        - format: percentunit
-          label: null
-          logBase: 1
-          max: null
-          min: null
-          show: true
-        - format: percentunit
-          label: null
-          logBase: 1
-          max: null
-          min: null
-          show: true
-      repeat: null
-      repeatIteration: null
-      repeatRowId: null
-      showTitle: true
-      title: Disk Space
+      title: Network
       titleSize: h6
       type: row
     schemaVersion: 14
@@ -741,20 +706,18 @@ spec:
         regex: ''
         type: datasource
       - allValue: null
-        current:
-          text: ''
-          value: ''
+        current: {}
         datasource: $datasource
-        hide: {{ if .Values.dashboard.multicluster.global.enabled }}0{{ else }}2{{ end }}
+        hide: 0
         includeAll: false
-        label: null
+        label: Instance
         multi: false
-        name: cluster
+        name: instance
         options: []
-        query: label_values(node_time_seconds, cluster)
+        query: label_values(node_uname_info{job="node-exporter", sysname="Darwin"}, instance)
         refresh: 2
         regex: ''
-        sort: 1
+        sort: 0
         tagValuesQuery: ''
         tags: []
         tagsQuery: ''
@@ -786,6 +749,6 @@ spec:
       - 7d
       - 30d
     timezone: '{{ .Values.grafana.defaultDashboardsTimezone }}'
-    title: Node Exporter / USE Method / Cluster
+    title: Node Exporter / MacOS
     version: 0
 {{- end }}
