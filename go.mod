@@ -10,8 +10,6 @@ require (
 	kmodules.xyz/schema-checker v0.4.1
 )
 
-require github.com/fsnotify/fsnotify v1.5.4 // indirect
-
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-logr/logr v1.2.3 // indirect
