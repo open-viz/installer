@@ -44,6 +44,9 @@ spec:
             - mountPath: /conf.d
               name: config
       containers:
+        {{- if .Values.sidecars.enable }}
+          {{- toYaml .Values.sidecars.spec | nindent 8 }}
+        {{- end }}
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
@@ -79,6 +82,9 @@ spec:
       volumes:
         - name: config
           emptyDir: {}
+      {{- if .Values.sidecars.enable }}
+        {{- toYaml .Values.sidecars.volumes | nindent 8 }}
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
