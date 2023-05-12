@@ -42,7 +42,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - mountPath: /conf.d
-              name: config
+              name: trickster-config
       containers:
       {{- with .Values.sidecars.spec }}
         {{- toYaml . | nindent 8 }}
@@ -78,9 +78,9 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - mountPath: /etc/trickster
-              name: config
+              name: trickster-config
       volumes:
-        - name: config
+        - name: trickster-config
           emptyDir: {}
       {{- with .Values.sidecars.volumes }}
         {{- toYaml . | nindent 8 }}
