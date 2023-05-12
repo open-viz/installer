@@ -1223,8 +1223,6 @@ properties:
     type: object
   sidecars:
     properties:
-      enable:
-        type: boolean
       spec:
         items:
           description: A single application container that you want to run within
@@ -3781,8 +3779,6 @@ properties:
           - name
           type: object
         type: array
-    required:
-    - enable
     type: object
   tolerations:
     description: If specified, the pod's tolerations.

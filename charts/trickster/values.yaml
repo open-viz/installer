@@ -100,50 +100,5 @@ monitoring:
     labels: {}
 
 sidecars:
-  enable: false
-  spec: # +doc-gen:break
-  - args:
-    - prom-auth
-    env:
-    - name: GOOGLE_APPLICATION_CREDENTIALS
-      value: /data/credentials/google_application_credential.json
-    image: ghcr.io/appscode/b3:v2023.03.02.8
-    imagePullPolicy: Always
-    name: auth
-    ports:
-    - containerPort: 4000
-      name: auth
-      protocol: TCP
-    resources: {}
-    terminationMessagePath: /dev/termination-log
-    terminationMessagePolicy: File
-    volumeMounts:
-    - mountPath: /data
-      name: data
-    - mountPath: /data/b3/conf/app.ini
-      name: bytebuilders-config
-      subPath: app.ini
-    - mountPath: /nats/creds
-      name: nats-credentials
-    - mountPath: /billing
-      name: invoice-store
-    - mountPath: /data/credentials/google_application_credential.json
-      name: google-cred
-      subPath: google_application_credential.json
-  volumes: # +doc-gen:break
-  - name: bytebuilders-config
-    secret:
-      defaultMode: 420
-      secretName: bytebuilders-config
-  - emptyDir: {}
-    name: data
-  - name: nats-credentials
-    secret:
-      defaultMode: 420
-      secretName: nats-credentials
-  - emptyDir: {}
-    name: invoice-store
-  - name: google-cred
-    secret:
-      defaultMode: 420
-      secretName: google-cred
+  spec: []
+  volumes: []

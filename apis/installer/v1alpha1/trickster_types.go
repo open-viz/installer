@@ -79,11 +79,10 @@ type TricksterSpec struct {
 }
 
 type TricksterSidecars struct {
-	Enable bool `json:"enable"`
 	// +optional
-	Spec []core.Container `json:"spec,omitempty"`
+	Spec []core.Container `json:"spec"`
 	// +optional
-	Volumes []core.Volume `json:"volumes,omitempty"`
+	Volumes []core.Volume `json:"volumes"`
 }
 
 type ImageReference struct {
