@@ -12,10 +12,6 @@ maintainers:
 - name: appscode
   email: support@appscode.com
 dependencies:
-- name: grafana-operator
-  repository: file://../grafana-operator
-  condition: grafana-operator.enabled
-  version: v0.0.2
 - name: grafana-ui-server
   repository: file://../grafana-ui-server
   condition: grafana-ui-server.enabled
