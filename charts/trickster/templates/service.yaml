@@ -8,6 +8,14 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
+  {{- range .Values.sidecars.spec }}
+    {{- range .ports }}
+    - name: {{ .name }}
+      port: {{ .containerPort }}
+      targetPort: {{ .name }}
+      protocol: {{ .protocol }}
+    {{- end }}
+  {{- end }}
     - name: prom
       port: 9090
       targetPort: prom
