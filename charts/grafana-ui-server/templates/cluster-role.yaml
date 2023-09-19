@@ -34,3 +34,64 @@ rules:
   - roles
   - rolebindings
   verbs: ["get", "list", "watch"]
+# permissions for prometheus syncer
+- apiGroups:
+  - monitoring.coreos.com
+  resources:
+  - prometheuses
+  verbs: ["get", "list", "watch"]
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs: ["get", "list", "watch"]
+- apiGroups:
+  - meta.k8s.appscode.com
+  resources:
+  - resourcequeries
+  verbs: ["create"]
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
+  verbs: ["get", "list", "watch"]
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - roles
+  - rolebindings
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+- apiGroups:
+  - ""
+  resources:
+  - services/proxy
+  verbs: ["*"]
+- apiGroups:
+  - charts.x-helm.dev
+  resources:
+  - clusterchartpresets
+  - chartpresets
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+- apiGroups:
+  - appcatalog.appscode.com
+  resources:
+  - appbindings
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+# permissions for service monitor syncer
+- apiGroups:
+  - monitoring.coreos.com
+  resources:
+  - servicemonitors
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+- apiGroups:
+  - ""
+  resources:
+  - services
+  - endpoints
+  - secrets
+  verbs: ["get", "list", "watch", "create", "update", "patch"]

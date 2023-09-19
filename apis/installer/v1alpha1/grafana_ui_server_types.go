@@ -77,6 +77,12 @@ type GrafanaUiServerSpec struct {
 	ServiceAccount     ServiceAccountSpec       `json:"serviceAccount"`
 	Apiserver          EASSpec                  `json:"apiserver"`
 	Monitoring         EASMonitoring            `json:"monitoring"`
+	Platform           PlatformSpec             `json:"platform"`
+}
+
+type PlatformSpec struct {
+	BaseURL string `json:"baseURL"`
+	Token   string `json:"token"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

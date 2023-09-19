@@ -46,14 +46,23 @@ spec:
         - --tls-cert-file=/var/serving-cert/tls.crt
         - --tls-private-key-file=/var/serving-cert/tls.key
         - --use-kubeapiserver-fqdn-for-aks={{ .Values.apiserver.useKubeapiserverFqdnForAks }}
+        - --baseURL={{ .Values.platform.baseURL }}
+        - --token=$(PLATFORM_API_TOKEN)
         ports:
         - containerPort: 8443
         env:
-        - name: MY_POD_NAME
+        {{- if .Values.platform.token }}
+        - name: PLATFORM_API_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "grafana-ui-server.fullname" . }}-token
+              key: token
+        {{- end }}
+        - name: POD_NAME
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        - name: MY_POD_NAMESPACE
+        - name: POD_NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace

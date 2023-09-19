@@ -1,0 +1,12 @@
+{{- if .Values.platform.token }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "grafana-ui-server.fullname" . }}-token
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "grafana-ui-server.labels" . | nindent 4 }}
+type: Opaque
+stringData:
+  token: {{ .Values.platform.token | quote }}
+{{- end }}

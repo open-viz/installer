@@ -44,8 +44,8 @@ securityContext: # +doc-gen:break
   readOnlyRootFilesystem: true
   runAsNonRoot: true
   runAsUser: 65534
-  seccompProfile:
-    type: RuntimeDefault
+  # seccompProfile:
+  #   type: RuntimeDefault
 
 service:
   type: ClusterIP
