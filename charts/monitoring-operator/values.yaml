@@ -1,4 +1,4 @@
-# Default values for grafana-ui-server.
+# Default values for monitoring-operator.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -28,8 +28,8 @@ image:
     readOnlyRootFilesystem: true
     runAsNonRoot: true
     runAsUser: 65534
-    seccompProfile:
-      type: RuntimeDefault
+    # seccompProfile:
+    #   type: RuntimeDefault
 
 # Specify an array of imagePullSecrets.
 # Secrets must be manually created in the namespace.
@@ -83,7 +83,7 @@ apiserver:
   servingCerts:
     # If true, generates on install/upgrade the certs that allow the kube-apiserver (and potentially ServiceMonitor)
     # to authenticate operators pods. Otherwise specify certs in `apiserver.servingCerts.{caCrt, serverCrt, serverKey}`.
-    # See also: [example terraform](https://github.com/kubeops/installer/blob/master/charts/grafana-ui-server/example-terraform.tf)
+    # See also: [example terraform](https://github.com/kubeops/installer/blob/master/charts/monitoring-operator/example-terraform.tf)
     generate: true
     # CA certficate used by serving certificate of webhook server.
     caCrt: ""
@@ -99,3 +99,6 @@ monitoring:
     # Prometheus crd will select ServiceMonitor using these labels.
     # Only usable when monitoring agent is `prometheus.io/operator`.
     labels: {}
+platform:
+  baseURL: ""
+  token: ""

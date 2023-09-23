@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "grafana-ui-server.fullname" . }}
+  name: {{ include "monitoring-operator.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "grafana-ui-server.labels" . | nindent 4 }}
+    {{- include "monitoring-operator.labels" . | nindent 4 }}
   {{- if eq "prometheus.io/builtin" ( include "monitoring.agent" . ) }}
   annotations:
     prometheus.io/scrape: "true"
@@ -19,4 +19,4 @@ spec:
     port: 443
     targetPort: 8443
   selector:
-    {{- include "grafana-ui-server.selectorLabels" . | nindent 4 }}
+    {{- include "monitoring-operator.selectorLabels" . | nindent 4 }}

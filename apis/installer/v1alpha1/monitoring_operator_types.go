@@ -22,12 +22,12 @@ import (
 )
 
 const (
-	ResourceKindGrafanaUiServer = "GrafanaUiServer"
-	ResourceGrafanaUiServer     = "grafanauiserver"
-	ResourceGrafanaUiServers    = "grafanauiservers"
+	ResourceKindMonitoringOperator = "MonitoringOperator"
+	ResourceMonitoringOperator     = "monitoringoperator"
+	ResourceMonitoringOperators    = "monitoringoperators"
 )
 
-// GrafanaUiServer defines the schama for ui server installer.
+// MonitoringOperator defines the schama for ui server installer.
 
 // +genclient
 // +genclient:skipVerbs=updateStatus
@@ -35,15 +35,15 @@ const (
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=grafanauiservers,singular=grafanauiserver,categories={kubeops,appscode}
-type GrafanaUiServer struct {
+// +kubebuilder:resource:path=monitoringoperators,singular=monitoringoperator,categories={kubeops,appscode}
+type MonitoringOperator struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              GrafanaUiServerSpec `json:"spec,omitempty"`
+	Spec              MonitoringOperatorSpec `json:"spec,omitempty"`
 }
 
-// GrafanaUiServerSpec is the schema for Identity Server values file
-type GrafanaUiServerSpec struct {
+// MonitoringOperatorSpec is the schema for Identity Server values file
+type MonitoringOperatorSpec struct {
 	//+optional
 	NameOverride string `json:"nameOverride"`
 	//+optional
@@ -77,14 +77,20 @@ type GrafanaUiServerSpec struct {
 	ServiceAccount     ServiceAccountSpec       `json:"serviceAccount"`
 	Apiserver          EASSpec                  `json:"apiserver"`
 	Monitoring         EASMonitoring            `json:"monitoring"`
+	Platform           PlatformSpec             `json:"platform"`
+}
+
+type PlatformSpec struct {
+	BaseURL string `json:"baseURL"`
+	Token   string `json:"token"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-// GrafanaUiServerList is a list of GrafanaUiServers
-type GrafanaUiServerList struct {
+// MonitoringOperatorList is a list of MonitoringOperators
+type MonitoringOperatorList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	// Items is a list of GrafanaUiServer CRD objects
-	Items []GrafanaUiServer `json:"items,omitempty"`
+	// Items is a list of MonitoringOperator CRD objects
+	Items []MonitoringOperator `json:"items,omitempty"`
 }

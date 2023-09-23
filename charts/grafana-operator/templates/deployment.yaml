@@ -45,11 +45,11 @@ spec:
         - --metrics-bind-address=:{{ .Values.monitoring.bindPort }}
         - --health-probe-bind-address=:{{ .Values.apiserver.healthcheck.probePort }}
         env:
-        - name: MY_POD_NAME
+        - name: POD_NAME
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        - name: MY_POD_NAMESPACE
+        - name: POD_NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace

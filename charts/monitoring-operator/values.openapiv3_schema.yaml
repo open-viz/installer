@@ -1015,6 +1015,16 @@ properties:
     additionalProperties:
       type: string
     type: object
+  platform:
+    properties:
+      baseURL:
+        type: string
+      token:
+        type: string
+    required:
+    - baseURL
+    - token
+    type: object
   podAnnotations:
     additionalProperties:
       type: string
@@ -1228,6 +1238,7 @@ required:
 - image
 - imagePullPolicy
 - monitoring
+- platform
 - registryFQDN
 - replicaCount
 - serviceAccount
