@@ -18,8 +18,8 @@ set -eou pipefail
 
 crd_dir=${1:-}
 
-api_repo_url=https://github.com/open-viz/grafana-tools.git
-api_repo_tag=${OPEN_VIZ_GRAFANA_TOOLS:-master}
+api_repo_url=https://github.com/open-viz/apimachinery.git
+api_repo_tag=${OPEN_VIZ_GRAFANA_APIMACHINERY:-master}
 
 if [ "$#" -ne 1 ]; then
     if [ "${api_repo_tag}" == "master" ]; then
@@ -63,8 +63,13 @@ crd-importer \
 
 crd-importer \
     --input=${crd_dir} \
-    --out=./charts/grafana-ui-server/crds \
+    --out=./charts/monitoring-operator/crds \
     --gk=GrafanaDashboard.openviz.dev
+
+crd-importer \
+    --input=https://github.com/x-helm/apimachinery/raw/master/crds/charts.x-helm.dev_chartpresets.yaml \
+    --input=https://github.com/x-helm/apimachinery/raw/master/crds/charts.x-helm.dev_clusterchartpresets.yaml \
+    --out=./charts/monitoring-operator/crds
 
 crd-importer \
     --input=${crd_dir} \

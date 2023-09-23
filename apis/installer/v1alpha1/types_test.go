@@ -28,9 +28,8 @@ import (
 func TestDefaultValues(t *testing.T) {
 	checker := schemachecker.New(os.DirFS("../../.."),
 		schemachecker.TestCase{Obj: v1alpha1.GrafanaOperatorSpec{}},
-		schemachecker.TestCase{Obj: v1alpha1.GrafanaUiServerSpec{}},
 		schemachecker.TestCase{Obj: v1alpha1.KubeGrafanaDashboardsSpec{}},
-		schemachecker.TestCase{Obj: v1alpha1.GrafanaOpscenterSpec{}},
+		schemachecker.TestCase{Obj: v1alpha1.MonitoringOperatorSpec{}},
 		schemachecker.TestCase{Obj: v1alpha1.TricksterSpec{}},
 	)
 	checker.TestAll(t)

@@ -2,13 +2,13 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "grafana-ui-server.fullname" . }}
+  name: {{ include "monitoring-operator.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
   {{- if eq "true" ( include "monitoring.apply-servicemonitor-label" . ) }}
     {{- include "monitoring.servicemonitor-label" . | nindent 4 }}
   {{- else }}
-    {{- include "grafana-ui-server.selectorLabels" . | nindent 4 }}
+    {{- include "monitoring-operator.selectorLabels" . | nindent 4 }}
   {{- end }}
 spec:
   namespaceSelector:
@@ -16,7 +16,7 @@ spec:
     - {{ .Release.Namespace }}
   selector:
     matchLabels:
-      {{- include "grafana-ui-server.selectorLabels" . | nindent 6 }}
+      {{- include "monitoring-operator.selectorLabels" . | nindent 6 }}
   endpoints:
   - port: api
     bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
@@ -24,7 +24,7 @@ spec:
     tlsConfig:
       ca:
         secret:
-          name: {{ include "grafana-ui-server.fullname" . }}-apiserver-cert
+          name: {{ include "monitoring-operator.fullname" . }}-apiserver-cert
           key: tls.crt
-      serverName: "{{ include "grafana-ui-server.fullname" . }}.{{ .Release.Namespace }}.svc"
+      serverName: "{{ include "monitoring-operator.fullname" . }}.{{ .Release.Namespace }}.svc"
 {{- end }}

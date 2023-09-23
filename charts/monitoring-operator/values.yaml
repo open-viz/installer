@@ -1,4 +1,4 @@
-# Default values for grafana-ui-server.
+# Default values for monitoring-operator.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -83,7 +83,7 @@ apiserver:
   servingCerts:
     # If true, generates on install/upgrade the certs that allow the kube-apiserver (and potentially ServiceMonitor)
     # to authenticate operators pods. Otherwise specify certs in `apiserver.servingCerts.{caCrt, serverCrt, serverKey}`.
-    # See also: [example terraform](https://github.com/kubeops/installer/blob/master/charts/grafana-ui-server/example-terraform.tf)
+    # See also: [example terraform](https://github.com/kubeops/installer/blob/master/charts/monitoring-operator/example-terraform.tf)
     generate: true
     # CA certficate used by serving certificate of webhook server.
     caCrt: ""

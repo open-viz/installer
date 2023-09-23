@@ -4,10 +4,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "grafana-ui-server.fullname" . }}
+  name: {{ include "monitoring-operator.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "grafana-ui-server.labels" . | nindent 4 }}
+    {{- include "monitoring-operator.labels" . | nindent 4 }}
   {{- with .Values.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -16,11 +16,11 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "grafana-ui-server.selectorLabels" . | nindent 6 }}
+      {{- include "monitoring-operator.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "grafana-ui-server.selectorLabels" . | nindent 8 }}
+        {{- include "monitoring-operator.selectorLabels" . | nindent 8 }}
       annotations:
         checksum/apiregistration.yaml: {{ include (print $.Template.BasePath "/apiregistration.yaml") . | sha256sum }}
       {{- if $criticalAddon }}
@@ -31,7 +31,7 @@ spec:
       {{- end }}
     spec:
       {{- include "appscode.imagePullSecrets" . | nindent 6 }}
-      serviceAccountName: {{ include "grafana-ui-server.serviceAccountName" . }}
+      serviceAccountName: {{ include "monitoring-operator.serviceAccountName" . }}
       containers:
       - name: ui-server
         securityContext:
@@ -55,7 +55,7 @@ spec:
         - name: PLATFORM_API_TOKEN
           valueFrom:
             secretKeyRef:
-              name: {{ include "grafana-ui-server.fullname" . }}-token
+              name: {{ include "monitoring-operator.fullname" . }}-token
               key: token
         {{- end }}
         - name: POD_NAME
@@ -89,7 +89,7 @@ spec:
       - name: serving-cert
         secret:
           defaultMode: 420
-          secretName: {{ include "grafana-ui-server.fullname" . }}-apiserver-cert
+          secretName: {{ include "monitoring-operator.fullname" . }}-apiserver-cert
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
     {{- if or .Values.tolerations $criticalAddon }}
