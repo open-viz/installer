@@ -15,5 +15,3 @@
 # limitations under the License.
 
 set -e
-
-helm dependency update charts/grafana-opscenter

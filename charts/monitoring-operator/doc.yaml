@@ -1,7 +1,7 @@
 project:
   name: Grafana UI Server by AppsCode
   shortName: Grafana UI Server
-  url: https://github.com/kubeops/ui-server
+  url: https://github.com/open-viz/grafana-tools
   description: Grafana UI Server for ByteBuilders
   app: a Grafana UI Server
 repository:

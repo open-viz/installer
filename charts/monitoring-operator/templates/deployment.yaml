@@ -33,7 +33,7 @@ spec:
       {{- include "appscode.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "monitoring-operator.serviceAccountName" . }}
       containers:
-      - name: ui-server
+      - name: operator
         securityContext:
           {{- toYaml .Values.image.securityContext | nindent 10 }}
         image: {{ include "image.registry" . }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}

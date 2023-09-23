@@ -35,5 +35,3 @@ _testmain.go
 
 .terraform
 *.tfstate*
-
-/charts/grafana-opscenter/charts

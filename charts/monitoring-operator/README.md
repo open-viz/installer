@@ -1,6 +1,6 @@
 # Grafana UI Server
 
-[Grafana UI Server by AppsCode](https://github.com/kubeops/ui-server) - Grafana UI Server for ByteBuilders
+[Grafana UI Server by AppsCode](https://github.com/open-viz/grafana-tools) - Grafana UI Server for ByteBuilders
 
 ## TL;DR;
 
