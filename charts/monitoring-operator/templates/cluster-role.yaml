@@ -39,7 +39,7 @@ rules:
   - monitoring.coreos.com
   resources:
   - prometheuses
-  verbs: ["get", "list", "watch"]
+  verbs: ["get", "list", "watch", "update", "patch"]
 - apiGroups:
   - apps
   resources:
