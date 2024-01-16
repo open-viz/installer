@@ -67,8 +67,6 @@ crd-importer \
     --gk=GrafanaDashboard.openviz.dev
 
 crd-importer \
-    --input=https://github.com/prometheus-operator/prometheus-operator/raw/v0.70.0/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml \
-    --input=https://github.com/prometheus-operator/prometheus-operator/raw/v0.70.0/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml \
     --input=https://github.com/kmodules/custom-resources/raw/v0.25.1/crds/appcatalog.appscode.com_appbindings.yaml \
     --input=https://github.com/x-helm/apimachinery/raw/master/crds/charts.x-helm.dev_chartpresets.yaml \
     --input=https://github.com/x-helm/apimachinery/raw/master/crds/charts.x-helm.dev_clusterchartpresets.yaml \
