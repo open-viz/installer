@@ -6,6 +6,11 @@ metadata:
     {{- include "monitoring-operator.labels" . | nindent 4 }}
 rules:
 - apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  verbs: ["*"]
+- apiGroups:
   - ui.openviz.dev
   resources:
   - "*"
@@ -25,6 +30,7 @@ rules:
   resources:
   - configmaps
   - secrets
+  - nodes
   verbs: ["get", "list", "watch"]
 - apiGroups:
   - rbac.authorization.k8s.io
