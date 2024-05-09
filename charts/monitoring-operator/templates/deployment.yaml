@@ -85,11 +85,15 @@ spec:
         volumeMounts:
         - mountPath: /var/serving-cert
           name: serving-cert
+        {{- with .Values.volumeMounts }}
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
       volumes:
       - name: serving-cert
         secret:
           defaultMode: 420
           secretName: {{ include "monitoring-operator.fullname" . }}-apiserver-cert
+      {{- toYaml . | nindent 6 }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
     {{- if or .Values.tolerations $criticalAddon }}

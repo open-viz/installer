@@ -49,6 +49,17 @@ logLevel: 3
 annotations: {}
 # Annotations passed to operator pod(s).
 podAnnotations: {}
+# Additional volumes on the output Deployment definition.
+# - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
+volumes: []
+# Additional volumeMounts on the output Deployment definition.
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
+volumeMounts: []
 # Node labels for pod assignment
 nodeSelector: {}
 # Tolerations for pod assignment

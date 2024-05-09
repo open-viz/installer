@@ -63,6 +63,10 @@ type MonitoringOperatorSpec struct {
 	//+optional
 	PodAnnotations map[string]string `json:"podAnnotations"`
 	//+optional
+	Volumes []core.Volume `json:"volumes"`
+	//+optional
+	VolumeMounts []core.VolumeMount `json:"volumeMounts"`
+	//+optional
 	NodeSelector map[string]string `json:"nodeSelector"`
 	// If specified, the pod's tolerations.
 	// +optional
