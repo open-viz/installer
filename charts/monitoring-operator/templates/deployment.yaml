@@ -48,6 +48,9 @@ spec:
         - --use-kubeapiserver-fqdn-for-aks={{ .Values.apiserver.useKubeapiserverFqdnForAks }}
         - --baseURL={{ .Values.platform.baseURL }}
         - --token=$(PLATFORM_API_TOKEN)
+        {{- if .Values.platform.caBundle }}
+        - --platform-ca-file=/var/platform-ca/tls.crt
+        {{- end }}
         ports:
         - containerPort: 8443
         env:
@@ -85,11 +88,21 @@ spec:
         volumeMounts:
         - mountPath: /var/serving-cert
           name: serving-cert
+        {{- if .Values.platform.caBundle }}
+        - mountPath: /var/platform-ca
+          name: platform-ca
+        {{- end }}
       volumes:
       - name: serving-cert
         secret:
           defaultMode: 420
           secretName: {{ include "monitoring-operator.fullname" . }}-apiserver-cert
+      {{- if .Values.platform.caBundle }}
+      - name: platform-ca
+        secret:
+          defaultMode: 420
+          secretName: {{ include "monitoring-operator.fullname" . }}-platform-ca
+      {{- end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
     {{- if or .Values.tolerations $criticalAddon }}

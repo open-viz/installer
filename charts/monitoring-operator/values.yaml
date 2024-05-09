@@ -102,3 +102,5 @@ monitoring:
 platform:
   baseURL: ""
   token: ""
+  caBundle: ""
+

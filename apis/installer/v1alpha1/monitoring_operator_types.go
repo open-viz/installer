@@ -83,6 +83,8 @@ type MonitoringOperatorSpec struct {
 type PlatformSpec struct {
 	BaseURL string `json:"baseURL"`
 	Token   string `json:"token"`
+	// +optional
+	CABundle string `json:"caBundle"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
