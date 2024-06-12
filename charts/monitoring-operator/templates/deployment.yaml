@@ -49,7 +49,7 @@ spec:
         - --baseURL={{ .Values.platform.baseURL }}
         - --token=$(PLATFORM_API_TOKEN)
         {{- if .Values.platform.caBundle }}
-        - --platform-ca-file=/var/platform-ca/tls.crt
+        - --platform-ca-file=/var/platform-auth/ca.crt
         {{- end }}
         ports:
         - containerPort: 8443
@@ -58,7 +58,7 @@ spec:
         - name: PLATFORM_API_TOKEN
           valueFrom:
             secretKeyRef:
-              name: {{ include "monitoring-operator.fullname" . }}-token
+              name: {{ include "monitoring-operator.fullname" . }}-platform-auth
               key: token
         {{- end }}
         - name: POD_NAME
@@ -89,8 +89,8 @@ spec:
         - mountPath: /var/serving-cert
           name: serving-cert
         {{- if .Values.platform.caBundle }}
-        - mountPath: /var/platform-ca
-          name: platform-ca
+        - mountPath: /var/platform-auth
+          name: platform-auth
         {{- end }}
       volumes:
       - name: serving-cert
@@ -98,10 +98,10 @@ spec:
           defaultMode: 420
           secretName: {{ include "monitoring-operator.fullname" . }}-apiserver-cert
       {{- if .Values.platform.caBundle }}
-      - name: platform-ca
+      - name: platform-auth
         secret:
           defaultMode: 420
-          secretName: {{ include "monitoring-operator.fullname" . }}-platform-ca
+          secretName: {{ include "monitoring-operator.fullname" . }}-platform-auth
       {{- end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
