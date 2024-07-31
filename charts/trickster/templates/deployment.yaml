@@ -44,7 +44,7 @@ spec:
             - mountPath: /conf.d
               name: trickster-config
       containers:
-      {{- with .Values.sidecars.spec }}
+      {{- with (values .Values.sidecars.spec) }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
         - name: {{ .Chart.Name }}

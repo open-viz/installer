@@ -1378,7 +1378,7 @@ properties:
   sidecars:
     properties:
       spec:
-        items:
+        additionalProperties:
           description: A single application container that you want to run within
             a pod.
           properties:
@@ -2600,7 +2600,7 @@ properties:
           required:
           - name
           type: object
-        type: array
+        type: object
       volumes:
         items:
           description: Volume represents a named volume in a pod that may be accessed

@@ -80,7 +80,7 @@ type TricksterSpec struct {
 
 type TricksterSidecars struct {
 	// +optional
-	Spec []core.Container `json:"spec"`
+	Spec map[string]core.Container `json:"spec"`
 	// +optional
 	Volumes []core.Volume `json:"volumes"`
 }

@@ -1001,9 +1001,9 @@ func (in *TricksterSidecars) DeepCopyInto(out *TricksterSidecars) {
 	*out = *in
 	if in.Spec != nil {
 		in, out := &in.Spec, &out.Spec
-		*out = make([]v1.Container, len(*in))
-		for i := range *in {
-			(*in)[i].DeepCopyInto(&(*out)[i])
+		*out = make(map[string]v1.Container, len(*in))
+		for key, val := range *in {
+			(*out)[key] = *val.DeepCopy()
 		}
 	}
 	if in.Volumes != nil {

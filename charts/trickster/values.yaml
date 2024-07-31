@@ -103,5 +103,5 @@ monitoring:
     labels: {}
 
 sidecars:
-  spec: []
+  spec: {}
   volumes: []
