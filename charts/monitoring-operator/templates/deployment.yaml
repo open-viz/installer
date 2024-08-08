@@ -51,6 +51,9 @@ spec:
         {{- if .Values.platform.caBundle }}
         - --platform-ca-file=/var/platform-auth/ca.crt
         {{- end }}
+        {{- with .Values.hubUID }}
+        - --hubUID={{.}}
+        {{- end }}
         ports:
         - containerPort: 8443
         env:
