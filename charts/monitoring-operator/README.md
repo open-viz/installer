@@ -7,8 +7,8 @@
 ```bash
 $ helm repo add appscode https://charts.appscode.com/stable/
 $ helm repo update
-$ helm search repo appscode/monitoring-operator --version=v0.0.8
-$ helm upgrade -i monitoring-operator appscode/monitoring-operator -n kubeops --create-namespace --version=v0.0.8
+$ helm search repo appscode/monitoring-operator --version=v0.0.9
+$ helm upgrade -i monitoring-operator appscode/monitoring-operator -n kubeops --create-namespace --version=v0.0.9
 ```
 
 ## Introduction
@@ -24,7 +24,7 @@ This chart deploys a Grafana UI Server on a [Kubernetes](http://kubernetes.io) c
 To install/upgrade the chart with the release name `monitoring-operator`:
 
 ```bash
-$ helm upgrade -i monitoring-operator appscode/monitoring-operator -n kubeops --create-namespace --version=v0.0.8
+$ helm upgrade -i monitoring-operator appscode/monitoring-operator -n kubeops --create-namespace --version=v0.0.9
 ```
 
 The command deploys a Grafana UI Server on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -82,17 +82,18 @@ The following table lists the configurable parameters of the `monitoring-operato
 | platform.baseURL                     |                                                                                                                                                                                                                                                                                                                                                                   | <code>""</code>                                                                                                                                     |
 | platform.token                       |                                                                                                                                                                                                                                                                                                                                                                   | <code>""</code>                                                                                                                                     |
 | platform.caBundle                    |                                                                                                                                                                                                                                                                                                                                                                   | <code>""</code>                                                                                                                                     |
+| hubUID                               |                                                                                                                                                                                                                                                                                                                                                                   | <code>""</code>                                                                                                                                     |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm upgrade -i`. For example:
 
 ```bash
-$ helm upgrade -i monitoring-operator appscode/monitoring-operator -n kubeops --create-namespace --version=v0.0.8 --set replicaCount=1
+$ helm upgrade -i monitoring-operator appscode/monitoring-operator -n kubeops --create-namespace --version=v0.0.9 --set replicaCount=1
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while
 installing the chart. For example:
 
 ```bash
-$ helm upgrade -i monitoring-operator appscode/monitoring-operator -n kubeops --create-namespace --version=v0.0.8 --values values.yaml
+$ helm upgrade -i monitoring-operator appscode/monitoring-operator -n kubeops --create-namespace --version=v0.0.9 --values values.yaml
 ```

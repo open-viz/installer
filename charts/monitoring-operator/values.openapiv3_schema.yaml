@@ -927,6 +927,8 @@ properties:
     type: boolean
   fullnameOverride:
     type: string
+  hubUID:
+    type: string
   image:
     properties:
       registry:
@@ -1390,6 +1392,7 @@ properties:
     type: array
 required:
 - apiserver
+- hubUID
 - image
 - imagePullPolicy
 - monitoring
