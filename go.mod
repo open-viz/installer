@@ -7,12 +7,10 @@ toolchain go1.22.2
 require (
 	github.com/gogo/protobuf v1.3.2
 	github.com/google/gofuzz v1.2.0
-	k8s.io/api v0.29.2
-	k8s.io/apimachinery v0.29.2
+	k8s.io/api v0.30.2
+	k8s.io/apimachinery v0.30.2
 	kmodules.xyz/schema-checker v0.4.1
 )
-
-require github.com/stretchr/testify v1.9.0 // indirect
 
 require (
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
@@ -46,13 +44,3 @@ require (
 	sigs.k8s.io/structured-merge-diff/v4 v4.4.1 // indirect
 	sigs.k8s.io/yaml v1.4.0 // indirect
 )
-
-replace github.com/Masterminds/sprig/v3 => github.com/gomodules/sprig/v3 v3.2.3-0.20220405051441-0a8a99bac1b8
-
-replace sigs.k8s.io/controller-runtime => github.com/kmodules/controller-runtime v0.16.1-0.20240104120228-ef547cbd1b75
-
-replace github.com/imdario/mergo => github.com/imdario/mergo v0.3.6
-
-replace k8s.io/apiserver => github.com/kmodules/apiserver v0.29.1-0.20240104121741-1fb217d4a573
-
-replace k8s.io/kubernetes => github.com/kmodules/kubernetes v1.30.0-alpha.0.0.20231224075822-3bd9a13c86db
