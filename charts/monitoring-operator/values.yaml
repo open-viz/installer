@@ -103,4 +103,14 @@ platform:
   baseURL: ""
   token: ""
   caBundle: ""
+
 hubUID: ""
+
+rancher:
+  baseURL: ""
+  token: ""
+  caBundle: ""
+
+# rancher:
+#   baseURL: "https://1.2.3.4/v3"
+#   token: "token-9dft7:mrpgqjfpbtmdmjq49jdjckdpwwrrc6vv749r66fj2jr244mcmz8c4p"

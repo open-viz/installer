@@ -69,7 +69,7 @@ rules:
 - apiGroups:
   - rbac.authorization.k8s.io
   resources:
-  - roles
+  - clusterroles
   - rolebindings
   verbs: ["get", "list", "watch", "create", "update", "patch"]
 - apiGroups:

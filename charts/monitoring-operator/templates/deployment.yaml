@@ -39,7 +39,7 @@ spec:
         image: {{ include "image.registry" . }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.imagePullPolicy  }}
         args:
-        - ui-server
+        - monitoring-operator
         - --v={{ .Values.logLevel }}
         - --secure-port=8443
         - --audit-log-path=-
@@ -53,6 +53,9 @@ spec:
         {{- end }}
         {{- with .Values.hubUID }}
         - --hubUID={{.}}
+        {{- end }}
+        {{- if .Values.rancher.baseURL }}
+        - --rancher-auth-secret={{ include "monitoring-operator.fullname" . }}-rancher-auth
         {{- end }}
         ports:
         - containerPort: 8443
