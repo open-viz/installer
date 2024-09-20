@@ -1,9 +1,8 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: openviz:trickster:edit
+  name: appscode:trickster:admin
   labels:
-    rbac.authorization.k8s.io/aggregate-to-edit: "true"
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
@@ -14,13 +13,27 @@ rules:
   resources:
   - "*"
   verbs: ["*"]
-
 ---
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: openviz:trickster:view
+  name: appscode:trickster:edit
+  labels:
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+rules:
+- apiGroups:
+  - trickstercache.org
+  resources:
+  - "*"
+  verbs: ["create", "delete", "deletecollection", "patch", "update"]
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: appscode:trickster:view
   labels:
     rbac.authorization.k8s.io/aggregate-to-view: "true"
   annotations:
