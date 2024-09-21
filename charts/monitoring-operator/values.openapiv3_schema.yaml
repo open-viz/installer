@@ -1412,6 +1412,18 @@ properties:
             type: string
         type: object
     type: object
+  rancher:
+    properties:
+      baseURL:
+        type: string
+      caBundle:
+        type: string
+      token:
+        type: string
+    required:
+    - baseURL
+    - token
+    type: object
   registryFQDN:
     type: string
   replicaCount:
@@ -1474,6 +1486,7 @@ required:
 - imagePullPolicy
 - monitoring
 - platform
+- rancher
 - registryFQDN
 - replicaCount
 - serviceAccount

@@ -79,6 +79,7 @@ type MonitoringOperatorSpec struct {
 	Monitoring         EASMonitoring            `json:"monitoring"`
 	Platform           PlatformSpec             `json:"platform"`
 	HubUID             string                   `json:"hubUID"`
+	Rancher            PlatformSpec             `json:"rancher"`
 }
 
 type PlatformSpec struct {
