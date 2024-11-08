@@ -2,8 +2,8 @@ apiVersion: v2
 name: grafana-operator
 description: A Helm chart for Grafana Operator by AppsCode
 type: application
-version: v2024.9.30
-appVersion: v0.0.12
+version: v2024.11.8
+appVersion: v0.1.0
 home: https://github.com/open-viz/grafana-operator
 icon: https://cdn.appscode.com/images/products/searchlight/icons/android-icon-192x192.png
 sources:
