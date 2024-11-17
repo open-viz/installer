@@ -19,7 +19,7 @@ rules:
   - openviz.dev
   resources:
   - "*"
-  verbs: ["get", "list", "watch"]
+  verbs: ["*"]
 - apiGroups:
   - appcatalog.appscode.com
   resources:
@@ -60,7 +60,7 @@ rules:
   - ""
   resources:
   - namespaces
-  verbs: ["get", "list", "watch"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
 - apiGroups:
   - ""
   resources:
