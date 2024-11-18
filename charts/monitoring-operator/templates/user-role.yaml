@@ -1,0 +1,65 @@
+# ClusterRole used to grant client org users permission in {client-org}-monitoring namespace
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: appscode:client-org:monitoring
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+rules:
+- apiGroups:
+  - appcatalog.appscode.com
+  resources:
+  - "appbindings"
+  resourceNames:
+  - "grafana"
+  verbs: ["get", "list", "watch"]
+- apiGroups:
+  - openviz.dev
+  resources:
+  - "grafanadashboards"
+  verbs: ["get", "list", "watch"]
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: appscode:monitoring-operator:view
+  labels:
+    rbac.authorization.k8s.io/aggregate-to-view: "true"
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+rules:
+- apiGroups:
+  - appcatalog.appscode.com
+  resources:
+  - "appbinding"
+  verbs: ["get", "list", "watch"]
+- apiGroups:
+  - ui.openviz.dev
+  resources:
+  - "dashboardgroups"
+  verbs: ["create"]
+
+---
+
+# Grant logged in users permission on cluster scoped resources required for grafana dashboards
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: appscode:monitoring-operator:view
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: appscode:monitoring-operator:view
+subjects:
+- kind: Group
+  name: system:authenticated
+  apiGroup: rbac.authorization.k8s.io
