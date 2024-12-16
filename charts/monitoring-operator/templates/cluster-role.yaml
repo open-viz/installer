@@ -40,6 +40,22 @@ rules:
   - roles
   - rolebindings
   verbs: ["get", "list", "watch"]
+# permissions for alertmanager config generator
+- apiGroups:
+  - monitoring.coreos.com
+  resources:
+  - alertmanagers
+  verbs: ["get", "list", "watch"]
+- apiGroups:
+  - monitoring.coreos.com
+  resources:
+  - alertmanagerconfigs
+  verbs: ["get", "list", "watch", "create", "patch"]
+- apiGroups:
+  - apiregistration.k8s.io
+  resources:
+  - apiservices
+  verbs: ["get", "list", "watch"]
 # permissions for prometheus syncer
 - apiGroups:
   - monitoring.coreos.com
