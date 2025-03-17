@@ -117,3 +117,9 @@ rules:
   - endpoints
   - secrets
   verbs: ["get", "list", "watch", "create", "update", "patch"]
+# permission to check ocm spoke
+- apiGroups:
+  - operator.open-cluster-management.io
+  resources:
+  - klusterlets
+  verbs: ["get", "list", "watch"]
