@@ -1,5 +1,5 @@
 # CVE Report
 |                                                     IMAGE REF                                                      |      OS       | CRITICAL<BR>(OS, OTHER) | HIGH<BR>(OS, OTHER) | MEDIUM<BR>(OS, OTHER) | LOW<BR>(OS, OTHER) | UNKNOWN<BR>(OS, OTHER) |
 |--------------------------------------------------------------------------------------------------------------------|---------------|-------------------------|---------------------|-----------------------|--------------------|------------------------|
-| ghcr.io/appscode/grafana-tools:v0.3.2<br>sha256:038b79338603ca4768dba2383b7aa4cd4e927b7110f9bfb31b67ee758df7d288   | debian 12.9   | 0, 0                    | 0, 0                | 0, 1                  | 0, 0               | 0, 0                   |
-| ghcr.io/appscode/trickster:v2.0.0-beta3<br>sha256:6f325b2f7d577df647560c5e93ddc81bfd178d8dc9e7a3e7729b0299b6e2e3e2 | alpine 3.21.0 | 0, 0                    | **2**, 2            | 2, 6                  | 0, 0               | 2, 0                   |
+| ghcr.io/appscode/grafana-tools:v0.3.2<br>sha256:038b79338603ca4768dba2383b7aa4cd4e927b7110f9bfb31b67ee758df7d288   | debian 12.9   | 0, 0                    | 0, 0                | 0, 2                  | 0, 0               | 0, 0                   |
+| ghcr.io/appscode/trickster:v2.0.0-beta3<br>sha256:6f325b2f7d577df647560c5e93ddc81bfd178d8dc9e7a3e7729b0299b6e2e3e2 | alpine 3.21.0 | 0, 0                    | **2**, 2            | 2, 7                  | 0, 0               | 2, 0                   |
