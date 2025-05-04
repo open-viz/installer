@@ -16,6 +16,8 @@
 
 set -eou pipefail
 
+KMODULES_CUSTOM_RESOURCES_TAG=${KMODULES_CUSTOM_RESOURCES_TAG:-v0.32.0}
+
 crd_dir=${1:-}
 
 api_repo_url=https://github.com/open-viz/apimachinery.git
@@ -58,7 +60,7 @@ crd-importer \
     --gk=GrafanaDatasource.openviz.dev
 
 crd-importer \
-    --input=https://github.com/kmodules/custom-resources/raw/v0.29.1/crds/appcatalog.appscode.com_appbindings.yaml \
+    --input=https://github.com/kmodules/custom-resources/raw/${KMODULES_CUSTOM_RESOURCES_TAG}/crds/appcatalog.appscode.com_appbindings.yaml \
     --out=./charts/grafana-operator/crds
 
 crd-importer \
@@ -67,7 +69,7 @@ crd-importer \
     --gk=GrafanaDashboard.openviz.dev
 
 crd-importer \
-    --input=https://github.com/kmodules/custom-resources/raw/v0.29.1/crds/appcatalog.appscode.com_appbindings.yaml \
+    --input=https://github.com/kmodules/custom-resources/raw/${KMODULES_CUSTOM_RESOURCES_TAG}/crds/appcatalog.appscode.com_appbindings.yaml \
     --input=https://github.com/x-helm/apimachinery/raw/master/crds/charts.x-helm.dev_chartpresets.yaml \
     --input=https://github.com/x-helm/apimachinery/raw/master/crds/charts.x-helm.dev_clusterchartpresets.yaml \
     --out=./charts/monitoring-operator/crds
