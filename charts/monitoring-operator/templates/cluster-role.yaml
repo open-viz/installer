@@ -45,7 +45,7 @@ rules:
   - monitoring.coreos.com
   resources:
   - alertmanagers
-  verbs: ["get", "list", "watch"]
+  verbs: ["get", "list", "watch", "patch"]
 - apiGroups:
   - monitoring.coreos.com
   resources:
