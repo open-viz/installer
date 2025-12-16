@@ -2,8 +2,8 @@ apiVersion: v2
 name: monitoring-operator
 description: A Helm chart for monitoring-operator by AppsCode
 type: application
-version: v2025.6.30
-appVersion: v0.4.2
+version: v2025.12.15
+appVersion: v0.4.3
 home: https://github.com/kubeops/monitoring-operator
 icon: https://cdn.appscode.com/images/products/kubeops/icons/android-icon-192x192.png
 sources:
