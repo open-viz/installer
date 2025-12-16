@@ -114,3 +114,9 @@ rancher:
 # rancher:
 #   baseURL: "https://1.2.3.4/v3"
 #   token: "token-9dft7:mrpgqjfpbtmdmjq49jdjckdpwwrrc6vv749r66fj2jr244mcmz8c4p"
+
+distro:
+  # Set true, if installed in OpenShift
+  openshift: false
+  # Set operator or all to use ubi images
+  ubi: ""

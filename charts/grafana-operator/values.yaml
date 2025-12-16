@@ -84,3 +84,9 @@ monitoring:
     # Prometheus crd will select ServiceMonitor using these labels.
     # Only usable when monitoring agent is `prometheus.io/operator`.
     labels: {}
+
+distro:
+  # Set true, if installed in OpenShift
+  openshift: false
+  # Set operator or all to use ubi images
+  ubi: ""

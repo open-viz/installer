@@ -38,6 +38,31 @@ func Test_CheckImageArchitectures(t *testing.T) {
 	}
 }
 
+func Test_CheckUBIImageArchitectures(t *testing.T) {
+	dir, err := rootDir()
+	if err != nil {
+		t.Error(err)
+	}
+
+	const (
+		//	ubiAll = `global:
+		// distro:
+		//  ubi: all`
+		ubiOperator = `distro:
+  ubi: operator`
+		//	ubiCatalog = `distro:
+		// ubi: catalog`
+	)
+	values := map[string]string{
+"grafana-operator": ubiOperator,
+"monitoring-operator": ubiOperator,
+"trickster": ubiOperator,
+	}
+	if err := lib.CheckHelmChartImageArchitectures(filepath.Join(dir, "charts"), values, nil, nil); err != nil {
+		t.Errorf("CheckUBIImageArchitectures() error = %v", err)
+	}
+}
+
 func rootDir() (string, error) {
 	_, file, _, ok := runtime.Caller(1)
 	if !ok {
