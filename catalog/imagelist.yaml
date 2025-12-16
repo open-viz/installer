@@ -1,2 +1,2 @@
-- ghcr.io/appscode/grafana-tools:v0.4.2
-- ghcr.io/appscode/trickster:v2.0.0-beta3
+- ghcr.io/appscode/grafana-tools:v0.4.3
+- ghcr.io/appscode/trickster:v2.0.0-beta4

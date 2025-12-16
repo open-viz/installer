@@ -3,7 +3,7 @@ name: trickster
 description: A Helm chart for Trickster by AppsCode
 type: application
 version: v2024.12.15
-appVersion: v2.0.0-beta3
+appVersion: v2.0.0-beta4
 home: https://github.com/open-viz/trickster
 icon: https://cdn.appscode.com/images/products/kubeops/icons/android-icon-192x192.png
 sources:
