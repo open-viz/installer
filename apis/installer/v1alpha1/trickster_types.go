@@ -19,6 +19,7 @@ package v1alpha1
 import (
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"kmodules.xyz/resource-metadata/apis/shared"
 )
 
 const (
@@ -76,6 +77,8 @@ type TricksterSpec struct {
 	Monitoring CustomMonitoring  `json:"monitoring"`
 	Ingress    AppIngress        `json:"ingress"`
 	Sidecars   TricksterSidecars `json:"sidecars"`
+	// +optional
+	Distro shared.DistroSpec `json:"distro"`
 }
 
 type TricksterSidecars struct {
