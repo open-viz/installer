@@ -62,7 +62,7 @@ func (d DefaultTypeMapper) ToChartName(k string) string {
 }
 
 type TestCase struct {
-	Obj  interface{}
+	Obj  any
 	File string
 }
 
@@ -78,7 +78,7 @@ type SchemaChecker struct {
 	registry map[string]TestData
 }
 
-func kind(v interface{}) string {
+func kind(v any) string {
 	return reflect.Indirect(reflect.ValueOf(v)).Type().Name()
 }
 
@@ -127,7 +127,7 @@ func (checker *SchemaChecker) TestKind(t *testing.T, kind string) {
 	checker.test(t, result, err)
 }
 
-func (checker *SchemaChecker) CheckObject(v interface{}, file string) (string, error) {
+func (checker *SchemaChecker) CheckObject(v any, file string) (string, error) {
 	checker.registry[kind(v)] = TestData{
 		typ:  reflect.TypeOf(v),
 		file: file,
@@ -135,7 +135,7 @@ func (checker *SchemaChecker) CheckObject(v interface{}, file string) (string, e
 	return checker.Check(kind(v), file)
 }
 
-func (checker *SchemaChecker) TestObject(t *testing.T, v interface{}, file string) {
+func (checker *SchemaChecker) TestObject(t *testing.T, v any, file string) {
 	checker.registry[kind(v)] = TestData{
 		typ:  reflect.TypeOf(v),
 		file: file,
@@ -156,7 +156,7 @@ func (checker *SchemaChecker) Check(schemaKind string, file string) (string, err
 		if err != nil {
 			return "", errors.Wrap(err, file)
 		}
-		defer resp.Body.Close()
+		defer resp.Body.Close() // nolint:errcheck
 		var buf bytes.Buffer
 		_, err = io.Copy(&buf, resp.Body)
 		if err != nil {
@@ -170,7 +170,7 @@ func (checker *SchemaChecker) Check(schemaKind string, file string) (string, err
 		}
 	}
 
-	var original map[string]interface{}
+	var original map[string]any
 	err = yaml.Unmarshal(data, &original)
 	if err != nil {
 		return "", errors.Wrap(err, file)
@@ -242,7 +242,7 @@ func (checker *SchemaChecker) test(t *testing.T, diff string, err error) {
 	}
 }
 
-func CheckFS(fsys fs.FS, v interface{}) error {
+func CheckFS(fsys fs.FS, v any) error {
 	return fs.WalkDir(fsys, ".", func(path string, e fs.DirEntry, err error) error {
 		if e.IsDir() || err != nil {
 			return err
@@ -260,7 +260,7 @@ func CheckFS(fsys fs.FS, v interface{}) error {
 	})
 }
 
-func TestFS(t *testing.T, fsys fs.FS, v interface{}) {
+func TestFS(t *testing.T, fsys fs.FS, v any) {
 	if err := CheckFS(fsys, v); err != nil {
 		t.Error(err)
 	}
