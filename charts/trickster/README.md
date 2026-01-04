@@ -7,8 +7,8 @@
 ```bash
 $ helm repo add appscode https://charts.appscode.com/stable/
 $ helm repo update
-$ helm search repo appscode/trickster --version=v2024.12.15
-$ helm upgrade -i trickster appscode/trickster -n kubeops --create-namespace --version=v2024.12.15
+$ helm search repo appscode/trickster --version=v2026.1.15
+$ helm upgrade -i trickster appscode/trickster -n kubeops --create-namespace --version=v2026.1.15
 ```
 
 ## Introduction
@@ -24,7 +24,7 @@ This chart deploys a Trickster Server on a [Kubernetes](http://kubernetes.io) cl
 To install/upgrade the chart with the release name `trickster`:
 
 ```bash
-$ helm upgrade -i trickster appscode/trickster -n kubeops --create-namespace --version=v2024.12.15
+$ helm upgrade -i trickster appscode/trickster -n kubeops --create-namespace --version=v2026.1.15
 ```
 
 The command deploys a Trickster Server on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -89,12 +89,12 @@ The following table lists the configurable parameters of the `trickster` chart a
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm upgrade -i`. For example:
 
 ```bash
-$ helm upgrade -i trickster appscode/trickster -n kubeops --create-namespace --version=v2024.12.15 --set replicaCount=1
+$ helm upgrade -i trickster appscode/trickster -n kubeops --create-namespace --version=v2026.1.15 --set replicaCount=1
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while
 installing the chart. For example:
 
 ```bash
-$ helm upgrade -i trickster appscode/trickster -n kubeops --create-namespace --version=v2024.12.15 --values values.yaml
+$ helm upgrade -i trickster appscode/trickster -n kubeops --create-namespace --version=v2026.1.15 --values values.yaml
 ```
