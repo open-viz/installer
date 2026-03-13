@@ -30,6 +30,7 @@ func TestDefaultValues(t *testing.T) {
 		schemachecker.TestCase{Obj: v1alpha1.GrafanaOperatorSpec{}},
 		schemachecker.TestCase{Obj: v1alpha1.KubeGrafanaDashboardsSpec{}},
 		schemachecker.TestCase{Obj: v1alpha1.MonitoringOperatorSpec{}},
+		schemachecker.TestCase{Obj: v1alpha1.ThanosQuerierSpec{}},
 		schemachecker.TestCase{Obj: v1alpha1.TricksterSpec{}},
 	)
 	checker.TestAll(t)
