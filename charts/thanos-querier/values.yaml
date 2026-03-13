@@ -1,0 +1,107 @@
+# Default values for thanos-querier.
+# This chart renders only the manifests copied from examples/.
+
+nameOverride: ""
+fullnameOverride: ""
+
+replicaCount: 2
+
+annotations: {}
+podAnnotations: {}
+
+# Additional image pull secrets for pod spec.
+imagePullSecrets: []
+
+# Container image pull policy used by all containers.
+imagePullPolicy: IfNotPresent
+
+image:
+  query:
+    repository: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:b1d26a296f7030737a14e198a7c83a7d8720dad1d2b2ffaeaf7cbdbde274da78
+    resources:
+      requests:
+        cpu: 10m
+        memory: 12Mi
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+      readOnlyRootFilesystem: false
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
+  kubeRbacProxy:
+    repository: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:0e4654368f7dbc4e0808df96a3d1f85b3130185f5ba3523707980728d13fae43
+    resources:
+      requests:
+        cpu: 1m
+        memory: 15Mi
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+  promLabelProxy:
+    repository: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:ab8dc6d8e30ef45c31d418718e17f1f5a500fa672a693058d61047a28a04adbd
+    resources:
+      requests:
+        cpu: 1m
+        memory: 15Mi
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+
+thanosQuery:
+  replicaLabels:
+    - prometheus_replica
+    - thanos_ruler_replica
+  endpointFlags:
+    - dnssrv+_grpc._tcp.prometheus-operated.openshift-monitoring.svc.cluster.local
+  storeFlags:
+    - dnssrv+_grpc._tcp.prometheus-operated.openshift-user-workload-monitoring.svc.cluster.local
+    - dnssrv+_grpc._tcp.thanos-ruler-operated.openshift-user-workload-monitoring.svc.cluster.local
+  ruleFlags:
+    - dnssrv+_grpc._tcp.prometheus-operated.openshift-monitoring.svc.cluster.local
+    - dnssrv+_grpc._tcp.prometheus-operated.openshift-user-workload-monitoring.svc.cluster.local
+    - dnssrv+_grpc._tcp.thanos-ruler-operated.openshift-user-workload-monitoring.svc.cluster.local
+  targetFlags:
+    - dnssrv+_grpc._tcp.prometheus-operated.openshift-monitoring.svc.cluster.local
+    - dnssrv+_grpc._tcp.prometheus-operated.openshift-user-workload-monitoring.svc.cluster.local
+
+nodeSelector:
+  kubernetes.io/os: linux
+
+tolerations: []
+
+# If empty, a default anti-affinity is applied in the deployment template.
+affinity: {}
+
+priorityClassName: system-cluster-critical
+
+podSecurityContext:
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+
+service:
+  type: ClusterIP
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name:
+
+secrets:
+  # If false, secret manifests are not created and names below must refer to pre-existing secrets.
+  create: true
+  names:
+    dockercfg: ""
+    grpcTLS: ""
+    kubeRbacProxy: ""
+    kubeRbacProxyWeb: ""
+    kubeRbacProxyRules: ""
+    kubeRbacProxyMetrics: ""
+    tls: ""
