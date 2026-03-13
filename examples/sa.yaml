@@ -1,0 +1,21 @@
+apiVersion: v1
+imagePullSecrets:
+- name: thanos-querier-dockercfg-kn9t7
+kind: ServiceAccount
+metadata:
+  annotations:
+    openshift.io/internal-registry-pull-secret-ref: thanos-querier-dockercfg-kn9t7
+  creationTimestamp: "2026-03-09T03:54:35Z"
+  labels:
+    app.kubernetes.io/component: query-layer
+    app.kubernetes.io/instance: thanos-querier
+    app.kubernetes.io/managed-by: cluster-monitoring-operator
+    app.kubernetes.io/name: thanos-query
+    app.kubernetes.io/part-of: openshift-monitoring
+    app.kubernetes.io/version: 0.37.2
+  name: thanos-querier
+  namespace: openshift-monitoring
+  resourceVersion: "24239"
+  uid: 93134b84-2775-4c4b-93ed-e3af121cbad4
+secrets:
+- name: thanos-querier-dockercfg-kn9t7
