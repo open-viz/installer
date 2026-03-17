@@ -16,9 +16,10 @@ subjects:
 {{- if eq "true" ( include "distro.openshift" . ) }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
+kind: RoleBinding
 metadata:
   name: {{ include "monitoring-operator.fullname" . }}-cluster-monitoring-viewer
+  namespace: openshift-monitoring
   labels:
     {{- include "monitoring-operator.labels" . | nindent 4 }}
 roleRef:

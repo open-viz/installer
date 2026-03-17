@@ -87,7 +87,7 @@ rules:
   resources:
   - clusterroles
   - rolebindings
-  verbs: ["get", "list", "watch", "create", "update", "patch"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 - apiGroups:
   - ""
   resources:
@@ -137,6 +137,7 @@ rules:
 - apiGroups:
   - ""
   resources:
+  - services/finalizers
   - serviceaccounts/finalizers
   verbs: ["update", "patch"]
 - apiGroups:
