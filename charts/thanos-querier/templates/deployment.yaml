@@ -10,22 +10,13 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  progressDeadlineSeconds: 600
   replicas: {{ .Values.replicaCount }}
-  revisionHistoryLimit: 10
   selector:
     matchLabels:
       {{- include "thanos-querier.selectorLabels" . | nindent 6 }}
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 1
-    type: RollingUpdate
   template:
     metadata:
       annotations:
-        openshift.io/required-scc: restricted-v2
-        target.workload.openshift.io/management: '{"effect": "PreferredDuringScheduling"}'
         {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}

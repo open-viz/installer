@@ -7,7 +7,9 @@ fullnameOverride: ""
 replicaCount: 2
 
 annotations: {}
-podAnnotations: {}
+podAnnotations:
+  openshift.io/required-scc: restricted-v2
+  target.workload.openshift.io/management: '{"effect": "PreferredDuringScheduling"}'
 
 # Additional image pull secrets for pod spec.
 imagePullSecrets: []
@@ -98,10 +100,10 @@ secrets:
   # If false, secret manifests are not created and names below must refer to pre-existing secrets.
   create: true
   names:
-    dockercfg: ""
-    grpcTLS: ""
-    kubeRbacProxy: ""
-    kubeRbacProxyWeb: ""
-    kubeRbacProxyRules: ""
-    kubeRbacProxyMetrics: ""
-    tls: ""
+    dockercfg: thanos-querier-dockercfg-ngckc
+    grpcTLS: thanos-querier-grpc-tls-1gij9etlsc7dr
+    kubeRbacProxy: thanos-querier-kube-rbac-proxy
+    kubeRbacProxyWeb: thanos-querier-kube-rbac-proxy-web
+    kubeRbacProxyRules: thanos-querier-kube-rbac-proxy-rules
+    kubeRbacProxyMetrics: thanos-querier-kube-rbac-proxy-metrics
+    tls: thanos-querier-tls
