@@ -79,6 +79,38 @@ type ServiceMonitorLabels struct {
 	Labels map[string]string `json:"labels"`
 }
 
+type Alertmanager struct {
+	ConfigSelector AlertmanagerConfigSelector `json:"configSelector"`
+	Email          AlertmanagerEmailSpec      `json:"email"`
+	Webhook        AlertmanagerWebhookSpec    `json:"webhook"`
+}
+
+type AlertmanagerConfigSelector struct {
+	LabelKey   string `json:"labelKey"`
+	LabelValue string `json:"labelValue"`
+}
+
+type AlertmanagerEmailSpec struct {
+	Enabled        bool   `json:"enabled"`
+	Continue       bool   `json:"continue"`
+	To             string `json:"to"`
+	From           string `json:"from"`
+	Smarthost      string `json:"smarthost"`
+	AuthUsername   string `json:"authUsername"`
+	AuthSecretName string `json:"authSecretName"`
+	AuthSecretKey  string `json:"authSecretKey"`
+	RequireTLS     bool   `json:"requireTLS"`
+	SendResolved   bool   `json:"sendResolved"`
+}
+
+type AlertmanagerWebhookSpec struct {
+	Enabled       bool   `json:"enabled"`
+	Continue      bool   `json:"continue"`
+	URLSecretName string `json:"urlSecretName"`
+	URLSecretKey  string `json:"urlSecretKey"`
+	SendResolved  bool   `json:"sendResolved"`
+}
+
 type EASSpec struct {
 	GroupPriorityMinimum       int32              `json:"groupPriorityMinimum"`
 	VersionPriority            int32              `json:"versionPriority"`

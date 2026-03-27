@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "grafana-operator.fullname" . }}-alertmanager
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "grafana-operator.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+    configSelectorLabelKey: {{ .Values.alertmanager.configSelector.labelKey | quote }}
+    configSelectorLabelValue: {{ .Values.alertmanager.configSelector.labelValue | quote }}
+    email:
+      enabled: {{ .Values.alertmanager.email.enabled }}
+      continue: {{ .Values.alertmanager.email.continue }}
+      to: {{ .Values.alertmanager.email.to | quote }}
+      from: {{ .Values.alertmanager.email.from | quote }}
+      smarthost: {{ .Values.alertmanager.email.smarthost | quote }}
+      authUsername: {{ .Values.alertmanager.email.authUsername | quote }}
+      authSecretName: {{ .Values.alertmanager.email.authSecretName | quote }}
+      authSecretKey: {{ .Values.alertmanager.email.authSecretKey | quote }}
+      requireTLS: {{ .Values.alertmanager.email.requireTLS }}
+      sendResolved: {{ .Values.alertmanager.email.sendResolved }}
+    webhook:
+      enabled: {{ .Values.alertmanager.webhook.enabled }}
+      continue: {{ .Values.alertmanager.webhook.continue }}
+      urlSecretName: {{ .Values.alertmanager.webhook.urlSecretName | quote }}
+      urlSecretKey: {{ .Values.alertmanager.webhook.urlSecretKey | quote }}
+      sendResolved: {{ .Values.alertmanager.webhook.sendResolved }}
