@@ -49,6 +49,7 @@ spec:
         - --use-kubeapiserver-fqdn-for-aks={{ .Values.apiserver.useKubeapiserverFqdnForAks }}
         - --metrics-bind-address=:{{ .Values.monitoring.bindPort }}
         - --health-probe-bind-address=:{{ .Values.apiserver.healthcheck.probePort }}
+        - --alertmanager-config-file=/etc/grafana-tools/alertmanager/config.yaml
         env:
         - name: POD_NAME
           valueFrom:
@@ -66,6 +67,9 @@ spec:
         volumeMounts:
         - mountPath: /tmp
           name: tmpdir
+        - mountPath: /etc/grafana-tools/alertmanager
+          name: alertmanager-config
+          readOnly: true
       {{- if .Values.apiserver.healthcheck.enabled }}
         readinessProbe:
           httpGet:
@@ -85,6 +89,9 @@ spec:
       volumes:
       - name: tmpdir
         emptyDir: {}
+      - name: alertmanager-config
+        configMap:
+          name: {{ include "grafana-operator.fullname" . }}-alertmanager
       {{- if eq "true" ( include "distro.openshift" . ) }}
       securityContext:
         {{- toYaml (omit .Values.podSecurityContext "runAsUser" "runAsGroup" "fsGroup" "supplementalGroups") | nindent 8 }}
