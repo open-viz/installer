@@ -84,23 +84,6 @@ monitoring:
     # Prometheus crd will select ServiceMonitor using these labels.
     # Only usable when monitoring agent is `prometheus.io/operator`.
     labels: {}
-alertmanager:
-  email:
-    enabled: false
-    to: ""
-    from: ""
-    smarthost: ""
-    authUsername: ""
-    authSecretName: ""
-    authSecretKey: ""
-    requireTLS: true
-    sendResolved: true
-  webhook:
-    enabled: false
-    urlSecretName: ""
-    urlSecretKey: ""
-    sendResolved: true
-
 distro:
   # Set true, if installed in OpenShift
   openshift: false
