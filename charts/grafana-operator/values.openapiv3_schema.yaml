@@ -1265,69 +1265,6 @@ properties:
             x-kubernetes-list-type: atomic
         type: object
     type: object
-  alertmanager:
-    properties:
-      email:
-        properties:
-          authUsername:
-            type: string
-          enabled:
-            type: boolean
-          from:
-            type: string
-          requireTLS:
-            type: boolean
-          secret:
-            properties:
-              key:
-                type: string
-              name:
-                type: string
-            required:
-            - key
-            - name
-            type: object
-          sendResolved:
-            type: boolean
-          smarthost:
-            type: string
-          to:
-            type: string
-        required:
-        - authUsername
-        - enabled
-        - from
-        - requireTLS
-        - secret
-        - sendResolved
-        - smarthost
-        - to
-        type: object
-      webhook:
-        properties:
-          enabled:
-            type: boolean
-          secret:
-            properties:
-              key:
-                type: string
-              name:
-                type: string
-            required:
-            - key
-            - name
-            type: object
-          sendResolved:
-            type: boolean
-        required:
-        - enabled
-        - secret
-        - sendResolved
-        type: object
-    required:
-    - email
-    - webhook
-    type: object
   annotations:
     additionalProperties:
       type: string
@@ -2150,7 +2087,6 @@ properties:
       type: object
     type: array
 required:
-- alertmanager
 - apiserver
 - image
 - imagePullPolicy

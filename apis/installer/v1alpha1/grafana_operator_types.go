@@ -78,7 +78,6 @@ type GrafanaOperatorSpec struct {
 	ServiceAccount     ServiceAccountSpec       `json:"serviceAccount"`
 	Apiserver          WebHookSpec              `json:"apiserver"`
 	Monitoring         Monitoring               `json:"monitoring"`
-	Alertmanager       Alertmanager             `json:"alertmanager"`
 	// +optional
 	Distro shared.DistroSpec `json:"distro"`
 }

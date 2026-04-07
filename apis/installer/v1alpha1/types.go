@@ -84,26 +84,33 @@ type Alertmanager struct {
 	Webhook AlertmanagerWebhookSpec `json:"webhook"`
 }
 
-type AlertmanagerSecretRefSpec struct {
+type AlertmanagerEmailSecretRefSpec struct {
+	Name     string `json:"name"`
+	Key      string `json:"key"`
+	Password string `json:"password"`
+}
+
+type AlertmanagerWebhookSecretRefSpec struct {
 	Name string `json:"name"`
 	Key  string `json:"key"`
+	URL  string `json:"url"`
 }
 
 type AlertmanagerEmailSpec struct {
-	Enabled      bool                      `json:"enabled"`
-	To           string                    `json:"to"`
-	From         string                    `json:"from"`
-	Smarthost    string                    `json:"smarthost"`
-	AuthUsername string                    `json:"authUsername"`
-	Secret       AlertmanagerSecretRefSpec `json:"secret"`
-	RequireTLS   bool                      `json:"requireTLS"`
-	SendResolved bool                      `json:"sendResolved"`
+	Enabled      bool                           `json:"enabled"`
+	To           string                         `json:"to"`
+	From         string                         `json:"from"`
+	Smarthost    string                         `json:"smarthost"`
+	AuthUsername string                         `json:"authUsername"`
+	Secret       AlertmanagerEmailSecretRefSpec `json:"secret"`
+	RequireTLS   bool                           `json:"requireTLS"`
+	SendResolved bool                           `json:"sendResolved"`
 }
 
 type AlertmanagerWebhookSpec struct {
-	Enabled      bool                      `json:"enabled"`
-	Secret       AlertmanagerSecretRefSpec `json:"secret"`
-	SendResolved bool                      `json:"sendResolved"`
+	Enabled      bool                             `json:"enabled"`
+	Secret       AlertmanagerWebhookSecretRefSpec `json:"secret"`
+	SendResolved bool                             `json:"sendResolved"`
 }
 
 type EASSpec struct {
