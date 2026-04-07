@@ -109,6 +109,7 @@ alertmanager:
     secret:
       name: ""
       key: ""
+      password: ""
     requireTLS: true
     sendResolved: true
   webhook:
@@ -116,6 +117,7 @@ alertmanager:
     secret:
       name: ""
       key: ""
+      url: ""
     sendResolved: true
 platform:
   baseURL: ""
