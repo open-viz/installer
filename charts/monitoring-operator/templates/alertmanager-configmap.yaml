@@ -13,12 +13,14 @@ data:
       from: {{ .Values.alertmanager.email.from | quote }}
       smarthost: {{ .Values.alertmanager.email.smarthost | quote }}
       authUsername: {{ .Values.alertmanager.email.authUsername | quote }}
-      authSecretName: {{ .Values.alertmanager.email.authSecretName | quote }}
-      authSecretKey: {{ .Values.alertmanager.email.authSecretKey | quote }}
+      secret:
+        name: {{ .Values.alertmanager.email.secret.name | quote }}
+        key: {{ .Values.alertmanager.email.secret.key | quote }}
       requireTLS: {{ .Values.alertmanager.email.requireTLS }}
       sendResolved: {{ .Values.alertmanager.email.sendResolved }}
     webhook:
       enabled: {{ .Values.alertmanager.webhook.enabled }}
-      urlSecretName: {{ .Values.alertmanager.webhook.urlSecretName | quote }}
-      urlSecretKey: {{ .Values.alertmanager.webhook.urlSecretKey | quote }}
+      secret:
+        name: {{ .Values.alertmanager.webhook.secret.name | quote }}
+        key: {{ .Values.alertmanager.webhook.secret.key | quote }}
       sendResolved: {{ .Values.alertmanager.webhook.sendResolved }}
