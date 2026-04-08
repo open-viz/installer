@@ -106,18 +106,12 @@ alertmanager:
     from: ""
     smarthost: ""
     authUsername: ""
-    secret:
-      name: "alertmanager-email-secret"
-      key: "password"
-      password: ""
+    password: ""
     requireTLS: true
     sendResolved: true
   webhook:
     enabled: false
-    secret:
-      name: ""
-      key: "alertmanager-webhook-secret"
-      url: "url"
+    url: ""
     sendResolved: true
 platform:
   baseURL: ""

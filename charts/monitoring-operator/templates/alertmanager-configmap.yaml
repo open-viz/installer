@@ -16,15 +16,15 @@ data:
             smarthost: {{ .Values.alertmanager.email.smarthost | quote }}
             authUsername: {{ .Values.alertmanager.email.authUsername | quote }}
             authPassword:
-              name: {{ .Values.alertmanager.email.secret.name | quote }}
-              key: {{ .Values.alertmanager.email.secret.key | quote }}
+              name: alertmanager-email-secret 
+              key: password
             requireTLS: {{ .Values.alertmanager.email.requireTLS }}
             sendResolved: {{ .Values.alertmanager.email.sendResolved }}
         {{- end }}
         {{- if .Values.alertmanager.webhook.enabled }}
         webhookConfigs:
           - urlSecret:
-              name: {{ .Values.alertmanager.webhook.secret.name | quote }}
-              key: {{ .Values.alertmanager.webhook.secret.key | quote }}
+              name: alertmanager-webhook-secret
+              key: url
             sendResolved: {{ .Values.alertmanager.webhook.sendResolved }}
         {{- end }}
