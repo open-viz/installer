@@ -1275,21 +1275,10 @@ properties:
             type: boolean
           from:
             type: string
+          password:
+            type: string
           requireTLS:
             type: boolean
-          secret:
-            properties:
-              key:
-                type: string
-              name:
-                type: string
-              password:
-                type: string
-            required:
-            - key
-            - name
-            - password
-            type: object
           sendResolved:
             type: boolean
           smarthost:
@@ -1300,8 +1289,8 @@ properties:
         - authUsername
         - enabled
         - from
+        - password
         - requireTLS
-        - secret
         - sendResolved
         - smarthost
         - to
@@ -1310,25 +1299,14 @@ properties:
         properties:
           enabled:
             type: boolean
-          secret:
-            properties:
-              key:
-                type: string
-              name:
-                type: string
-              url:
-                type: string
-            required:
-            - key
-            - name
-            - url
-            type: object
           sendResolved:
             type: boolean
+          url:
+            type: string
         required:
         - enabled
-        - secret
         - sendResolved
+        - url
         type: object
     required:
     - email
