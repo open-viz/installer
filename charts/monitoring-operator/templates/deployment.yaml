@@ -53,6 +53,7 @@ spec:
         - --use-kubeapiserver-fqdn-for-aks={{ .Values.apiserver.useKubeapiserverFqdnForAks }}
         - --baseURL={{ .Values.platform.baseURL }}
         - --token=$(PLATFORM_API_TOKEN)
+        - --alertmanager-config-file=/etc/grafana-tools/alertmanager/config.yaml
         {{- if .Values.platform.caBundle }}
         - --platform-ca-file=/var/platform-auth/ca.crt
         {{- end }}
@@ -99,6 +100,9 @@ spec:
         volumeMounts:
         - mountPath: /var/serving-cert
           name: serving-cert
+        - mountPath: /etc/grafana-tools/alertmanager
+          name: alertmanager-config
+          readOnly: true
         {{- if .Values.platform.caBundle }}
         - mountPath: /var/platform-auth
           name: platform-auth
@@ -108,6 +112,9 @@ spec:
         secret:
           defaultMode: 420
           secretName: {{ include "monitoring-operator.fullname" . }}-apiserver-cert
+      - name: alertmanager-config
+        configMap:
+          name: {{ include "monitoring-operator.fullname" . }}-alertmanager-config
       {{- if .Values.platform.caBundle }}
       - name: platform-auth
         secret:

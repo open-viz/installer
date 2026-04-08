@@ -78,6 +78,7 @@ type MonitoringOperatorSpec struct {
 	ServiceAccount     ServiceAccountSpec       `json:"serviceAccount"`
 	Apiserver          EASSpec                  `json:"apiserver"`
 	Monitoring         EASMonitoring            `json:"monitoring"`
+	Alertmanager       Alertmanager             `json:"alertmanager"`
 	Platform           PlatformSpec             `json:"platform"`
 	HubUID             string                   `json:"hubUID"`
 	Rancher            PlatformSpec             `json:"rancher"`

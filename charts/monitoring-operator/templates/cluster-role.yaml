@@ -50,7 +50,7 @@ rules:
   - monitoring.coreos.com
   resources:
   - alertmanagerconfigs
-  verbs: ["get", "list", "watch", "create", "patch"]
+  verbs: ["get", "list", "watch", "create", "patch", "delete"]
 - apiGroups:
   - apiregistration.k8s.io
   resources:

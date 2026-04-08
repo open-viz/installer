@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "monitoring-operator.fullname" . }}-alertmanager-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "monitoring-operator.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+    receivers:
+      - name: alertmanager-receiver
+        {{- if .Values.alertmanager.email.enabled }}
+        emailConfigs:
+          - to: {{ .Values.alertmanager.email.to | quote }}
+            from: {{ .Values.alertmanager.email.from | quote }}
+            smarthost: {{ .Values.alertmanager.email.smarthost | quote }}
+            authUsername: {{ .Values.alertmanager.email.authUsername | quote }}
+            authPassword:
+              name: {{ include "monitoring-operator.fullname" . }}-alertmanager-email
+              key: password
+            requireTLS: {{ .Values.alertmanager.email.requireTLS }}
+            sendResolved: {{ .Values.alertmanager.email.sendResolved }}
+        {{- end }}
+        {{- if .Values.alertmanager.webhook.enabled }}
+        webhookConfigs:
+          - urlSecret:
+              name: {{ include "monitoring-operator.fullname" . }}-alertmanager-webhook
+              key: url
+            sendResolved: {{ .Values.alertmanager.webhook.sendResolved }}
+        {{- end }}
