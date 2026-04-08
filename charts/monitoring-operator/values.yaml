@@ -107,8 +107,8 @@ alertmanager:
     smarthost: ""
     authUsername: ""
     secret:
-      name: ""
-      key: ""
+      name: "alertmanager-email-secret"
+      key: "password"
       password: ""
     requireTLS: true
     sendResolved: true
@@ -116,8 +116,8 @@ alertmanager:
     enabled: false
     secret:
       name: ""
-      key: ""
-      url: ""
+      key: "alertmanager-webhook-secret"
+      url: "url"
     sendResolved: true
 platform:
   baseURL: ""
