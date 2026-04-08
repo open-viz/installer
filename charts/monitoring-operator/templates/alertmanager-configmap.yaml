@@ -7,20 +7,24 @@ metadata:
     {{- include "monitoring-operator.labels" . | nindent 4 }}
 data:
   config.yaml: |
-    email:
-      enabled: {{ .Values.alertmanager.email.enabled }}
-      to: {{ .Values.alertmanager.email.to | quote }}
-      from: {{ .Values.alertmanager.email.from | quote }}
-      smarthost: {{ .Values.alertmanager.email.smarthost | quote }}
-      authUsername: {{ .Values.alertmanager.email.authUsername | quote }}
-      secret:
-        name: {{ .Values.alertmanager.email.secret.name | quote }}
-        key: {{ .Values.alertmanager.email.secret.key | quote }}
-      requireTLS: {{ .Values.alertmanager.email.requireTLS }}
-      sendResolved: {{ .Values.alertmanager.email.sendResolved }}
-    webhook:
-      enabled: {{ .Values.alertmanager.webhook.enabled }}
-      secret:
-        name: {{ .Values.alertmanager.webhook.secret.name | quote }}
-        key: {{ .Values.alertmanager.webhook.secret.key | quote }}
-      sendResolved: {{ .Values.alertmanager.webhook.sendResolved }}
+    receivers:
+      - name: alertmanager-receiver
+        {{- if .Values.alertmanager.email.enabled }}
+        emailConfigs:
+          - to: {{ .Values.alertmanager.email.to | quote }}
+            from: {{ .Values.alertmanager.email.from | quote }}
+            smarthost: {{ .Values.alertmanager.email.smarthost | quote }}
+            authUsername: {{ .Values.alertmanager.email.authUsername | quote }}
+            authPassword:
+              name: {{ .Values.alertmanager.email.secret.name | quote }}
+              key: {{ .Values.alertmanager.email.secret.key | quote }}
+            requireTLS: {{ .Values.alertmanager.email.requireTLS }}
+            sendResolved: {{ .Values.alertmanager.email.sendResolved }}
+        {{- end }}
+        {{- if .Values.alertmanager.webhook.enabled }}
+        webhookConfigs:
+          - urlSecret:
+              name: {{ .Values.alertmanager.webhook.secret.name | quote }}
+              key: {{ .Values.alertmanager.webhook.secret.key | quote }}
+            sendResolved: {{ .Values.alertmanager.webhook.sendResolved }}
+        {{- end }}
