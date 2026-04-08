@@ -16,7 +16,7 @@ data:
             smarthost: {{ .Values.alertmanager.email.smarthost | quote }}
             authUsername: {{ .Values.alertmanager.email.authUsername | quote }}
             authPassword:
-              name: alertmanager-email-secret 
+              name: {{ include "monitoring-operator.fullname" . }}-alertmanager-email
               key: password
             requireTLS: {{ .Values.alertmanager.email.requireTLS }}
             sendResolved: {{ .Values.alertmanager.email.sendResolved }}
@@ -24,7 +24,7 @@ data:
         {{- if .Values.alertmanager.webhook.enabled }}
         webhookConfigs:
           - urlSecret:
-              name: alertmanager-webhook-secret
+              name: {{ include "monitoring-operator.fullname" . }}-alertmanager-webhook
               key: url
             sendResolved: {{ .Values.alertmanager.webhook.sendResolved }}
         {{- end }}
