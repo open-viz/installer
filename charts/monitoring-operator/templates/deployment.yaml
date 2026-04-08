@@ -114,7 +114,7 @@ spec:
           secretName: {{ include "monitoring-operator.fullname" . }}-apiserver-cert
       - name: alertmanager-config
         configMap:
-          name: {{ include "monitoring-operator.fullname" . }}-alertmanager
+          name: {{ include "monitoring-operator.fullname" . }}-alertmanager-config
       {{- if .Values.platform.caBundle }}
       - name: platform-auth
         secret:
