@@ -20,6 +20,14 @@ data:
               key: password
             requireTLS: {{ .Values.alertmanager.email.requireTLS }}
             sendResolved: {{ .Values.alertmanager.email.sendResolved }}
+            headers:
+              - key: Subject
+                value: >-
+{{ .Files.Get "files/alertmanager/email.subject.tmpl" | indent 18 }}
+            text: |
+{{ .Files.Get "files/alertmanager/email.text.tmpl" | indent 14 }}
+            html: |
+{{ .Files.Get "files/alertmanager/email.html.tmpl" | indent 14 }}
         {{- end }}
         {{- if .Values.alertmanager.webhook.enabled }}
         webhookConfigs:

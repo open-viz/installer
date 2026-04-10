@@ -1,0 +1,18 @@
+Alert Details:
+{{- range .Alerts }}
+- Status: {{ .Status | toUpper }}
+  Alertname: {{ .Labels.alertname }}
+  Namespace: {{ or .Labels.namespace .Labels.app_namespace "default" }}
+  Job: {{ or .Labels.job "unknown" }}
+  Starts At: {{ .StartsAt }}
+  {{- if .Annotations.summary }}
+  Summary: {{ .Annotations.summary }}
+  {{- end }}
+  {{- if .Annotations.description }}
+  Description: {{ .Annotations.description }}
+  {{- end }}
+  Labels:
+  {{- range .Labels.SortedPairs }}
+    - {{ .Name }}: {{ .Value }}
+  {{- end }}
+{{- end }}
