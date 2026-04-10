@@ -1,0 +1,12 @@
+{{- $alertname := or .GroupLabels.alertname .CommonLabels.alertname "Alertmanager Notification" -}}
+{{- $kind := or .GroupLabels.k8s_kind .CommonLabels.k8s_kind "" -}}
+{{- $name := or .GroupLabels.k8s_resource .CommonLabels.k8s_resource "" -}}
+{{- $namespace := or .GroupLabels.namespace .CommonLabels.namespace .CommonLabels.app_namespace "" -}}
+{{- $job := or .GroupLabels.job .CommonLabels.job "" -}}
+[{{- if gt (len .Alerts.Firing) 0 -}}FIRING:{{ len .Alerts.Firing }}{{- end -}}
+{{- if and (gt (len .Alerts.Firing) 0) (gt (len .Alerts.Resolved) 0) -}} | {{- end -}}
+{{- if gt (len .Alerts.Resolved) 0 -}}RESOLVED:{{ len .Alerts.Resolved }}{{- end -}}]
+{{ $alertname }}
+{{- if and $kind $name }} - {{ $kind }}/{{ $name }}{{ end -}}
+{{- if $namespace }} - ns={{ $namespace }}{{ end -}}
+{{- if $job }} [via {{ $job }}]{{ end -}}
