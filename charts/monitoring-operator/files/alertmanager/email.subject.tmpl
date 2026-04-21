@@ -3,10 +3,17 @@
 {{- $name := or .GroupLabels.k8s_resource .CommonLabels.k8s_resource "" -}}
 {{- $namespace := or .GroupLabels.namespace .CommonLabels.namespace .CommonLabels.app_namespace "" -}}
 {{- $job := or .GroupLabels.job .CommonLabels.job "" -}}
+{{- $resource := "" -}}
+{{- if and $namespace $name -}}
+  {{- $resource = printf "%s/%s" $namespace $name -}}
+{{- else if $namespace -}}
+  {{- $resource = $namespace -}}
+{{- else if $name -}}
+  {{- $resource = $name -}}
+{{- end -}}
 [{{- if gt (len .Alerts.Firing) 0 -}}FIRING:{{ len .Alerts.Firing }}{{- end -}}
 {{- if and (gt (len .Alerts.Firing) 0) (gt (len .Alerts.Resolved) 0) -}} | {{- end -}}
-{{- if gt (len .Alerts.Resolved) 0 -}}RESOLVED:{{ len .Alerts.Resolved }}{{- end -}}]
-{{ $alertname }}
-{{- if and $kind $name }} - {{ $kind }}/{{ $name }}{{ end -}}
-{{- if $namespace }} - ns={{ $namespace }}{{ end -}}
-{{- if $job }} [via {{ $job }}]{{ end -}}
+{{- if gt (len .Alerts.Resolved) 0 -}}RESOLVED:{{ len .Alerts.Resolved }}{{- end -}}] {{- $alertname -}}
+{{- if $kind }} - {{ $kind }}{{ end -}}
+{{- if $resource }} - {{ $resource }}{{ end -}}
+{{- if $job }} [Via {{ $job }}]{{ end -}}

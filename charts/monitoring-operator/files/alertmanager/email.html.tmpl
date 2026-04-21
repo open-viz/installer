@@ -52,10 +52,10 @@
       table-layout: fixed;
       width: 100%;
     }
-    .main-table th:nth-child(1), .main-table td:nth-child(1) { width: 10%; }
-    .main-table th:nth-child(2), .main-table td:nth-child(2) { width: 18%; }
-    .main-table th:nth-child(3), .main-table td:nth-child(3) { width: 26%; }
-    .main-table th:nth-child(4), .main-table td:nth-child(4) { width: 46%; }
+    .main-table th:nth-child(1), .main-table td:nth-child(1) { width: 8%; }
+    .main-table th:nth-child(2), .main-table td:nth-child(2) { width: 14%; }
+    .main-table th:nth-child(3), .main-table td:nth-child(3) { width: 28%; }
+    .main-table th:nth-child(4), .main-table td:nth-child(4) { width: 50%; }
   </style>
 </head>
 <body>
@@ -76,6 +76,9 @@
         {{- else -}}
         {{ .Status | toUpper }}
         {{- end -}}
+        {{- if .Annotations.runbook_url }}
+        <div style="margin-top:8px;"><a href="{{ .Annotations.runbook_url }}">Runbook</a></div>
+        {{- end }}
       </td>
       <td>{{ .StartsAt }}</td>
       <td>
@@ -91,10 +94,6 @@
         {{- if .Annotations.description }}
         <div style="margin-top:8px;"><strong>Description</strong></div>
         <pre>{{ .Annotations.description }}</pre>
-        {{- end }}
-        {{- if .Annotations.runbook_url }}
-        <div style="margin-top:8px;"><strong>Runbook</strong></div>
-        <div><a href="{{ .Annotations.runbook_url }}">{{ .Annotations.runbook_url }}</a></div>
         {{- end }}
       </td>
     </tr>
