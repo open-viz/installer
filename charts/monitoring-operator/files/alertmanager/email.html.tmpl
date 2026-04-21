@@ -52,23 +52,25 @@
       table-layout: fixed;
       width: 100%;
     }
-    .main-table th:nth-child(1), .main-table td:nth-child(1) { width: 8%; }
-    .main-table th:nth-child(2), .main-table td:nth-child(2) { width: 14%; }
-    .main-table th:nth-child(3), .main-table td:nth-child(3) { width: 28%; }
-    .main-table th:nth-child(4), .main-table td:nth-child(4) { width: 50%; }
   </style>
 </head>
 <body>
   <table class="main-table">
+    <colgroup>
+      <col style="width: 10%;" />
+      <col style="width: 16%;" />
+      <col style="width: 24%;" />
+      <col style="width: 50%;" />
+    </colgroup>
     <tr>
-      <th>Status</th>
-      <th>Started At</th>
-      <th>Labels</th>
-      <th>Content</th>
+      <th style="width: 10%;">Status</th>
+      <th style="width: 16%;">Started At</th>
+      <th style="width: 24%;">Labels</th>
+      <th style="width: 50%;">Content</th>
     </tr>
     {{- range .Alerts }}
     <tr>
-      <td>
+      <td style="width: 10%;">
         {{- if eq .Status "firing" -}}
         <span class="status-firing">FIRING</span>
         {{- else if eq .Status "resolved" -}}
@@ -80,13 +82,13 @@
         <div style="margin-top:8px;"><a href="{{ .Annotations.runbook_url }}">Runbook</a></div>
         {{- end }}
       </td>
-      <td>{{ .StartsAt }}</td>
-      <td>
+      <td style="width: 16%;">{{ .StartsAt }}</td>
+      <td style="width: 24%;">
         {{- range .Labels.SortedPairs }}
         <div><strong>{{ .Name }}</strong>: {{ .Value }}</div>
         {{- end }}
       </td>
-      <td>
+      <td style="width: 50%;">
         {{- if .Annotations.summary }}
         <div><strong>Summary</strong></div>
         <pre>{{ .Annotations.summary }}</pre>
