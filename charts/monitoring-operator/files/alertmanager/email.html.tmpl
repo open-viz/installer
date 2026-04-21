@@ -85,7 +85,9 @@
       <td style="width: 16%;">{{ .StartsAt }}</td>
       <td style="width: 24%;">
         {{- range .Labels.SortedPairs }}
+        {{- if ne .Name "instance" }}
         <div><strong>{{ .Name }}</strong>: {{ .Value }}</div>
+        {{- end }}
         {{- end }}
       </td>
       <td style="width: 50%;">
