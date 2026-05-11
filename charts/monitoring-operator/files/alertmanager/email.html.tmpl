@@ -68,7 +68,41 @@
       <th style="width: 24%;">Labels</th>
       <th style="width: 50%;">Content</th>
     </tr>
-    {{- range .Alerts }}
+    {{- range .Alerts.Firing }}
+    <tr>
+      <td style="width: 10%;">
+        {{- if eq .Status "firing" -}}
+        <span class="status-firing">FIRING</span>
+        {{- else if eq .Status "resolved" -}}
+        <span class="status-resolved">RESOLVED</span>
+        {{- else -}}
+        {{ .Status | toUpper }}
+        {{- end -}}
+        {{- if .Annotations.runbook_url }}
+        <div style="margin-top:8px;"><a href="{{ .Annotations.runbook_url }}">Runbook</a></div>
+        {{- end }}
+      </td>
+      <td style="width: 16%;">{{ .StartsAt }}</td>
+      <td style="width: 24%;">
+        {{- range .Labels.SortedPairs }}
+        {{- if ne .Name "instance" }}
+        <div><strong>{{ .Name }}</strong>: {{ .Value }}</div>
+        {{- end }}
+        {{- end }}
+      </td>
+      <td style="width: 50%;">
+        {{- if .Annotations.summary }}
+        <div><strong>Summary</strong></div>
+        <pre>{{ .Annotations.summary }}</pre>
+        {{- end }}
+        {{- if .Annotations.description }}
+        <div style="margin-top:8px;"><strong>Description</strong></div>
+        <pre>{{ .Annotations.description }}</pre>
+        {{- end }}
+      </td>
+    </tr>
+    {{- end }}
+    {{- range .Alerts.Resolved }}
     <tr>
       <td style="width: 10%;">
         {{- if eq .Status "firing" -}}
