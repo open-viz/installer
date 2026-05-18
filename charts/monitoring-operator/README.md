@@ -7,8 +7,8 @@
 ```bash
 $ helm repo add appscode https://charts.appscode.com/stable/
 $ helm repo update
-$ helm search repo appscode/monitoring-operator --version=v2026.3.30-alpha.2
-$ helm upgrade -i monitoring-operator appscode/monitoring-operator -n kubeops --create-namespace --version=v2026.3.30-alpha.2
+$ helm search repo appscode/monitoring-operator --version=v2026.3.30
+$ helm upgrade -i monitoring-operator appscode/monitoring-operator -n kubeops --create-namespace --version=v2026.3.30
 ```
 
 ## Introduction
@@ -24,7 +24,7 @@ This chart deploys a Grafana UI Server on a [Kubernetes](http://kubernetes.io) c
 To install/upgrade the chart with the release name `monitoring-operator`:
 
 ```bash
-$ helm upgrade -i monitoring-operator appscode/monitoring-operator -n kubeops --create-namespace --version=v2026.3.30-alpha.2
+$ helm upgrade -i monitoring-operator appscode/monitoring-operator -n kubeops --create-namespace --version=v2026.3.30
 ```
 
 The command deploys a Grafana UI Server on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -92,9 +92,9 @@ The following table lists the configurable parameters of the `monitoring-operato
 | alertmanager.webhook.sendResolved                   |                                                                                                                                                                                                                                                                                                                                                                   | <code>true</code>                                                                                                                                                                              |
 | alertmanager.webhook.relay.replicaCount             |                                                                                                                                                                                                                                                                                                                                                                   | <code>1</code>                                                                                                                                                                                 |
 | alertmanager.webhook.relay.port                     |                                                                                                                                                                                                                                                                                                                                                                   | <code>8080</code>                                                                                                                                                                              |
-| alertmanager.webhook.relay.image.registry           |                                                                                                                                                                                                                                                                                                                                                                   | <code>appscode</code>                                                                                                                                                                          |
+| alertmanager.webhook.relay.image.registry           |                                                                                                                                                                                                                                                                                                                                                                   | <code>opnpulse</code>                                                                                                                                                                          |
 | alertmanager.webhook.relay.image.repository         |                                                                                                                                                                                                                                                                                                                                                                   | <code>alertmanager-webhook-relay</code>                                                                                                                                                        |
-| alertmanager.webhook.relay.image.tag                |                                                                                                                                                                                                                                                                                                                                                                   | <code>""</code>                                                                                                                                                                                |
+| alertmanager.webhook.relay.image.tag                |                                                                                                                                                                                                                                                                                                                                                                   | <code>v0.1.0</code>                                                                                                                                                                            |
 | alertmanager.webhook.relay.image.resources          |                                                                                                                                                                                                                                                                                                                                                                   | <code>{}</code>                                                                                                                                                                                |
 | alertmanager.webhook.relay.image.securityContext    |                                                                                                                                                                                                                                                                                                                                                                   | <code>{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsNonRoot":true,"runAsUser":65534,"seccompProfile":{"type":"RuntimeDefault"}}</code> |
 | alertmanager.webhook.relay.providers.googleChat.url |                                                                                                                                                                                                                                                                                                                                                                   | <code>""</code>                                                                                                                                                                                |
@@ -119,12 +119,12 @@ The following table lists the configurable parameters of the `monitoring-operato
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm upgrade -i`. For example:
 
 ```bash
-$ helm upgrade -i monitoring-operator appscode/monitoring-operator -n kubeops --create-namespace --version=v2026.3.30-alpha.2 --set replicaCount=1
+$ helm upgrade -i monitoring-operator appscode/monitoring-operator -n kubeops --create-namespace --version=v2026.3.30 --set replicaCount=1
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while
 installing the chart. For example:
 
 ```bash
-$ helm upgrade -i monitoring-operator appscode/monitoring-operator -n kubeops --create-namespace --version=v2026.3.30-alpha.2 --values values.yaml
+$ helm upgrade -i monitoring-operator appscode/monitoring-operator -n kubeops --create-namespace --version=v2026.3.30 --values values.yaml
 ```
