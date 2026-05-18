@@ -74,15 +74,14 @@ type MonitoringOperatorSpec struct {
 	// PodSecurityContext holds pod-level security attributes and common container settings.
 	// Optional: Defaults to empty.  See type description for default values of each field.
 	// +optional
-	PodSecurityContext       *core.PodSecurityContext     `json:"podSecurityContext"`
-	ServiceAccount           ServiceAccountSpec           `json:"serviceAccount"`
-	Apiserver                EASSpec                      `json:"apiserver"`
-	Monitoring               EASMonitoring                `json:"monitoring"`
-	Alertmanager             Alertmanager                 `json:"alertmanager"`
-	AlertmanagerWebhookRelay AlertmanagerWebhookRelaySpec `json:"alertmanagerWebhookRelay"`
-	Platform                 PlatformSpec                 `json:"platform"`
-	HubUID                   string                       `json:"hubUID"`
-	Rancher                  PlatformSpec                 `json:"rancher"`
+	PodSecurityContext *core.PodSecurityContext `json:"podSecurityContext"`
+	ServiceAccount     ServiceAccountSpec       `json:"serviceAccount"`
+	Apiserver          EASSpec                  `json:"apiserver"`
+	Monitoring         EASMonitoring            `json:"monitoring"`
+	Alertmanager       Alertmanager             `json:"alertmanager"`
+	Platform           PlatformSpec             `json:"platform"`
+	HubUID             string                   `json:"hubUID"`
+	Rancher            PlatformSpec             `json:"rancher"`
 	// +optional
 	Distro shared.DistroSpec `json:"distro"`
 }

@@ -113,37 +113,36 @@ alertmanager:
     enabled: false
     url: ""
     sendResolved: true
-alertmanagerWebhookRelay:
-  replicaCount: 1
-  port: 8080
-  image:
-    registry: appscode
-    repository: alertmanager-webhook-relay
-    tag: ""
-    resources: {}
-    securityContext: # +doc-gen:break
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop: ["ALL"]
-      readOnlyRootFilesystem: true
-      runAsNonRoot: true
-      runAsUser: 65534
-      seccompProfile:
-        type: RuntimeDefault
-  providers:
-    googleChat:
-      url: ""
-    slack:
-      url: ""
-    msTeams:
-      url: ""
-    mattermost:
-      url: ""
-  requestTimeout: 5s
-  sendResolved: true
-  dedupeCacheSize: 2000
-  dedupeWindowSeconds: 1800  # 30 minutes
-  maxRequestBodyBytes: 1048576  # 1 MiB
+    relay: # webhook relay configuration for platforms supporting the schema {"text": "..."}
+      replicaCount: 1
+      port: 8080
+      image:
+        registry: appscode
+        repository: alertmanager-webhook-relay
+        tag: ""
+        resources: {}
+        securityContext: # +doc-gen:break
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 65534
+          seccompProfile:
+            type: RuntimeDefault
+      providers:
+        googleChat:
+          url: ""
+        slack:
+          url: ""
+        msTeams:
+          url: ""
+        mattermost:
+          url: ""
+      requestTimeout: 5s
+      dedupeCacheSize: 2000
+      dedupeWindowSeconds: 3600  # 1 hour
+      maxRequestBodyBytes: 1048576  # 1 MiB
 platform:
   baseURL: ""
   token: ""

@@ -96,9 +96,10 @@ type AlertmanagerEmailSpec struct {
 }
 
 type AlertmanagerWebhookSpec struct {
-	Enabled      bool   `json:"enabled"`
-	URL          string `json:"url"`
-	SendResolved bool   `json:"sendResolved"`
+	Enabled      bool                         `json:"enabled"`
+	URL          string                       `json:"url"`
+	SendResolved bool                         `json:"sendResolved"`
+	Relay        AlertmanagerWebhookRelaySpec `json:"relay"`
 }
 
 type AlertmanagerWebhookRelaySpec struct {
@@ -107,7 +108,6 @@ type AlertmanagerWebhookRelaySpec struct {
 	Image               ContianerRef                          `json:"image"`
 	Providers           AlertmanagerWebhookRelayProvidersSpec `json:"providers"`
 	RequestTimeout      string                                `json:"requestTimeout"`
-	SendResolved        bool                                  `json:"sendResolved"`
 	DedupeCacheSize     int32                                 `json:"dedupeCacheSize"`
 	DedupeWindowSeconds int32                                 `json:"dedupeWindowSeconds"`
 	MaxRequestBodyBytes int64                                 `json:"maxRequestBodyBytes"`

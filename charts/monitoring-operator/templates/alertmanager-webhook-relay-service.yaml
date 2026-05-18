@@ -1,6 +1,7 @@
-{{- $relay := .Values.alertmanagerWebhookRelay -}}
+{{- $webhook := .Values.alertmanager.webhook -}}
+{{- $relay := $webhook.relay -}}
 {{- $relayWebhookEnabled := and
-  .Values.alertmanager.webhook.enabled
+  $webhook.enabled
   (or
     $relay.providers.googleChat.url
     $relay.providers.slack.url

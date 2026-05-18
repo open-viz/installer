@@ -69,8 +69,8 @@ Returns the registry used for image docker image
 {{- list .Values.registryFQDN .Values.image.registry | compact | join "/" }}
 {{- end }}
 
-{{- define "monitoring-operator.alertmanagerWebhookRelayImageRegistry" -}}
-{{- list .Values.registryFQDN .Values.alertmanagerWebhookRelay.image.registry | compact | join "/" }}
+{{- define "monitoring-operator.alertmanagerWebhookImageRegistry" -}}
+{{- list .Values.registryFQDN .Values.alertmanager.webhook.relay.image.registry | compact | join "/" }}
 {{- end }}
 
 {{- define "appscode.imagePullSecrets" -}}
