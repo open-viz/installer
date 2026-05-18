@@ -17,10 +17,6 @@ metadata:
   labels:
     {{- include "monitoring-operator.labels" . | nindent 4 }}
     app.kubernetes.io/component: alertmanager-webhook-relay
-  {{- with .Values.annotations }}
-  annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
 spec:
   replicas: {{ $relay.replicaCount }}
   selector:
@@ -32,10 +28,6 @@ spec:
       labels:
         {{- include "monitoring-operator.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: alertmanager-webhook-relay
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
     spec:
       {{- include "appscode.imagePullSecrets" . | nindent 6 }}
       {{- if eq "true" ( include "distro.openshift" . ) }}
