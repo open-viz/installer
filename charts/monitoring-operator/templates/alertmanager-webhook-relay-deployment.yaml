@@ -1,0 +1,100 @@
+{{- $webhook := .Values.alertmanager.webhook -}}
+{{- $relay := $webhook.relay -}}
+{{- $relayWebhookEnabled := and
+  $webhook.enabled
+  (or
+    $relay.providers.googleChat.url
+    $relay.providers.slack.url
+    $relay.providers.msTeams.url
+    $relay.providers.mattermost.url
+  )
+-}}
+{{- if $relayWebhookEnabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "monitoring-operator.alertmanagerWebhookRelayName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "monitoring-operator.labels" . | nindent 4 }}
+    app.kubernetes.io/component: alertmanager-webhook-relay
+spec:
+  replicas: {{ $relay.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "monitoring-operator.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: alertmanager-webhook-relay
+  template:
+    metadata:
+      labels:
+        {{- include "monitoring-operator.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: alertmanager-webhook-relay
+    spec:
+      {{- include "appscode.imagePullSecrets" . | nindent 6 }}
+      {{- if eq "true" ( include "distro.openshift" . ) }}
+      securityContext:
+        {{- toYaml (omit .Values.podSecurityContext "runAsUser" "runAsGroup" "fsGroup" "supplementalGroups") | nindent 8 }}
+      {{- else }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: alertmanager-webhook-relay
+        {{- if eq "true" ( include "distro.openshift" . ) }}
+        securityContext:
+          {{- toYaml (omit $relay.image.securityContext "runAsUser" "runAsGroup" "fsGroup" "supplementalGroups") | nindent 10 }}
+        {{- else }}
+        securityContext:
+          {{- toYaml $relay.image.securityContext | nindent 10 }}
+        {{- end }}
+        image: {{ include "monitoring-operator.alertmanagerWebhookImageRegistry" . }}/{{ $relay.image.repository }}:{{ $relay.image.tag | default .Chart.AppVersion }}{{ include "operator.ubi" . }}
+        imagePullPolicy: {{ .Values.imagePullPolicy  }}
+        ports:
+        - name: http
+          containerPort: {{ $relay.port }}
+        env:
+        - name: LISTEN_ADDR
+          value: {{ printf ":%v" $relay.port | quote }}
+        - name: REQUEST_TIMEOUT
+          value: {{ $relay.requestTimeout | quote }}
+        - name: SEND_RESOLVED
+          value: {{ $webhook.sendResolved | quote }}
+        - name: WEBHOOK_URLS_FILE
+          value: /etc/alertmanager-webhook-relay/webhooks/urls
+        - name: DEDUPE_CACHE_SIZE
+          value: {{ printf "%d" (int $relay.dedupeCacheSize) | quote }}
+        - name: DEDUPE_WINDOW_SECONDS
+          value: {{ printf "%d" (int $relay.dedupeWindowSeconds) | quote }}
+        - name: MAX_REQUEST_BODY_BYTES
+          value: {{ printf "%d" (int64 $relay.maxRequestBodyBytes) | quote }}
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+        volumeMounts:
+        - name: webhook-urls
+          mountPath: /etc/alertmanager-webhook-relay/webhooks
+          readOnly: true
+        resources:
+          {{- toYaml $relay.image.resources | nindent 10 }}
+      volumes:
+      - name: webhook-urls
+        secret:
+          defaultMode: 420
+          secretName: {{ include "monitoring-operator.alertmanagerWebhookRelaySecretName" . }}
+          items:
+          - key: urls
+            path: urls
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

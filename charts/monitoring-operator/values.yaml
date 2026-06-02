@@ -113,6 +113,36 @@ alertmanager:
     enabled: false
     url: ""
     sendResolved: true
+    relay: # webhook relay configuration for platforms supporting the schema {"text": "..."}
+      replicaCount: 1
+      port: 8080
+      image:
+        registry: opnpulse
+        repository: alertmanager-webhook-relay
+        tag: v0.1.0
+        resources: {}
+        securityContext: # +doc-gen:break
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 65534
+          seccompProfile:
+            type: RuntimeDefault
+      providers:
+        googleChat:
+          url: ""
+        slack:
+          url: ""
+        msTeams:
+          url: ""
+        mattermost:
+          url: ""
+      requestTimeout: 5s
+      dedupeCacheSize: 2000
+      dedupeWindowSeconds: 3600  # 1 hour
+      maxRequestBodyBytes: 1048576  # 1 MiB
 platform:
   baseURL: ""
   token: ""

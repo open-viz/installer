@@ -69,6 +69,10 @@ Returns the registry used for image docker image
 {{- list .Values.registryFQDN .Values.image.registry | compact | join "/" }}
 {{- end }}
 
+{{- define "monitoring-operator.alertmanagerWebhookImageRegistry" -}}
+{{- list .Values.registryFQDN .Values.alertmanager.webhook.relay.image.registry | compact | join "/" }}
+{{- end }}
+
 {{- define "appscode.imagePullSecrets" -}}
 {{- with .Values.imagePullSecrets -}}
 imagePullSecrets:
@@ -111,4 +115,12 @@ Returns if ubi images are to be used
 */}}
 {{- define "operator.ubi" -}}
 {{ ternary "-ubi" "" (list "operator" "all" | has .Values.distro.ubi) }}
+{{- end }}
+
+{{- define "monitoring-operator.alertmanagerWebhookRelayName" -}}
+{{- printf "%s-alertmanager-webhook-relay" (include "monitoring-operator.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end }}
+
+{{- define "monitoring-operator.alertmanagerWebhookRelaySecretName" -}}
+{{- printf "%s-am-relay-urls" (include "monitoring-operator.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end }}

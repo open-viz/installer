@@ -1,0 +1,29 @@
+{{- $webhook := .Values.alertmanager.webhook -}}
+{{- $relay := $webhook.relay -}}
+{{- $relayWebhookEnabled := and
+  $webhook.enabled
+  (or
+    $relay.providers.googleChat.url
+    $relay.providers.slack.url
+    $relay.providers.msTeams.url
+    $relay.providers.mattermost.url
+  )
+-}}
+{{- if $relayWebhookEnabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "monitoring-operator.alertmanagerWebhookRelayName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "monitoring-operator.labels" . | nindent 4 }}
+    app.kubernetes.io/component: alertmanager-webhook-relay
+spec:
+  selector:
+    {{- include "monitoring-operator.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: alertmanager-webhook-relay
+  ports:
+  - name: http
+    port: {{ $relay.port }}
+    targetPort: http
+{{- end }}
