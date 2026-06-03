@@ -1721,11 +1721,6 @@ properties:
                     required:
                     - url
                     type: object
-                required:
-                - googleChat
-                - mattermost
-                - msTeams
-                - slack
                 type: object
               replicaCount:
                 format: int32
@@ -1733,24 +1728,16 @@ properties:
               requestTimeout:
                 type: string
             required:
-            - dedupeCacheSize
-            - dedupeWindowSeconds
             - image
-            - maxRequestBodyBytes
             - port
-            - providers
             - replicaCount
-            - requestTimeout
             type: object
           sendResolved:
             type: boolean
-          url:
-            type: string
         required:
         - enabled
         - relay
         - sendResolved
-        - url
         type: object
     required:
     - email
