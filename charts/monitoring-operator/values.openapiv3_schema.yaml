@@ -1693,6 +1693,13 @@ properties:
                 type: integer
               providers:
                 properties:
+                  generic:
+                    properties:
+                      url:
+                        type: string
+                    required:
+                    - url
+                    type: object
                   googleChat:
                     properties:
                       url:
@@ -1722,6 +1729,7 @@ properties:
                     - url
                     type: object
                 required:
+                - generic
                 - googleChat
                 - mattermost
                 - msTeams
@@ -1744,13 +1752,10 @@ properties:
             type: object
           sendResolved:
             type: boolean
-          url:
-            type: string
         required:
         - enabled
         - relay
         - sendResolved
-        - url
         type: object
     required:
     - email

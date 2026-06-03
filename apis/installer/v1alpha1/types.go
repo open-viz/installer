@@ -97,7 +97,6 @@ type AlertmanagerEmailSpec struct {
 
 type AlertmanagerWebhookSpec struct {
 	Enabled      bool                         `json:"enabled"`
-	URL          string                       `json:"url"`
 	SendResolved bool                         `json:"sendResolved"`
 	Relay        AlertmanagerWebhookRelaySpec `json:"relay"`
 }
@@ -118,6 +117,7 @@ type AlertmanagerWebhookRelayProvidersSpec struct {
 	Slack      AlertmanagerWebhookRelayProviderSpec `json:"slack"`
 	MsTeams    AlertmanagerWebhookRelayProviderSpec `json:"msTeams"`
 	Mattermost AlertmanagerWebhookRelayProviderSpec `json:"mattermost"`
+	Generic    AlertmanagerWebhookRelayProviderSpec `json:"generic"`
 }
 
 type AlertmanagerWebhookRelayProviderSpec struct {

@@ -138,6 +138,8 @@ alertmanager:
           url: ""
         mattermost:
           url: ""
+        generic:
+          url: ""
       requestTimeout: 5s
       dedupeCacheSize: 2000
       dedupeWindowSeconds: 3600  # 1 hour
