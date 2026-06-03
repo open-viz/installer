@@ -138,8 +138,6 @@ alertmanager:
           url: ""
         mattermost:
           url: ""
-        generic:
-          url: ""
         requestTimeout: 5s # Webhook timeout per provider
         dedupeCacheSize: 2000 # Alert deduplication cache size
         dedupeWindowSeconds: 3600 # Alert deduplication TTL

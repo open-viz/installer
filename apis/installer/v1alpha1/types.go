@@ -121,8 +121,6 @@ type AlertmanagerWebhookRelayProvidersSpec struct {
 	MsTeams AlertmanagerWebhookRelayProviderSpec `json:"msTeams"`
 	// +optional
 	Mattermost AlertmanagerWebhookRelayProviderSpec `json:"mattermost"`
-	// +optional
-	Generic AlertmanagerWebhookRelayProviderSpec `json:"generic"`
 }
 
 type AlertmanagerWebhookRelayProviderSpec struct {

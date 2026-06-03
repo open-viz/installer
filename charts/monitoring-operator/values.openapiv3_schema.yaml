@@ -1693,13 +1693,6 @@ properties:
                 type: integer
               providers:
                 properties:
-                  generic:
-                    properties:
-                      url:
-                        type: string
-                    required:
-                    - url
-                    type: object
                   googleChat:
                     properties:
                       url:
