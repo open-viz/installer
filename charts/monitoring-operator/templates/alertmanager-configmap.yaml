@@ -1,7 +1,6 @@
 {{- $root := . -}}
 {{- $webhook := .Values.alertmanager.webhook -}}
 {{- $relay := $webhook.relay -}}
-{{- $genericWebhookEnabled := and $webhook.enabled $webhook.url -}}
 {{- $relayWebhookURLs := list -}}
 {{- range $provider := list $relay.providers.googleChat $relay.providers.slack $relay.providers.msTeams $relay.providers.mattermost }}
   {{- if $provider.url }}
@@ -40,18 +39,10 @@ data:
             html: |
 {{ .Files.Get "files/alertmanager/email.html.tmpl" | indent 14 }}
         {{- end }}
-        {{- if or $genericWebhookEnabled $relayWebhookEnabled }}
+        {{- if $relayWebhookEnabled }}
         webhookConfigs:
-          {{- if $genericWebhookEnabled }}
-          - urlSecret:
-              name: {{ include "monitoring-operator.fullname" $root }}-alertmanager-webhook
-              key: url
-            sendResolved: {{ $webhook.sendResolved }}
-          {{- end }}
-          {{- if $relayWebhookEnabled }}
           - urlSecret:
               name: {{ include "monitoring-operator.fullname" $root }}-alertmanager-webhook
               key: relay-url
             sendResolved: {{ $webhook.sendResolved }}
-          {{- end }}
         {{- end }}

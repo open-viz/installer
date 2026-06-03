@@ -111,7 +111,6 @@ alertmanager:
     sendResolved: true
   webhook:
     enabled: false
-    url: ""
     sendResolved: true
     relay: # webhook relay configuration for platforms supporting the schema {"text": "..."}
       replicaCount: 1
