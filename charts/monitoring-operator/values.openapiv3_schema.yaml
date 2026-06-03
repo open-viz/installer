@@ -1685,7 +1685,7 @@ properties:
                 - repository
                 - tag
                 type: object
-              maxRequestBodyBytesomitempty:
+              maxRequestBodyBytes:
                 format: int64
                 type: integer
               port:
@@ -1729,7 +1729,6 @@ properties:
                 type: string
             required:
             - image
-            - maxRequestBodyBytesomitempty
             - port
             - replicaCount
             type: object

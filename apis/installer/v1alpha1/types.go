@@ -109,7 +109,7 @@ type AlertmanagerWebhookRelaySpec struct {
 	RequestTimeout      string                                `json:"requestTimeout,omitempty"`
 	DedupeCacheSize     int32                                 `json:"dedupeCacheSize,omitempty"`
 	DedupeWindowSeconds int32                                 `json:"dedupeWindowSeconds,omitempty"`
-	MaxRequestBodyBytes int64                                 `json:"maxRequestBodyBytesomitempty"`
+	MaxRequestBodyBytes int64                                 `json:"maxRequestBodyBytes,omitempty"`
 }
 
 type AlertmanagerWebhookRelayProvidersSpec struct {

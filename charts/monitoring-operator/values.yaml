@@ -138,10 +138,10 @@ alertmanager:
           url: ""
         mattermost:
           url: ""
-        requestTimeout: 5s # Webhook timeout per provider
-        dedupeCacheSize: 2000 # Alert deduplication cache size
-        dedupeWindowSeconds: 3600 # Alert deduplication TTL
-        maxRequestBodyBytes: 1048576 # 1 MB (max alert body size)
+      requestTimeout: 5s # Webhook timeout per provider
+      dedupeCacheSize: 2000 # Alert deduplication cache size
+      dedupeWindowSeconds: 3600 # Alert deduplication TTL
+      maxRequestBodyBytes: 1048576 # 1 MB (max alert body size)
 platform:
   baseURL: ""
   token: ""
