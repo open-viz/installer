@@ -1685,7 +1685,7 @@ properties:
                 - repository
                 - tag
                 type: object
-              maxRequestBodyBytes:
+              maxRequestBodyBytesomitempty:
                 format: int64
                 type: integer
               port:
@@ -1728,12 +1728,6 @@ properties:
                     required:
                     - url
                     type: object
-                required:
-                - generic
-                - googleChat
-                - mattermost
-                - msTeams
-                - slack
                 type: object
               replicaCount:
                 format: int32
@@ -1741,14 +1735,10 @@ properties:
               requestTimeout:
                 type: string
             required:
-            - dedupeCacheSize
-            - dedupeWindowSeconds
             - image
-            - maxRequestBodyBytes
+            - maxRequestBodyBytesomitempty
             - port
-            - providers
             - replicaCount
-            - requestTimeout
             type: object
           sendResolved:
             type: boolean

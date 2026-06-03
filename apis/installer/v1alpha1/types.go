@@ -105,19 +105,24 @@ type AlertmanagerWebhookRelaySpec struct {
 	ReplicaCount        int32                                 `json:"replicaCount"`
 	Port                int32                                 `json:"port"`
 	Image               ContianerRef                          `json:"image"`
-	Providers           AlertmanagerWebhookRelayProvidersSpec `json:"providers"`
-	RequestTimeout      string                                `json:"requestTimeout"`
-	DedupeCacheSize     int32                                 `json:"dedupeCacheSize"`
-	DedupeWindowSeconds int32                                 `json:"dedupeWindowSeconds"`
-	MaxRequestBodyBytes int64                                 `json:"maxRequestBodyBytes"`
+	Providers           AlertmanagerWebhookRelayProvidersSpec `json:"providers,omitempty"`
+	RequestTimeout      string                                `json:"requestTimeout,omitempty"`
+	DedupeCacheSize     int32                                 `json:"dedupeCacheSize,omitempty"`
+	DedupeWindowSeconds int32                                 `json:"dedupeWindowSeconds,omitempty"`
+	MaxRequestBodyBytes int64                                 `json:"maxRequestBodyBytesomitempty"`
 }
 
 type AlertmanagerWebhookRelayProvidersSpec struct {
+	// +optional
 	GoogleChat AlertmanagerWebhookRelayProviderSpec `json:"googleChat"`
-	Slack      AlertmanagerWebhookRelayProviderSpec `json:"slack"`
-	MsTeams    AlertmanagerWebhookRelayProviderSpec `json:"msTeams"`
+	// +optional
+	Slack AlertmanagerWebhookRelayProviderSpec `json:"slack"`
+	// +optional
+	MsTeams AlertmanagerWebhookRelayProviderSpec `json:"msTeams"`
+	// +optional
 	Mattermost AlertmanagerWebhookRelayProviderSpec `json:"mattermost"`
-	Generic    AlertmanagerWebhookRelayProviderSpec `json:"generic"`
+	// +optional
+	Generic AlertmanagerWebhookRelayProviderSpec `json:"generic"`
 }
 
 type AlertmanagerWebhookRelayProviderSpec struct {
