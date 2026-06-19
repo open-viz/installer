@@ -1,5 +1,5 @@
 {{- /*
-Generated from 'nodes-darwin' from https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/main/manifests/grafana-dashboardDefinitions.yaml
+Generated from 'nodes-aix' from https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/main/manifests/grafana-dashboardDefinitions.yaml
 Do not change in-place! In order to change this file first read following link:
 https://github.com/open-viz/installer/tree/master/charts/kube-grafana-dashboards/hack
 */ -}}
@@ -8,7 +8,7 @@ https://github.com/open-viz/installer/tree/master/charts/kube-grafana-dashboards
 apiVersion: openviz.dev/v1alpha1
 kind: GrafanaDashboard
 metadata:
-  name: {{ printf "%s-%s" (include "kube-grafana-dashboards.fullname" $) "nodes-darwin" | trunc 63 | trimSuffix "-" }}
+  name: {{ printf "%s-%s" (include "kube-grafana-dashboards.fullname" $) "nodes-aix" | trunc 63 | trimSuffix "-" }}
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "kube-grafana-dashboards.labels" $ | nindent 4 }}
@@ -157,23 +157,8 @@ spec:
       - datasource:
           type: prometheus
           uid: $datasource
-        expr: "(\n    node_memory_internal_bytes{job=\"node-exporter\", instance=\"$instance\", cluster=\"$cluster\"} -\n    node_memory_purgeable_bytes{job=\"node-exporter\", instance=\"$instance\", cluster=\"$cluster\"} +\n    node_memory_wired_bytes{job=\"node-exporter\", instance=\"$instance\", cluster=\"$cluster\"} +\n    node_memory_compressed_bytes{job=\"node-exporter\", instance=\"$instance\", cluster=\"$cluster\"}\n)\n"
+        expr: "(\n    node_memory_total_bytes{job=\"node-exporter\", instance=\"$instance\", cluster=\"$cluster\"} -\n    node_memory_available_bytes{job=\"node-exporter\", instance=\"$instance\", cluster=\"$cluster\"}\n)\n"
         legendFormat: Memory Used
-      - datasource:
-          type: prometheus
-          uid: $datasource
-        expr: "(\n    node_memory_internal_bytes{job=\"node-exporter\", instance=\"$instance\", cluster=\"$cluster\"} -\n    node_memory_purgeable_bytes{job=\"node-exporter\", instance=\"$instance\", cluster=\"$cluster\"}\n)\n"
-        legendFormat: App Memory
-      - datasource:
-          type: prometheus
-          uid: $datasource
-        expr: node_memory_wired_bytes{job="node-exporter", instance="$instance", cluster="$cluster"}
-        legendFormat: Wired Memory
-      - datasource:
-          type: prometheus
-          uid: $datasource
-        expr: node_memory_compressed_bytes{job="node-exporter", instance="$instance", cluster="$cluster"}
-        legendFormat: Compressed
       title: Memory Usage
       type: timeseries
     - datasource:
@@ -202,7 +187,7 @@ spec:
       - datasource:
           type: prometheus
           uid: $datasource
-        expr: "(\n    (\n      avg(node_memory_internal_bytes{job=\"node-exporter\", instance=\"$instance\", cluster=\"$cluster\"}) -\n      avg(node_memory_purgeable_bytes{job=\"node-exporter\", instance=\"$instance\", cluster=\"$cluster\"}) +\n      avg(node_memory_wired_bytes{job=\"node-exporter\", instance=\"$instance\", cluster=\"$cluster\"}) +\n      avg(node_memory_compressed_bytes{job=\"node-exporter\", instance=\"$instance\", cluster=\"$cluster\"})\n    ) /\n    avg(node_memory_total_bytes{job=\"node-exporter\", instance=\"$instance\", cluster=\"$cluster\"})\n)\n*\n100\n"
+        expr: "100 -\n(\n  avg(node_memory_available_bytes{job=\"node-exporter\", instance=\"$instance\", cluster=\"$cluster\"}) /\n  avg(node_memory_total_bytes{job=\"node-exporter\", instance=\"$instance\", cluster=\"$cluster\"})\n  * 100\n)\n"
       title: Memory Usage
       type: gauge
     - collapsed: false
@@ -482,7 +467,7 @@ spec:
         hide: {{ if .Values.dashboard.multicluster.global.enabled }}0{{ else }}2{{ end }}
         label: Cluster
         name: cluster
-        query: label_values(node_uname_info{job="node-exporter", sysname="Darwin"},  cluster)
+        query: label_values(node_uname_info{job="node-exporter", sysname!="Darwin"}, cluster)
         refresh: 2
         type: query
       - datasource:
@@ -490,12 +475,12 @@ spec:
           uid: ${datasource}
         label: Instance
         name: instance
-        query: label_values(node_uname_info{job="node-exporter", cluster="$cluster", sysname="Darwin"}, instance)
+        query: label_values(node_uname_info{job="node-exporter", cluster="$cluster", sysname!="Darwin"}, instance)
         refresh: 2
         type: query
     time:
       from: now-1h
       to: now
     timezone: '{{ .Values.grafana.defaultDashboardsTimezone }}'
-    title: Node Exporter / MacOS
+    title: Node Exporter / AIX
 {{- end }}
