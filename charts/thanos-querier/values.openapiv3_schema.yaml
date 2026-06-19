@@ -1,0 +1,134 @@
+type: object
+properties:
+  nameOverride:
+    type: string
+  fullnameOverride:
+    type: string
+  replicaCount:
+    type: integer
+  annotations:
+    type: object
+    additionalProperties: true
+  podAnnotations:
+    type: object
+    additionalProperties: true
+  imagePullSecrets:
+    type: array
+    items:
+      type: object
+      additionalProperties: true
+  imagePullPolicy:
+    type: string
+  image:
+    type: object
+    properties:
+      query:
+        type: object
+        properties:
+          repository:
+            type: string
+          resources:
+            type: object
+            additionalProperties: true
+          securityContext:
+            type: object
+            additionalProperties: true
+      kubeRbacProxy:
+        type: object
+        properties:
+          repository:
+            type: string
+          resources:
+            type: object
+            additionalProperties: true
+          securityContext:
+            type: object
+            additionalProperties: true
+      promLabelProxy:
+        type: object
+        properties:
+          repository:
+            type: string
+          resources:
+            type: object
+            additionalProperties: true
+          securityContext:
+            type: object
+            additionalProperties: true
+  thanosQuery:
+    type: object
+    properties:
+      replicaLabels:
+        type: array
+        items:
+          type: string
+      endpointFlags:
+        type: array
+        items:
+          type: string
+      storeFlags:
+        type: array
+        items:
+          type: string
+      ruleFlags:
+        type: array
+        items:
+          type: string
+      targetFlags:
+        type: array
+        items:
+          type: string
+  nodeSelector:
+    type: object
+    additionalProperties:
+      type: string
+  tolerations:
+    type: array
+    items:
+      type: object
+      additionalProperties: true
+  affinity:
+    type: object
+    additionalProperties: true
+  priorityClassName:
+    type: string
+  podSecurityContext:
+    type: object
+    additionalProperties: true
+  service:
+    type: object
+    properties:
+      type:
+        type: string
+  serviceAccount:
+    type: object
+    properties:
+      create:
+        type: boolean
+      annotations:
+        type: object
+        additionalProperties: true
+      name:
+        type: string
+  secrets:
+    type: object
+    properties:
+      create:
+        type: boolean
+      names:
+        type: object
+        properties:
+          dockercfg:
+            type: string
+          grpcTLS:
+            type: string
+          kubeRbacProxy:
+            type: string
+          kubeRbacProxyWeb:
+            type: string
+          kubeRbacProxyRules:
+            type: string
+          kubeRbacProxyMetrics:
+            type: string
+          tls:
+            type: string

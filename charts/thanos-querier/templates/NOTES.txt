@@ -1,0 +1,3 @@
+To verify that thanos querier has started, run:
+
+  kubectl get deployment --namespace {{ .Release.Namespace }} thanos-querier
