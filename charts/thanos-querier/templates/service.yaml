@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "thanos-querier.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    openshift.io/description: 'Expose the Thanos Querier web server within the cluster
+      on the following ports:
+
+      * Port 9091 provides access to all the Thanos Querier endpoints. Granting access
+      requires binding a user to the `cluster-monitoring-view` cluster role.
+
+      * Port 9092 provides access to the `/api/v1/query`, `/api/v1/query_range/`,
+      `/api/v1/labels`, `/api/v1/label/*/values`, and `/api/v1/series` endpoints restricted
+      to a given project. Granting access requires binding a user to the `view` cluster
+      role in the project.
+
+      * Port 9093 provides access to the `/api/v1/alerts`, and `/api/v1/rules` endpoints
+      restricted to a given project. Granting access requires binding a user to the
+      `monitoring-rules-edit` cluster role or `monitoring-edit` cluster role or `monitoring-rules-view`
+      cluster role in the project.
+
+      * Port 9094 provides access to the `/metrics` endpoint only. This port is for
+      internal use, and no other usage is guaranteed.'
+    operator.openshift.io/spec-hash: 0c29478f63d34bf0dd2a114c15b5518c2e967a61c11e61f2676c05a268c8b7f8
+    service.alpha.openshift.io/serving-cert-signed-by: openshift-service-serving-signer@1773027804
+    service.beta.openshift.io/serving-cert-secret-name: {{ include "thanos-querier.secretTLS" . }}
+    service.beta.openshift.io/serving-cert-signed-by: openshift-service-serving-signer@1773027804
+  labels:
+    {{- include "thanos-querier.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - name: web
+      port: 9091
+      protocol: TCP
+      targetPort: web
+    - name: tenancy
+      port: 9092
+      protocol: TCP
+      targetPort: tenancy
+    - name: tenancy-rules
+      port: 9093
+      protocol: TCP
+      targetPort: tenancy-rules
+    - name: metrics
+      port: 9094
+      protocol: TCP
+      targetPort: metrics
+  selector:
+    {{- include "thanos-querier.selectorLabels" . | nindent 4 }}
+  sessionAffinity: None
+

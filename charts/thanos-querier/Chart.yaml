@@ -1,0 +1,12 @@
+apiVersion: v2
+name: thanos-querier
+description: A Helm chart for Thanos Querier manifests based on examples
+type: application
+version: v2026.3.13
+appVersion: v0.37.2
+home: https://github.com/go-openviz/installer
+sources:
+- https://github.com/go-openviz/installer
+maintainers:
+- name: appscode
+  email: support@appscode.com

@@ -1,0 +1,271 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "thanos-querier.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "thanos-querier.labels" . | nindent 4 }}
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "thanos-querier.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "thanos-querier.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- include "thanos-querier.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.affinity }}
+      affinity:
+        {{- toYaml .Values.affinity | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  {{- include "thanos-querier.selectorLabels" . | nindent 18 }}
+              topologyKey: kubernetes.io/hostname
+      {{- end }}
+      containers:
+        - args:
+            - query
+            - --grpc-address=127.0.0.1:10901
+            - --http-address=127.0.0.1:9090
+            - --log.format=logfmt
+            {{- range .Values.thanosQuery.replicaLabels }}
+            - --query.replica-label={{ . }}
+            {{- end }}
+            {{- range .Values.thanosQuery.endpointFlags }}
+            - --endpoint={{ . }}
+            {{- end }}
+            - --query.auto-downsampling
+            - --store.sd-dns-resolver=miekgdns
+            - --grpc-client-tls-secure
+            - --grpc-client-tls-cert=/etc/tls/grpc/client.crt
+            - --grpc-client-tls-key=/etc/tls/grpc/client.key
+            - --grpc-client-tls-ca=/etc/tls/grpc/ca.crt
+            - --grpc-client-server-name=prometheus-grpc
+            {{- range .Values.thanosQuery.storeFlags }}
+            - --store={{ . }}
+            {{- end }}
+            {{- range .Values.thanosQuery.ruleFlags }}
+            - --rule={{ . }}
+            {{- end }}
+            {{- range .Values.thanosQuery.targetFlags }}
+            - --target={{ . }}
+            {{- end }}
+            - --web.disable-cors
+          env:
+            - name: HOST_IP_ADDRESS
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.hostIP
+          image: {{ .Values.image.query.repository }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          name: thanos-query
+          ports:
+            - containerPort: 9090
+              name: http
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.image.query.resources | nindent 12 }}
+          securityContext:
+            {{- toYaml .Values.image.query.securityContext | nindent 12 }}
+          volumeMounts:
+            - mountPath: /etc/tls/grpc
+              name: secret-grpc-tls
+        - args:
+            - --secure-listen-address=0.0.0.0:9091
+            - --upstream=http://127.0.0.1:9090
+            - --config-file=/etc/kube-rbac-proxy/config.yaml
+            - --tls-cert-file=/etc/tls/private/tls.crt
+            - --tls-private-key-file=/etc/tls/private/tls.key
+            - --tls-cipher-suites=TLS_AES_128_GCM_SHA256,TLS_AES_256_GCM_SHA384,TLS_CHACHA20_POLY1305_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+            - --ignore-paths=/-/healthy,/-/ready
+            - --tls-min-version=VersionTLS12
+          image: {{ .Values.image.kubeRbacProxy.repository }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          livenessProbe:
+            failureThreshold: 4
+            httpGet:
+              path: /-/healthy
+              port: 9091
+              scheme: HTTPS
+            initialDelaySeconds: 5
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: kube-rbac-proxy-web
+          ports:
+            - containerPort: 9091
+              name: web
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 20
+            httpGet:
+              path: /-/ready
+              port: 9091
+              scheme: HTTPS
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            {{- toYaml .Values.image.kubeRbacProxy.resources | nindent 12 }}
+          securityContext:
+            {{- toYaml .Values.image.kubeRbacProxy.securityContext | nindent 12 }}
+          volumeMounts:
+            - mountPath: /etc/tls/private
+              name: secret-thanos-querier-tls
+            - mountPath: /etc/kube-rbac-proxy
+              name: secret-thanos-querier-kube-rbac-proxy-web
+        - args:
+            - --secure-listen-address=0.0.0.0:9092
+            - --upstream=http://127.0.0.1:9095
+            - --config-file=/etc/kube-rbac-proxy/config.yaml
+            - --tls-cert-file=/etc/tls/private/tls.crt
+            - --tls-private-key-file=/etc/tls/private/tls.key
+            - --tls-cipher-suites=TLS_AES_128_GCM_SHA256,TLS_AES_256_GCM_SHA384,TLS_CHACHA20_POLY1305_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+            - --allow-paths=/api/v1/query,/api/v1/query_range,/api/v1/labels,/api/v1/label/*/values,/api/v1/series
+            - --tls-min-version=VersionTLS12
+          image: {{ .Values.image.kubeRbacProxy.repository }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          name: kube-rbac-proxy
+          ports:
+            - containerPort: 9092
+              name: tenancy
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.image.kubeRbacProxy.resources | nindent 12 }}
+          securityContext:
+            {{- toYaml .Values.image.kubeRbacProxy.securityContext | nindent 12 }}
+          volumeMounts:
+            - mountPath: /etc/tls/private
+              name: secret-thanos-querier-tls
+            - mountPath: /etc/kube-rbac-proxy
+              name: secret-thanos-querier-kube-rbac-proxy
+        - args:
+            - --insecure-listen-address=127.0.0.1:9095
+            - --upstream=http://127.0.0.1:9090
+            - --label=namespace
+            - --enable-label-apis
+            - --error-on-replace
+            - --rules-with-active-alerts
+          image: {{ .Values.image.promLabelProxy.repository }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          name: prom-label-proxy
+          resources:
+            {{- toYaml .Values.image.promLabelProxy.resources | nindent 12 }}
+          securityContext:
+            {{- toYaml .Values.image.promLabelProxy.securityContext | nindent 12 }}
+        - args:
+            - --secure-listen-address=0.0.0.0:9093
+            - --upstream=http://127.0.0.1:9095
+            - --config-file=/etc/kube-rbac-proxy/config.yaml
+            - --tls-cert-file=/etc/tls/private/tls.crt
+            - --tls-private-key-file=/etc/tls/private/tls.key
+            - --tls-cipher-suites=TLS_AES_128_GCM_SHA256,TLS_AES_256_GCM_SHA384,TLS_CHACHA20_POLY1305_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+            - --allow-paths=/api/v1/rules,/api/v1/alerts
+            - --tls-min-version=VersionTLS12
+          image: {{ .Values.image.kubeRbacProxy.repository }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          name: kube-rbac-proxy-rules
+          ports:
+            - containerPort: 9093
+              name: tenancy-rules
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.image.kubeRbacProxy.resources | nindent 12 }}
+          securityContext:
+            {{- toYaml .Values.image.kubeRbacProxy.securityContext | nindent 12 }}
+          volumeMounts:
+            - mountPath: /etc/tls/private
+              name: secret-thanos-querier-tls
+            - mountPath: /etc/kube-rbac-proxy
+              name: secret-thanos-querier-kube-rbac-proxy-rules
+        - args:
+            - --secure-listen-address=0.0.0.0:9094
+            - --upstream=http://127.0.0.1:9090
+            - --config-file=/etc/kube-rbac-proxy/config.yaml
+            - --tls-cert-file=/etc/tls/private/tls.crt
+            - --tls-private-key-file=/etc/tls/private/tls.key
+            - --tls-cipher-suites=TLS_AES_128_GCM_SHA256,TLS_AES_256_GCM_SHA384,TLS_CHACHA20_POLY1305_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+            - --client-ca-file=/etc/tls/client/client-ca.crt
+            - --allow-paths=/metrics
+            - --tls-min-version=VersionTLS12
+          image: {{ .Values.image.kubeRbacProxy.repository }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          name: kube-rbac-proxy-metrics
+          ports:
+            - containerPort: 9094
+              name: metrics
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.image.kubeRbacProxy.resources | nindent 12 }}
+          securityContext:
+            {{- toYaml .Values.image.kubeRbacProxy.securityContext | nindent 12 }}
+          volumeMounts:
+            - mountPath: /etc/tls/private
+              name: secret-thanos-querier-tls
+            - mountPath: /etc/kube-rbac-proxy
+              name: secret-thanos-querier-kube-rbac-proxy-metrics
+            - mountPath: /etc/tls/client
+              name: metrics-client-ca
+              readOnly: true
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      serviceAccountName: {{ include "thanos-querier.serviceAccountName" . }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: 120
+      volumes:
+        - name: secret-thanos-querier-tls
+          secret:
+            defaultMode: 420
+            secretName: {{ include "thanos-querier.secretTLS" . }}
+        - name: secret-thanos-querier-kube-rbac-proxy
+          secret:
+            defaultMode: 420
+            secretName: {{ include "thanos-querier.secretKubeRbacProxy" . }}
+        - name: secret-thanos-querier-kube-rbac-proxy-web
+          secret:
+            defaultMode: 420
+            secretName: {{ include "thanos-querier.secretKubeRbacProxyWeb" . }}
+        - name: secret-thanos-querier-kube-rbac-proxy-rules
+          secret:
+            defaultMode: 420
+            secretName: {{ include "thanos-querier.secretKubeRbacProxyRules" . }}
+        - name: secret-thanos-querier-kube-rbac-proxy-metrics
+          secret:
+            defaultMode: 420
+            secretName: {{ include "thanos-querier.secretKubeRbacProxyMetrics" . }}
+        - configMap:
+            defaultMode: 420
+            name: metrics-client-ca
+          name: metrics-client-ca
+        - name: secret-grpc-tls
+          secret:
+            defaultMode: 420
+            secretName: {{ include "thanos-querier.secretGrpcTLS" . }}

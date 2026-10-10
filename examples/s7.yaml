@@ -1,0 +1,18 @@
+apiVersion: v1
+data:
+  config.yaml: ImF1dGhvcml6YXRpb24iOgogICJyZXNvdXJjZUF0dHJpYnV0ZXMiOgogICAgImFwaUdyb3VwIjogIm1vbml0b3JpbmcuY29yZW9zLmNvbSIKICAgICJuYW1lIjogIms4cyIKICAgICJuYW1lc3BhY2UiOiAib3BlbnNoaWZ0LW1vbml0b3JpbmciCiAgICAicmVzb3VyY2UiOiAicHJvbWV0aGV1c2VzIgogICAgInN1YnJlc291cmNlIjogImFwaSI=
+kind: Secret
+metadata:
+  creationTimestamp: "2026-03-09T03:54:35Z"
+  labels:
+    app.kubernetes.io/component: query-layer
+    app.kubernetes.io/instance: thanos-querier
+    app.kubernetes.io/managed-by: cluster-monitoring-operator
+    app.kubernetes.io/name: thanos-query
+    app.kubernetes.io/part-of: openshift-monitoring
+    app.kubernetes.io/version: 0.37.2
+  name: thanos-querier-kube-rbac-proxy-web
+  namespace: openshift-monitoring
+  resourceVersion: "24235"
+  uid: 46242cce-a0cf-434b-8ed1-684b08485514
+type: Opaque
