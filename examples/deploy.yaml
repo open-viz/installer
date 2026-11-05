@@ -1,0 +1,346 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "2"
+  creationTimestamp: "2026-03-09T03:54:37Z"
+  generation: 2
+  labels:
+    app.kubernetes.io/component: query-layer
+    app.kubernetes.io/instance: thanos-querier
+    app.kubernetes.io/managed-by: cluster-monitoring-operator
+    app.kubernetes.io/name: thanos-query
+    app.kubernetes.io/part-of: openshift-monitoring
+    app.kubernetes.io/version: 0.37.2
+  name: thanos-querier
+  namespace: openshift-monitoring
+  resourceVersion: "2028508"
+  uid: dce89476-5deb-4967-acff-02538102beab
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 2
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: query-layer
+      app.kubernetes.io/instance: thanos-querier
+      app.kubernetes.io/name: thanos-query
+      app.kubernetes.io/part-of: openshift-monitoring
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        openshift.io/required-scc: restricted-v2
+        target.workload.openshift.io/management: '{"effect": "PreferredDuringScheduling"}'
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/component: query-layer
+        app.kubernetes.io/instance: thanos-querier
+        app.kubernetes.io/managed-by: cluster-monitoring-operator
+        app.kubernetes.io/name: thanos-query
+        app.kubernetes.io/part-of: openshift-monitoring
+        app.kubernetes.io/version: 0.37.2
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app.kubernetes.io/component: query-layer
+                app.kubernetes.io/instance: thanos-querier
+                app.kubernetes.io/name: thanos-query
+                app.kubernetes.io/part-of: openshift-monitoring
+            topologyKey: kubernetes.io/hostname
+      containers:
+      - args:
+        - query
+        - --grpc-address=127.0.0.1:10901
+        - --http-address=127.0.0.1:9090
+        - --log.format=logfmt
+        - --query.replica-label=prometheus_replica
+        - --query.replica-label=thanos_ruler_replica
+        - --endpoint=dnssrv+_grpc._tcp.prometheus-operated.openshift-monitoring.svc.cluster.local
+        - --query.auto-downsampling
+        - --store.sd-dns-resolver=miekgdns
+        - --grpc-client-tls-secure
+        - --grpc-client-tls-cert=/etc/tls/grpc/client.crt
+        - --grpc-client-tls-key=/etc/tls/grpc/client.key
+        - --grpc-client-tls-ca=/etc/tls/grpc/ca.crt
+        - --grpc-client-server-name=prometheus-grpc
+        - --rule=dnssrv+_grpc._tcp.prometheus-operated.openshift-monitoring.svc.cluster.local
+        - --target=dnssrv+_grpc._tcp.prometheus-operated.openshift-monitoring.svc.cluster.local
+        - --store=dnssrv+_grpc._tcp.prometheus-operated.openshift-user-workload-monitoring.svc.cluster.local
+        - --store=dnssrv+_grpc._tcp.thanos-ruler-operated.openshift-user-workload-monitoring.svc.cluster.local
+        - --rule=dnssrv+_grpc._tcp.prometheus-operated.openshift-user-workload-monitoring.svc.cluster.local
+        - --rule=dnssrv+_grpc._tcp.thanos-ruler-operated.openshift-user-workload-monitoring.svc.cluster.local
+        - --target=dnssrv+_grpc._tcp.prometheus-operated.openshift-user-workload-monitoring.svc.cluster.local
+        - --web.disable-cors
+        env:
+        - name: HOST_IP_ADDRESS
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.hostIP
+        image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:b1d26a296f7030737a14e198a7c83a7d8720dad1d2b2ffaeaf7cbdbde274da78
+        imagePullPolicy: IfNotPresent
+        name: thanos-query
+        ports:
+        - containerPort: 9090
+          name: http
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 10m
+            memory: 12Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: false
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: FallbackToLogsOnError
+        volumeMounts:
+        - mountPath: /etc/tls/grpc
+          name: secret-grpc-tls
+      - args:
+        - --secure-listen-address=0.0.0.0:9091
+        - --upstream=http://127.0.0.1:9090
+        - --config-file=/etc/kube-rbac-proxy/config.yaml
+        - --tls-cert-file=/etc/tls/private/tls.crt
+        - --tls-private-key-file=/etc/tls/private/tls.key
+        - --tls-cipher-suites=TLS_AES_128_GCM_SHA256,TLS_AES_256_GCM_SHA384,TLS_CHACHA20_POLY1305_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+        - --ignore-paths=/-/healthy,/-/ready
+        - --tls-min-version=VersionTLS12
+        image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:0e4654368f7dbc4e0808df96a3d1f85b3130185f5ba3523707980728d13fae43
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 4
+          httpGet:
+            path: /-/healthy
+            port: 9091
+            scheme: HTTPS
+          initialDelaySeconds: 5
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: kube-rbac-proxy-web
+        ports:
+        - containerPort: 9091
+          name: web
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 20
+          httpGet:
+            path: /-/ready
+            port: 9091
+            scheme: HTTPS
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          requests:
+            cpu: 1m
+            memory: 15Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: FallbackToLogsOnError
+        volumeMounts:
+        - mountPath: /etc/tls/private
+          name: secret-thanos-querier-tls
+        - mountPath: /etc/kube-rbac-proxy
+          name: secret-thanos-querier-kube-rbac-proxy-web
+      - args:
+        - --secure-listen-address=0.0.0.0:9092
+        - --upstream=http://127.0.0.1:9095
+        - --config-file=/etc/kube-rbac-proxy/config.yaml
+        - --tls-cert-file=/etc/tls/private/tls.crt
+        - --tls-private-key-file=/etc/tls/private/tls.key
+        - --tls-cipher-suites=TLS_AES_128_GCM_SHA256,TLS_AES_256_GCM_SHA384,TLS_CHACHA20_POLY1305_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+        - --allow-paths=/api/v1/query,/api/v1/query_range,/api/v1/labels,/api/v1/label/*/values,/api/v1/series
+        - --tls-min-version=VersionTLS12
+        image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:0e4654368f7dbc4e0808df96a3d1f85b3130185f5ba3523707980728d13fae43
+        imagePullPolicy: IfNotPresent
+        name: kube-rbac-proxy
+        ports:
+        - containerPort: 9092
+          name: tenancy
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 1m
+            memory: 15Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: FallbackToLogsOnError
+        volumeMounts:
+        - mountPath: /etc/tls/private
+          name: secret-thanos-querier-tls
+        - mountPath: /etc/kube-rbac-proxy
+          name: secret-thanos-querier-kube-rbac-proxy
+      - args:
+        - --insecure-listen-address=127.0.0.1:9095
+        - --upstream=http://127.0.0.1:9090
+        - --label=namespace
+        - --enable-label-apis
+        - --error-on-replace
+        - --rules-with-active-alerts
+        image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:ab8dc6d8e30ef45c31d418718e17f1f5a500fa672a693058d61047a28a04adbd
+        imagePullPolicy: IfNotPresent
+        name: prom-label-proxy
+        resources:
+          requests:
+            cpu: 1m
+            memory: 15Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: FallbackToLogsOnError
+      - args:
+        - --secure-listen-address=0.0.0.0:9093
+        - --upstream=http://127.0.0.1:9095
+        - --config-file=/etc/kube-rbac-proxy/config.yaml
+        - --tls-cert-file=/etc/tls/private/tls.crt
+        - --tls-private-key-file=/etc/tls/private/tls.key
+        - --tls-cipher-suites=TLS_AES_128_GCM_SHA256,TLS_AES_256_GCM_SHA384,TLS_CHACHA20_POLY1305_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+        - --allow-paths=/api/v1/rules,/api/v1/alerts
+        - --tls-min-version=VersionTLS12
+        image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:0e4654368f7dbc4e0808df96a3d1f85b3130185f5ba3523707980728d13fae43
+        imagePullPolicy: IfNotPresent
+        name: kube-rbac-proxy-rules
+        ports:
+        - containerPort: 9093
+          name: tenancy-rules
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 1m
+            memory: 15Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: FallbackToLogsOnError
+        volumeMounts:
+        - mountPath: /etc/tls/private
+          name: secret-thanos-querier-tls
+        - mountPath: /etc/kube-rbac-proxy
+          name: secret-thanos-querier-kube-rbac-proxy-rules
+      - args:
+        - --secure-listen-address=0.0.0.0:9094
+        - --upstream=http://127.0.0.1:9090
+        - --config-file=/etc/kube-rbac-proxy/config.yaml
+        - --tls-cert-file=/etc/tls/private/tls.crt
+        - --tls-private-key-file=/etc/tls/private/tls.key
+        - --tls-cipher-suites=TLS_AES_128_GCM_SHA256,TLS_AES_256_GCM_SHA384,TLS_CHACHA20_POLY1305_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+        - --client-ca-file=/etc/tls/client/client-ca.crt
+        - --allow-paths=/metrics
+        - --tls-min-version=VersionTLS12
+        image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:0e4654368f7dbc4e0808df96a3d1f85b3130185f5ba3523707980728d13fae43
+        imagePullPolicy: IfNotPresent
+        name: kube-rbac-proxy-metrics
+        ports:
+        - containerPort: 9094
+          name: metrics
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 1m
+            memory: 15Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: FallbackToLogsOnError
+        volumeMounts:
+        - mountPath: /etc/tls/private
+          name: secret-thanos-querier-tls
+        - mountPath: /etc/kube-rbac-proxy
+          name: secret-thanos-querier-kube-rbac-proxy-metrics
+        - mountPath: /etc/tls/client
+          name: metrics-client-ca
+          readOnly: true
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        kubernetes.io/os: linux
+      priorityClassName: system-cluster-critical
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      serviceAccount: thanos-querier
+      serviceAccountName: thanos-querier
+      terminationGracePeriodSeconds: 120
+      volumes:
+      - name: secret-thanos-querier-tls
+        secret:
+          defaultMode: 420
+          secretName: thanos-querier-tls
+      - name: secret-thanos-querier-kube-rbac-proxy
+        secret:
+          defaultMode: 420
+          secretName: thanos-querier-kube-rbac-proxy
+      - name: secret-thanos-querier-kube-rbac-proxy-web
+        secret:
+          defaultMode: 420
+          secretName: thanos-querier-kube-rbac-proxy-web
+      - name: secret-thanos-querier-kube-rbac-proxy-rules
+        secret:
+          defaultMode: 420
+          secretName: thanos-querier-kube-rbac-proxy-rules
+      - name: secret-thanos-querier-kube-rbac-proxy-metrics
+        secret:
+          defaultMode: 420
+          secretName: thanos-querier-kube-rbac-proxy-metrics
+      - configMap:
+          defaultMode: 420
+          name: metrics-client-ca
+        name: metrics-client-ca
+      - name: secret-grpc-tls
+        secret:
+          defaultMode: 420
+          secretName: thanos-querier-grpc-tls-1pof2jr10np
+status:
+  availableReplicas: 2
+  conditions:
+  - lastTransitionTime: "2026-03-09T03:54:37Z"
+    lastUpdateTime: "2026-03-10T04:13:55Z"
+    message: ReplicaSet "thanos-querier-6ff8cfcd7d" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2026-03-12T04:01:27Z"
+    lastUpdateTime: "2026-03-12T04:01:27Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 2
+  readyReplicas: 2
+  replicas: 2
+  updatedReplicas: 2
