@@ -3,7 +3,7 @@ name: monitoring-operator
 description: A Helm chart for monitoring-operator by AppsCode
 type: application
 version: v2026.6.12
-appVersion: v0.8.0
+appVersion: v0.9.0
 home: https://github.com/kubeops/monitoring-operator
 icon: https://cdn.appscode.com/images/products/kubeops/icons/android-icon-192x192.png
 sources:
