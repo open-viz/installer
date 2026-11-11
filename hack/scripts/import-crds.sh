@@ -57,7 +57,8 @@ crd-importer \
     --input=${crd_dir} \
     --out=./charts/grafana-operator/crds \
     --gk=GrafanaDashboard.openviz.dev \
-    --gk=GrafanaDatasource.openviz.dev
+    --gk=GrafanaDatasource.openviz.dev \
+    --gk=PersesDashboard.openviz.dev
 
 crd-importer \
     --input=https://github.com/kmodules/custom-resources/raw/${KMODULES_CUSTOM_RESOURCES_TAG}/crds/appcatalog.appscode.com_appbindings.yaml \
@@ -66,7 +67,8 @@ crd-importer \
 crd-importer \
     --input=${crd_dir} \
     --out=./charts/monitoring-operator/crds \
-    --gk=GrafanaDashboard.openviz.dev
+    --gk=GrafanaDashboard.openviz.dev \
+    --gk=PersesDashboard.openviz.dev
 
 crd-importer \
     --input=https://github.com/kmodules/custom-resources/raw/${KMODULES_CUSTOM_RESOURCES_TAG}/crds/appcatalog.appscode.com_appbindings.yaml \
